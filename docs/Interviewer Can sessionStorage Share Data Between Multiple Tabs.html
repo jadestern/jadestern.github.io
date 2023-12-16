@@ -1,0 +1,21 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+      <title>Interviewer: Can sessionStorage Share Data Between Multiple Tabs?</title>
+      <link rel="canonical" href="https://medium.com/@fatfish/interviewer-can-sessionstorage-share-data-between-multiple-tabs-c30983c61501">
+      <style>
+        pre {
+          padding: 1rem;
+          background-color: #263238;
+          color: #fff
+        }
+      </style>
+    </head>
+    <body>
+      <article>
+        <div id="readability-page-1" class="page"><div><div><h2 id="5a45">대부분의 프론트엔드 개발자가 답을 모르는 질문</h2><div><a rel="noopener follow" href="https://medium.com/?source=post_page-----c30983c61501--------------------------------"><div aria-hidden="false"><p><img alt="fatfish" src="https://miro.medium.com/v2/resize:fill:88:88/1*iS1UwYrqJUAkVtLVR_mZXQ.jpeg" width="44" height="44" loading="lazy" data-testid="authorPhoto"></p></div></a></div></div><figure><figcaption><a href="https://unsplash.com/?utm_source=medium&amp;utm_medium=referral" rel="noopener ugc nofollow" target="_blank">Unsplash에</a> 게시된 <a href="https://unsplash.com/@pieschwarzler?utm_source=medium&amp;utm_medium=referral" rel="noopener ugc nofollow" target="_blank">Pietra Schwarzler의</a> 사진</figcaption></figure><p id="1072">최근 제 친구가 인터뷰 도중 <code><strong>세션스토리지에</strong></code> 대한 질문을 받고 당황한 적이 있습니다.</p><p id="00ed"><em>사실 저도 세션스토리지에 대해 잘 알지 못합니다. 친구야, 이해가 되니?</em></p><p id="0030"><strong>세션스토리지는 여러 탭 간에 데이터를 공유할 수 있나요?</strong></p><h2 id="d85a">인터뷰 과정에 대해</h2><p id="95b5"><strong>질문 1: "로컬 스토리지와 세션 스토리지의 차이점이 뭔지 아세요?"</strong></p><p id="3645"><em>제 친구: 프런트엔드 개발 엔지니어라면 누구나 알고 있는 지식이기 때문에 그는 매우 기뻐했습니다.</em></p><ol><li id="eac1"><code>localStorage의</code> 데이터는 영구적이므로 우리가 적극적으로 지우지 않는 한 항상 존재합니다.</li><li id="c1be">탭/창을 닫으면 세션이 종료되고 세션스토리지의 개체도 지워집니다.</li></ol><p id="1e57"><strong>질문 2: "같은 웹사이트 아래에서 localStorage가 데이터를 공유할 수 있나요?"</strong></p><p id="5f87">내 친구: "이것도 쉬운 문제입니다! 동일한 웹사이트 아래의 다른 탭이나 창에서 데이터를 공유할 수 있습니다."</p><pre translate="no"><span id="5365">// Let's try to set a name in window 1 page 1<br>localStorage.setItem('name', 'fatfish')<br>// We try to read the current name in window 2 page 2<br>localStorage.getItem('name') // fatfish</span></pre><p id="009a"><strong>질문 3: "훌륭하시네요, 한 가지 질문을 더 테스트하고 싶은데요, 세션스토리지가 여러 탭 간에 데이터를 공유할 수 있나요?"</strong></p><p id="0267">내 친구: "아니요, 각 창이나 탭에는 별도의 세션스토리지가 있으며, 이들 간에 데이터를 공유할 수 없습니다."</p><p id="0bf1"><strong>면접관: "정말 그런가요?"</strong></p><p id="148d">내 친구: "어! 잘 모르겠어요, 아마도!"</p><p id="0627">이 질문 때문에 친구가 제안을 놓쳤을 수도 있지만, 개발자로서 우리는 끊임없이 지식과 기술을 향상시켜야 합니다.</p><h2 id="825e">세션 스토리지란 무엇인가요?</h2><p id="3bb9">( <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage" rel="noopener ugc nofollow" target="_blank">mdn에서</a>)읽기 전용 sessionStorage 속성은 현재 원점에 대한 세션 저장소 개체에 액세스합니다. sessionStorage는 localStorage와 유사하지만, localStorage의 데이터는 만료되지 않지만 세션Storage의 데이터는 페이지 세션이 종료될 때 지워진다는 차이점이 있습니다.</p></div></div>
+      </article>
+    </body>
+  </html>
+  
