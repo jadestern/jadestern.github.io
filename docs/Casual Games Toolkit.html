@@ -1,0 +1,348 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+      <title>Casual Games Toolkit</title>
+      <link rel="canonical" href="https://docs.flutter.dev/resources/games-toolkit">
+      <style>
+        pre {
+          padding: 1rem;
+          background-color: #263238;
+          color: #fff
+        }
+      </style>
+    </head>
+    <body>
+      <article>
+        <div id="readability-page-1" class="page"><div>
+
+        
+
+        
+
+        <header>
+          
+
+          
+          </header>
+        
+        
+  <div id="site-toc--inline">
+    <header>
+      콘텐츠    </header>
+    <ul>
+<li><a href="#why-flutter-for-games">왜 게임용 Flutter인가요?</a></li>
+<li><a href="#whats-included-in-the-toolkit">툴킷에 포함된 내용</a></li>
+<li><a href="#get-started">시작하기</a></li>
+<li><a href="#example-games">예제 게임</a></li>
+<li><a href="#other-resources">기타 리소스</a></li>
+</ul>
+  </div>
+<p>Flutter 캐주얼 게임 툴킷은 모바일 플랫폼에서 게임 개발을 가속화할 수 있도록 새로운 리소스와 기존 리소스를 한데 모아 제공합니다.</p>
+
+<p>이 페이지에서는 사용 가능한 리소스를 어디에서 찾을 수 있는지 간략하게 설명합니다.</p>
+
+<h2 id="why-flutter-for-games">
+왜 게임에 Flutter를 사용해야 할까요?</h2>
+
+<p>Flutter 프레임워크는 데스크톱, 모바일 기기, 웹 등 6가지 대상 플랫폼을 위한 고성능 앱을 만들 수 있습니다.</p>
+
+<p>크로스 플랫폼 개발, 성능, 오픈 소스 라이선스 등 Flutter가 제공하는 이점을 고려할 때 Flutter는 게임에 적합한 선택입니다.</p>
+
+<p>캐주얼 게임은 턴제 게임과 실시간 게임의 두 가지 범주로 나뉩니다. 두 가지 유형의 게임에 모두 익숙할 수도 있지만, 이런 식으로 생각하지 않았을 수도 있습니다.</p>
+
+<p><em>턴제 게임은</em> 간단한 규칙과 게임 플레이로 대중 시장을 겨냥한 게임으로, 보드 게임, 카드 게임, 퍼즐, 전략 게임 등이 여기에 포함됩니다. 이러한 게임은 카드를 탭하거나 숫자나 문자를 입력하는 등 간단한 사용자 입력에 반응하며, Flutter에 적합합니다.</p>
+
+<p><em>실시간 게임은</em> 일련의 동작에 실시간으로 반응해야 하는 게임을 포함합니다. 무한 달리기 게임, 레이싱 게임 등이 이에 해당합니다. 충돌 감지, 카메라 뷰, 게임 루프 등과 같은 고급 기능을 갖춘 게임을 만들고자 할 수 있습니다. 이러한 유형의 게임에는 Flutter를 사용하여 구축된<a href="https://flame-engine.org/">Flame 게임 엔진과</a> 같은 오픈 소스 게임 엔진을 사용할 수 있습니다.</p>
+
+
+
+<p>캐주얼 게임 툴킷은 다음과 같은 무료 리소스를 제공합니다.</p>
+
+<ul>
+  <li>
+    <p>캐주얼 게임을 빌드하기 위한 시작점을 제공하는 세 가지 새로운 게임 템플릿이 포함된 저장소.</p>
+
+    <ol>
+      <li>
+        <p>기본 <a href="https://github.com/flutter/games/tree/main/templates/basic">게임 템플릿에</a>대한 기본 사항이 포함되어 있습니다:</p>
+
+        <ul>
+          <li>메인 메뉴</li>
+          <li>탐색</li>
+          <li>설정</li>
+          <li>레벨 선택</li>
+          <li>플레이어 진행 상황</li>
+          <li>플레이 세션 관리</li>
+          <li>사운드</li>
+          <li>테마</li>
+        </ul>
+      </li>
+      <li>
+        <p>기본 템플릿에 모든 것을 더한 <a href="https://github.com/flutter/games/tree/main/templates/card">카드 게임 템플릿입니다</a>:</p>
+
+        <ul>
+          <li>드래그 앤 드롭</li>
+          <li>게임 상태 관리</li>
+          <li>멀티플레이어 통합 후크</li>
+        </ul>
+      </li>
+      <li>
+        <p>오픈 소스 게임 엔진인 Flame과 제휴하여 만든 <a href="https://github.com/flutter/games/tree/main/templates/endless_runner">무한 러너 템플릿입니다</a>. 구현합니다:</p>
+
+        <ul>
+          <li>FlameGame 기본 템플릿</li>
+          <li>플레이어 스티어링</li>
+          <li>충돌 감지</li>
+          <li>시차 효과</li>
+          <li>스폰</li>
+          <li>다양한 시각 효과</li>
+        </ul>
+      </li>
+      <li>
+        <p>끝없는 러너 템플릿을 기반으로 제작된 샘플 게임, SuperDash. iOS, Android 또는 <a href="https://superdash.flutter.dev/">웹에서</a> 게임을 플레이하고, <a href="https://github.com/flutter/super_dash">오픈 소스 코드 리</a>포지토리를 확인하거나,<a href="https://medium.com/flutter/how-we-built-the-new-super-dash-demo-in-flutter-and-flame-in-just-six-weeks-9c7aa2a5ad31">6주 만에 게임을 만든 방법을 읽어볼</a> 수 있습니다.</p>
+      </li>
+    </ol>
+  </li>
+  <li>필요한 서비스를 통합하기 위한 개발자 가이드.</li>
+  <li><a href="https://discord.gg/qUyQFVbV45">플레임 디스코드</a> 채널 링크. 디스코드 계정이 있는 경우 이 <a href="https://discord.com/login?redirect_to=%2Fchannels%2F509714518008528896%2F788415774938103829">직접 링크를</a> 사용하세요.</li>
+</ul>
+
+<p>포함된 게임 템플릿과 쿡북 레시피는 개발을 가속화하는 데 도움이 됩니다. <code translate="no">provider</code>, <code translate="no">google_mobile_ads</code>,<code translate="no">in_app_purchase</code>, <code translate="no">audioplayers</code>, <code translate="no">crashlytics</code>, <code translate="no">games_services</code> 와 같은 특정 패키지가 포함되어 있습니다. 다른 패키지를 선호하는 경우 코드를 변경하여 해당 패키지를 사용할 수 있습니다.</p>
+
+<p>Flutter 팀은 수익 창출이 향후 고려 대상이 될 수 있음을 이해합니다. 광고 및 인앱 구매를 위한 요리책 레시피가 추가되었습니다.</p>
+
+<p><a href="https://flutter.dev/games">게임</a> 페이지에 설명된 대로 <a href="https://cloud.google.com/free">클라우드, 파이어베이스</a>, <a href="https://ads.google.com/intl/en_us/home/flutter/#!/">광고와</a> 같은 Google 서비스를 게임에 통합하면 최대 900달러의 혜택을 받을 수 있습니다.</p>
+
+
+
+<h2 id="get-started">
+시작하기</h2>
+
+<p>준비되셨나요? 이제 시작하세요:</p>
+
+<ol>
+  <li>아직 <a href="https://docs.flutter.dev/get-started/install">설치하지</a> 않았다면 <a href="https://docs.flutter.dev/get-started/install">Flutter를 설치합니다</a>.</li>
+  <li>
+<a href="https://github.com/flutter/games">게임 리포지토리를 복제합니다</a>.</li>
+  <li>
+    <p>만들고자 하는 첫 번째 게임 유형에 대한 <code translate="no">README</code> 파일을 검토합니다.</p>
+
+    <ul>
+      <li><a href="https://github.com/flutter/games/tree/main/templates/basic/README.md">기본 게임</a></li>
+      <li><a href="https://github.com/flutter/games/blob/main/templates/card/README.md">카드 게임</a></li>
+      <li><a href="https://github.com/flutter/games/blob/main/templates/endless_runner/README.md">러너 게임</a></li>
+    </ul>
+  </li>
+  <li>
+<a href="https://discord.gg/qUyQFVbV45">디스코드에서 플레임 커뮤니티에 가입합니다</a>(이미 디스코드 계정이 있는 경우 <a href="https://discord.com/login?redirect_to=%2Fchannels%2F509714518008528896%2F788415774938103829">직접 링크</a> 사용).</li>
+  <li>
+    <p>코드랩과 요리책 레시피를 검토합니다.</p>
+
+    <ul>
+      <li>클라우드 파이어스토어로 <a href="https://docs.flutter.dev/cookbook/games/firestore-multiplayer">멀티플레이어 게임을</a> 만들어 보세요.</li>
+      <li><a href="https://docs.flutter.dev/cookbook/games/achievements-leaderboard">리더보드와</a> 도전 과제를 통해 게임의 몰입도를 높이세요.</li>
+      <li><a href="https://docs.flutter.dev/cookbook/plugins/google-mobile-ads">게임 내 광고와</a> <a href="https://codelabs.developers.google.com/codelabs/flutter-in-app-purchases#0">인앱 구매로</a> 게임에서 수익을 창출하세요.</li>
+      <li><a href="https://firebase.google.com/codelabs/firebase-auth-in-flutter-apps#0">Firebase 인증을</a> 통해 게임에 사용자 인증 흐름을 추가하세요.</li>
+      <li><a href="https://firebase.google.com/docs/crashlytics/get-started?platform=flutter">Firebase 크래시리틱스로</a> 게임 내 크래시 및 오류에 대한 분석을 수집하세요.</li>
+    </ul>
+  </li>
+  <li>필요에 따라 애드몹, 파이어베이스, 클라우드에 계정을 설정합니다.</li>
+  <li>게임을 제작하세요!</li>
+  <li>구글 플레이와 애플 스토어에 모두 배포하세요.</li>
+</ol>
+
+<h2 id="example-games">
+게임 예시</h2>
+
+<p>Google I/O 2022를 위해 Flutter 팀과 Very Good Ventures는 새로운 게임을 만들었습니다.</p>
+
+<ul>
+  <li>
+    <p>VGV는 Flame 엔진을 사용하여 <a href="https://pinball.flutter.dev/#/">I/O 핀볼 게임을</a> 만들었습니다. 이 게임에 대해 알아보려면 미디엄에서 <a href="https://medium.com/flutter/di-o-pinball-powered-by-flutter-and-firebase-d22423f3f5d">Flutter와 Firebase로 구동되는 I/O 핀볼을</a> 확인하고 브라우저에서 <a href="https://pinball.flutter.dev/#/">게임을 플레이해</a> 보세요.</p>
+  </li>
+  <li>
+    <p>Flutter 팀은 가상 <a href="https://en.wikipedia.org/wiki/Collectible_card_game">CCG인</a> <a href="https://flip.withgoogle.com/#/">I/O Flip을</a> 만들었습니다. I/O Flip에 대해 자세히 알아보려면 Google 개발자 블로그에서 ' <a href="https://developers.googleblog.com/2023/05/how-its-made-io-flip-adds-twist-to.html">어떻게 만들어졌나: 제너레이티브 AI로 고전적인 카드 게임에 색다른 재미를 더한 I/O FLIP</a>'을 확인하고 브라우저에서 <a href="https://flip.withgoogle.com/#/">게임을 플레이해</a> 보세요.</p>
+  </li>
+</ul>
+
+<h2 id="other-resources">
+기타 리소스</h2>
+
+<p>이 게임 템플릿을 넘어설 준비가 되었다고 생각되면 커뮤니티에서 추천하는 다른 리소스를 살펴보세요.</p>
+
+
+
+<table>
+<tbody><tr>
+<th>기능</th>
+<th>리소스</th>
+</tr>
+
+<tr>
+<td>애니메이션 및 스프라이트</td>
+<td>
+
+      <p><span>책_5</span> <a href="https://docs.flutter.dev/cookbook/effects">특수 효과</a><br>
+<span>핸디</span> <a href="https://store.steampowered.com/app/332360/Spriter_Pro/">스프라이터 프로</a><br>
+<span>package_2</span> <a href="https://pub.dev/packages/rive">rive</a><br>
+<span>package_2</span> <a href="https://pub.dev/packages/spritewidget">스프라이트 위젯</a></p>
+
+    </td>
+</tr>
+
+<tr>
+<td>앱 리뷰</td>
+<td>
+
+      <p><span>package_2</span> <a href="https://pub.dev/packages/app_review">app_review</a></p>
+
+    </td>
+</tr>
+
+<tr>
+<td>오디오</td>
+<td>
+
+      <p><span>package_2</span> <a href="https://pub.dev/packages/audioplayers">오디오 플레이어</a></p>
+
+    </td>
+</tr>
+
+<tr>
+<td>인증</td>
+<td>
+
+      <p><span>과학</span> <a href="https://firebase.google.com/codelabs/firebase-auth-in-flutter-apps#0">Firebase를 사용한 사용자 인증</a></p>
+
+    </td>
+</tr>
+
+<tr>
+<td>클라우드 서비스</td>
+<td>
+
+      <p><span>과학</span> <a href="https://firebase.google.com/docs/flutter/setup">Flutter 게임에 Firebase 추가하기</a></p>
+
+    </td>
+</tr>
+
+<tr>
+<td>디버깅</td>
+<td>
+
+      <p><span>quick_reference_all</span> <a href="https://firebase.google.com/docs/crashlytics/get-started?platform=flutter">파이어베이스 크래시리틱스 개요</a><br>
+<span>package_2</span> <a href="https://pub.dev/packages/firebase_crashlytics">FIREBASE_CRASHLYTICS</a></p>
+
+    </td>
+</tr>
+
+<tr>
+<td>드라이버</td>
+<td>
+
+      <p><span>package_2</span> <a href="https://pub.dev/packages/win32_gamepad">win32_gamepad</a></p>
+
+    </td>
+</tr>
+
+<tr>
+<td>게임 에셋<br>및 에셋 툴</td>
+<td>
+
+      <p><span>photo_album</span> <a href="https://craftpix.net/">CraftPix</a><br>
+<span>사진_앨범</span> <a href="https://www.gamedeveloperstudio.com/">게임 개발자 스튜디오</a><br>
+<span>핸디</span> <a href="https://www.gimp.org/">김프</a></p>
+
+    </td>
+</tr>
+
+<tr>
+<td>게임 엔진</td>
+<td>
+
+      <p><span>package_2</span> <a href="https://pub.dev/packages/flame">불꽃</a><br>
+<span>package_2</span> <a href="https://pub.dev/packages/bonfire">모닥불</a><br>
+<span>package_2</span> <a href="https://pub.dev/packages/forge2d">forge2d</a></p>
+
+    </td>
+</tr>
+
+<tr>
+<td>게임 기능</td>
+<td>
+
+      <p><span>책_5</span> <a href="https://docs.flutter.dev/cookbook/games/achievements-leaderboard">게임에 업적과 리더보드 추가하기</a><br>
+<span>책_5</span> <a href="https://docs.flutter.dev/cookbook/games/firestore-multiplayer">게임에 멀티플레이어 지원 추가하기</a></p>
+
+    </td>
+</tr>
+
+<tr>
+<td>게임 서비스 통합</td>
+<td>
+
+      <p><span>package_2</span> <a href="https://pub.dev/packages/games_services">games_services</a></p>
+
+    </td>
+</tr>
+
+<tr>
+<td>레거시 코드</td>
+<td>
+
+      <p><span>과학</span> <a href="https://codelabs.developers.google.com/codelabs/flutter-ffigen">Flutter 플러그인에서 외부 함수 인터페이스 사용</a></p>
+
+    </td>
+</tr>
+
+<tr>
+<td>수익화</td>
+<td>
+
+      <p><span>book_5</span> <a href="https://docs.flutter.dev/cookbook/plugins/google-mobile-ads">Flutter 게임에 광고 추가하기</a><br>
+<span>과학</span> <a href="https://codelabs.developers.google.com/codelabs/admob-ads-in-flutter">Flutter 앱에 AdMob 광고 추가하기</a><br>
+<span>과학</span> <a href="https://codelabs.developers.google.com/codelabs/flutter-in-app-purchases#0">Flutter 앱에 인앱 구매 추가하기</a></p>
+
+    </td>
+</tr>
+
+<tr>
+<td>지속성</td>
+<td>
+
+      <p><span>package_2</span> <a href="https://pub.dev/packages/shared_preferences">shared_preferences</a><br>
+<span>package_2</span> <a href="https://pub.dev/packages/sqflite">sqflite</a><br>
+<span>package_2</span> <a href="https://pub.dev/packages/cbl_flutter">cbl_flutter</a> (카우치베이스 라이트)<br></p>
+
+    </td>
+</tr>
+
+<tr>
+<td>특수 효과</td>
+<td>
+
+      <p><a href="https://api.flutter.dev/flutter/dart-ui/Paint-class.html">페인트 API</a><br>
+<span>book_5</span> <a href="https://docs.flutter.dev/cookbook/effects">특수 효과</a></p>
+
+    </td>
+</tr>
+
+<tr>
+<td>사용자 경험</td>
+<td>
+
+      <p><span>과학</span> <a href="https://codelabs.developers.google.com/codelabs/flutter-next-gen-uis">Flutter에서 차세대 UI 구축</a></p>
+
+    </td>
+</tr>
+</tbody></table>
+
+
+
+        
+      </div></div>
+      </article>
+    </body>
+  </html>
+  
