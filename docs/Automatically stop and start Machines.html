@@ -1,0 +1,127 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+      <title>Automatically stop and start Machines</title>
+      <link rel="canonical" href="https://fly.io/docs/apps/autostart-stop/">
+      <style>
+        pre {
+          padding: 1rem;
+          background-color: #263238;
+          color: #fff
+        }
+      </style>
+    </head>
+    <body>
+      <article>
+        <div id="readability-page-1" class="page"><div>
+
+        <article>
+          
+
+          <p>Fly 머신은 빠르게 시작하고 중지할 수 있으며, <code translate="no">stopped</code> 상태일 때는 CPU와 RAM에 대한 비용을 지불하지 않아도 됩니다. 서비스가 구성된 Fly 앱의 경우, Fly 프록시는 수신 요청에 따라 기존 머신을 자동으로 시작 및 중지할 수 있으므로 앱이 추가 머신을 계속 실행하지 않고도 수요를 충족할 수 있습니다. 또한 앱이 기본 지역에서 항상 하나 이상의 머신을 실행해야 하는 경우, 계속 실행할 최소 머신 수를 설정할 수 있습니다.</p>
+
+<p>자동 시작 및 중지 기능은 유휴 상태일 때 머신이 <a href="#stop-a-machine-by-terminating-its-main-process">종료되는</a> 앱에서도 잘 작동합니다. 앱이 유휴 상태일 때 이미 종료되는 경우 트래픽이 발생하면 프록시가 앱을 다시 시작할 수 있습니다.</p>
+
+<p><a href="https://fly.io/docs/apps/scale-count/">머신 수 확장에</a> 대해 알아보고 싶으실 수도 있습니다.</p>
+<h2 id="configure-automatic-start-and-stop"><a href="#configure-automatic-start-and-stop" aria-label="Anchor"></a>자동 시작 및 중지 구성</h2>
+<p>자동 시작 및 중지 설정은 서비스별로 적용되므로 <code translate="no">fly.toml</code> 의 <a href="https://fly.io/docs/reference/configuration/#the-services-sections">[[서비스]]</a> 또는 <a href="https://fly.io/docs/reference/configuration/#the-http_service-section">[http_service]</a> 섹션에서 설정합니다:</p>
+
+<p>예를 들어:</p>
+<div>
+  <pre translate="no"><code translate="no"><span>...</span>
+<span>[[services]]</span>
+  <span>internal_port</span> <span>=</span> <span>8080</span>
+  <span>protocol</span> <span>=</span> <span>"tcp"</span>
+  <span>auto_stop_machines</span> <span>=</span> <span>true</span>
+  <span>auto_start_machines</span> <span>=</span> <span>true</span>
+  <span>min_machines_running</span> <span>=</span> <span>0</span>
+<span>...</span>
+</code></pre>
+</div>
+
+<p>간단히 설정은 다음과 같습니다:</p>
+
+<ul>
+<li><code translate="no">auto_start_machines</code>: 요청 및 용량에 따라 Fly Proxy가 머신을 자동으로 시작할지 여부.</li><li><code translate="no">auto_stop_machines</code>: 앱이 몇 분 동안 유휴 상태일 때 Fly Proxy가 자동으로 머신을 중지할지 여부.</li><li><code translate="no">min_machines_running</code>: 기본 리전에서 계속 실행할 최소 머신 수 <code translate="no">auto_stop_machines = true</code>.</li></ul>
+
+<p>서비스의 동시성 제한은 <a href="#how-it-works">자동 시작 및 중지 작동 방식에</a> 영향을 줍니다.</p>
+<h3 id="default-values"><a href="#default-values" aria-label="Anchor"></a>기본값</h3>
+<p><code translate="no">fly.toml</code> 에서 자동 시작 및 중지 설정을 지정하지 않은 앱의 기본 설정은 <code translate="no">auto_start_machines = true</code> 및 <code translate="no">auto_stop_machines = false</code> 입니다.</p>
+
+<p><code translate="no">fly launch</code> 명령을 사용하여 앱을 만드는 경우 <code translate="no">fly.toml</code> 의 기본 설정은 다음과 같습니다:</p>
+<div>
+  <pre translate="no"><code translate="no"><span>...</span>
+<span>[http_service]</span>
+  <span>internal_port</span> <span>=</span> <span>8080</span>
+  <span>force_https</span> <span>=</span> <span>true</span>
+  <span>auto_stop_machines</span> <span>=</span> <span>true</span>
+  <span>auto_start_machines</span> <span>=</span> <span>true</span>
+  <span>min_machines_running</span> <span>=</span> <span>0</span>
+<span>...</span>
+</code></pre>
+</div>
+<h3 id="recommended-settings"><a href="#recommended-settings" aria-label="Anchor"></a>권장 설정</h3>
+<p>앱이 <a href="#stop-a-machine-by-terminating-its-main-process">유휴 상태일 때</a> 이미 <a href="#stop-a-machine-by-terminating-its-main-process">종료되는</a> 경우, <code translate="no">auto_start_machines = true</code> 및 <code translate="no">auto_stop_machines = false</code> 을 설정하여 앱에서 중지된 머신을 Fly Proxy가 자동으로 다시 시작하도록 할 수 있습니다. </p>
+
+<p>앱이 유휴 상태일 때 종료되지 않는다면 <code translate="no">auto_stop_machines</code> 및 <code translate="no">auto_start_machines</code> 을 동일한 값(둘 다 <code translate="no">true</code> 또는 둘 다 <code translate="no">false</code>)으로 설정하여 Fly Proxy가 머신을 중지하고 다시 시작하지 않도록 하는 것이 좋습니다. 예를 들어 <code translate="no">auto_start_machines = false</code> 및 <code translate="no">auto_stop_machines = true</code> 으로 설정하면 트래픽이 적을 때 Fly 프록시가 자동으로 머신을 중지하지만 다시 시작하지 않습니다. 모든 또는 대부분의 머신이 중지되면 앱에 대한 요청이 실패하기 시작할 수 있습니다.</p>
+
+<p><code translate="no">auto_stop_machines = true</code>, 기본 지역에서 하나 이상의 컴퓨터를 항상 실행해야 하는 경우 <code translate="no">min_machines_running</code> 을 <code translate="no">1</code> 이상으로 설정하세요. <code translate="no">min_machines_running</code> 값은 지역별 머신이 아닌 총 머신 수에 적용됩니다. 예를 들어 <code translate="no">min_machines_running = 1</code> 인데 앱에 대한 트래픽이 없는 경우, 기본 지역에서 실행 중인 컴퓨터가 한 대만 남을 때까지 Fly Proxy가 컴퓨터를 중지합니다.</p>
+
+<p>최대 머신 수는 앱에 대해 생성한 총 머신 수에 불과하므로 '실행 중인 최대 머신 수' 설정은 없습니다. <a href="#how-it-works">작동 방식</a> 섹션에서 자세히 알아보세요.</p>
+<h2 id="how-it-works"><a href="#how-it-works" aria-label="Anchor"></a>작동 방식</h2>
+<p>플라이 프록시는 몇 분마다 기존 플라이 머신을 자동으로 중지하고 시작하는 프로세스를 실행합니다.</p>
+<p>자동 시작 및 중지 기능은 기존 머신에서만 작동하며, 사용자를 위해 머신을 생성하거나 파괴하지 않습니다. 실행 중인 머신의 최대 수는 <code translate="no">fly scale count</code> 또는 <code translate="no">fly machine clone</code> 을 사용하여 앱에 대해 생성한 머신의 수입니다. <a href="https://fly.io/docs/apps/scale-count/">머신 수 확장에</a> 대해 자세히 알아보세요. </p><h3 id="fly-proxy-stops-machines"><a href="#fly-proxy-stops-machines" aria-label="Anchor"></a>Fly 프록시가 머신을 중지합니다.</h3>
+<p><code translate="no">fly.toml</code> 에서 <code translate="no">auto_stop_machines = true</code> 이면 프록시는 단일 지역에서 실행 중인 머신을 살펴보고 각 머신에 대한 동시성 <a href="https://fly.io/docs/reference/configuration/#the-http_service-section"><code translate="no">soft_limit</code> 설정을</a> 사용하여 초과 용량이 있는지 확인합니다. 용량이 초과되었다고 판단되면 프록시는 정확히 하나의 머신을 중지합니다. 프록시는 이 프로세스를 몇 분마다 반복하여 필요한 경우 매번 지역당 한 대의 컴퓨터만 중지합니다.</p>
+
+<p><code translate="no">fly.toml</code> 파일에 <a href="https://fly.io/docs/reference/configuration/#runtime-options"><code translate="no">kill_signal</code> 및 <code translate="no">kill_timeout</code> 옵션이</a> 구성되어 있는 경우, Fly Proxy는 머신을 중지할 때 이 설정을 사용합니다.</p>
+
+<p>Fly Proxy는 다음과 같이 지역당 초과 용량을 결정합니다:</p>
+
+<ul>
+<li>지역에 머신이 두 대 이상 있는 경우:<ul>
+<li>프록시는 <code translate="no">soft_limit</code> 설정을 초과하는 실행 중인 머신의 수를 확인한 다음 초과 용량을 계산합니다: <code translate="no">excess capacity = num of machines - (num machines over soft limit + 1)</code>
+</li><li>초과 용량이 1 이상이면 프록시는 머신 한 대를 중지합니다.</li></ul>
+</li><li>해당 지역에 머신이 하나만 있는 경우:<ul>
+<li>프록시는 머신에 트래픽이 있는지 확인합니다.</li><li>머신에 트래픽이 없는 경우(부하가 0인 경우), 프록시는 머신을 중지합니다.</li></ul>
+</li></ul>
+<h3 id="fly-proxy-starts-machines"><a href="#fly-proxy-starts-machines" aria-label="Anchor"></a>플라이 프록시가 머신을 시작합니다.</h3>
+<p><code translate="no">fly.toml</code> 에서 <code translate="no">auto_start_machines = true</code> 이면 Fly Proxy는 필요할 때 가장 가까운 지역의 머신을 다시 시작합니다.</p>
+
+<p>Fly Proxy는 다음과 같이 머신을 시작할 시기를 결정합니다:</p>
+
+<ul>
+<li>프록시는 앱에 대한 요청을 기다립니다.</li><li>실행 중인 모든 머신이 <code translate="no">soft_limit</code> 설정보다 높으면 프록시는 가장 가까운 지역에서 중지된 머신을 시작합니다(중지된 머신이 있는 경우).</li><li>프록시는 요청을 새로 시작된 머신으로 라우팅합니다.</li></ul>
+<h2 id="when-to-stop-and-start-fly-machines-automatically-or-not"><a href="#when-to-stop-and-start-fly-machines-automatically-or-not" aria-label="Anchor"></a>플라이 머신을 자동으로 중지하고 시작할지 여부</h2>
+<p>앱의 요청 워크로드가 매우 가변적인 경우, <code translate="no">auto_stop_machines</code> 및 <code translate="no">auto_start_machines</code> 을 <code translate="no">true</code> 으로 설정하여 수요의 감소 및 증가에 따라 Fly 머신을 관리할 수 있습니다. 이렇게 하면 최대 부하를 처리하기 위해 여분의 머신을 실행할 필요 없이 필요한 만큼의 머신만 실행하고 비용을 청구할 수 있으므로 비용을 절감할 수 있습니다.</p>
+
+<p>이 기능과 일반적인 자동 확장 기능의 차이점은 지정된 최대치까지 새 머신을 생성하지 않는다는 점입니다. 기존 머신만 자동으로 시작합니다. 예를 들어 서비스 요청에 최대 10대의 컴퓨터를 사용할 수 있도록 하려면 앱에 대해 10대의 컴퓨터를 만들어야 합니다.</p>
+
+<p>앱의 모든 머신이 계속 실행되어야 하는 경우 <code translate="no">auto_stop_machines</code> 및 <code translate="no">auto_start_machines</code> 을 <code translate="no">false</code> 으로 설정하면 됩니다.</p>
+
+<p>특정 수의 앱 머신만 지속적으로 실행해야 하는 경우 <code translate="no">auto_stop_machines = true</code> 및 <code translate="no">min_machines_running</code> 을 <code translate="no">1</code> 이상으로 설정할 수 있습니다.</p>
+<h2 id="stop-a-machine-by-terminating-its-main-process"><a href="#stop-a-machine-by-terminating-its-main-process" aria-label="Anchor"></a>주 프로세스를 종료하여 머신 중지하기</h2>
+<p><code translate="no">auto_stop_machines = true</code> 을 사용하여 용량이 초과되면 앱이 자동으로 종료되도록 설정하면 일정 시간 동안 사용하지 않은 후 앱이 자동으로 종료되지 않는 경우를 대체할 수 있습니다. 앱에 대한 사용자 지정 종료 프로세스를 원하는 경우 유휴 상태일 때 앱이 자동으로 종료되도록 코딩할 수 있습니다.</p>
+
+<p>다음은 몇 가지 예입니다:</p>
+
+<ul>
+<li>유휴 상태일<a href="https://fly.io/phoenix-files/shut-down-idle-phoenix-app/">때 Phoenix 앱 종료하기</a>: 활성 연결이 없을 때 Erlang 런타임을 종료하는 작업을 Elixir 앱의 감독 트리에 추가하는 방법에 대한 Chris McCord의 게시물입니다.</li><li>Rails 앱의 경우 <code translate="no">dockerfile-rails</code> 생성기는 <em>n초</em> 동안 사용하지 않으면 종료되는 <a href="https://github.com/rubys/dockerfile-rails#addremove-a-feature">-max-idle</a> 옵션을 제공합니다.</li><li><a href="https://fly.io/blog/remote-ide-machines/">브라우저 내 IDE를 어려운 방식으로 구축하는</a> 데 사용되는<a href="https://github.com/superfly/tired-proxy">Go의 피곤한 프록시</a>. <a href="https://community.fly.io/t/improved-tired-proxy-for-use-with-fly-machines/10584">최신 업데이트가 포함된 커뮤니티 포크가 있습니다</a>.</li><li>타입스크립트/리믹스의 최소한의 데모 앱: <a href="https://github.com/fly-apps/autoscale-to-zero-demo">코드</a> 및 <a href="https://autoscale-to-zero-demo.fly.dev/">데모</a>.</li></ul>
+
+<p><code translate="no">flyctl</code> v0.0.520부터 Fly Postgres에서 이 <a href="https://community.fly.io/t/scale-to-zero-postgres-for-hobby-projects/12212">기능도 지원합니다</a>.</p>
+
+
+            <p>
+              
+                
+ <a href="https://github.com/superfly/docs/edit/main/apps/autostart-stop.html.markerb"><svg role="img" viewBox="0 0 24 24" style="pointer-events: none; width: 20px; height: 20px;" fill="currentColor">
+  <g buffered-rendering="static">
+    <path d="M11.999 1.271C5.925 1.271 1 6.196 1 12.273c0 4.859 3.152 8.982 7.523 10.437.55.1.751-.239.751-.53l-.015-1.872c-3.06.666-3.706-1.474-3.706-1.474-.5-1.271-1.221-1.609-1.221-1.609-.999-.683.075-.668.075-.668 1.105.077 1.685 1.133 1.685 1.133.981 1.681 2.575 1.196 3.202.914.1-.711.384-1.196.698-1.471-2.442-.277-5.011-1.221-5.011-5.436 0-1.201.429-2.183 1.133-2.952-.114-.278-.491-1.397.108-2.911 0 0 .923-.296 3.025 1.127A10.56 10.56 0 0 1 12 6.591c.935.004 1.876.127 2.754.37 2.1-1.423 3.022-1.127 3.022-1.127.6 1.514.223 2.633.11 2.911.705.769 1.131 1.751 1.131 2.952 0 4.225-2.573 5.155-5.023 5.427.395.34.747 1.011.747 2.038 0 1.471-.014 2.657-.014 3.018 0 .293.199.636.756.528C19.851 21.251 23 17.13 23 12.273c0-6.077-4.926-11.002-11.001-11.002z"></path>
+  </g>
+</svg>
+               </a> <a href="https://github.com/superfly/docs/edit/main/apps/autostart-stop.html.markerb">GitHub에서 이 페이지 수정하기</a>           </p>
+        </article></div></div>
+      </article>
+    </body>
+  </html>
+  
