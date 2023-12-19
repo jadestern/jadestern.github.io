@@ -1,0 +1,66 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+      <title>Roadmap to Tauri 2.0</title>
+      <link rel="canonical" href="https://beta.tauri.app/blog/roadmap-to-tauri-2-0/">
+      <style>
+        pre {
+          padding: 1rem;
+          background-color: #263238;
+          color: #fff
+        }
+      </style>
+    </head>
+    <body>
+      <article>
+        <div id="readability-page-1" class="page"><div><p><img alt="Hero Image" src="https://beta.tauri.app/_astro/header.4c15ffb4_ZSFl27.webp" width="1280" height="640" loading="lazy" decoding="async"></p>
+<p>타우리 1.0은 <a href="https://beta.tauri.app/blog/tauri-1-0">2022년 6월에 출시되었으며</a>, 개발자가 Rust의 보안과 성능을 갖춘 HTML, CSS, JavaScript를 사용하여 앱을 구축할 수 있는 앱 툴킷을 도입했습니다. 타우리는 다음과 같은 질문을 던지고 재정의하는 데 중추적인 역할을 해왔습니다: "앱이란 무엇인가?"</p>
+<p>1.0 버전은 Linux, macOS, Windows를 지원하며 출시되었고, 새로운 기능, DX 개선, 버그 수정으로 업데이트되어 현재 <a href="https://beta.tauri.app/blog/tauri-1-4">Tauri 1.4가</a> 출시되었습니다.</p>
+<p>하지만 타우리 워킹 그룹이 계속해서 받는 질문이 하나 있습니다. 저희는 이 질문을 "모바일은 언제?!?"라는 애칭으로 부르며, 오늘은 이 질문에 대한 답을 드리기 위해 타우리 2.0에 도달하기 위해 앞으로 나아갈 길을 간략하게 설명해드리고자 합니다.</p>
+<h2 id="what-is-tauri-20"><a aria-hidden="" tabindex="-1" href="#what-is-tauri-20">타우리 2.0이란 무엇인가요?</a></h2>
+<p>타우리 2.0 릴리스는 본질적으로 모바일 업데이트입니다. 하지만 2.0은 단순한 모바일 업데이트 그 이상입니다. 다음은 포함될 몇 가지 기능입니다:</p>
+<ul>
+<li><strong>강력한 플러그인</strong>: 많은 Tauri API가 Tauri 플러그인 시스템을 사용하도록 전환되었습니다. 이를 통해 Tauri 코드를 더욱 모듈화하고 유지보수를 용이하게 할 뿐만 아니라 개발자가 직접 플러그인을 구축할 수 있도록 플러그인 시스템을 더욱 강력하게 만들 수 있게 되었습니다.</li>
+<li><strong>플러그인을 위한 Swift 및 Kotlin 바인딩</strong>: 이제 Swift와 Kotlin에서 플랫폼별 코드를 작성할 수 있습니다. Tauri는 버전 1.0부터 Rust와 JavaScript 코드 간의 가교 역할을 해왔습니다. Tauri 2.0을 통해 플러그인 개발자는 Swift 및 Kotlin으로 코드를 작성하여 개발 중인 시스템과 더욱 긴밀하게 통합할 수 있습니다.</li>
+<li><strong>iOS 및 Android 지원</strong>: Tauri 앱을 빌드하여 iOS와 Android에서 실행할 수 있게 됩니다.</li>
+</ul>
+
+<p>이미 개발자들이 Tauri 2.0의 시험판 버전으로 놀라운 작업을 수행하는 것을 보았으며, 이제 모든 사람이 사용할 수 있는 안정적인 버전으로 나아갈 수 있게 되어 기대가 큽니다.</p>
+<h2 id="path-to-tauri-20-stable"><a aria-hidden="" tabindex="-1" href="#path-to-tauri-20-stable">타우리 2.0 안정 버전으로 가는 길</a></h2>
+<p>현재는 2.0 알파 단계에 있습니다. 다음은 타우리 2.0의 안정화를 위한 3가지 주요 마일스톤입니다:</p>
+<ol>
+<li><a href="#beta">베타</a></li>
+<li><a href="#release-candidate">릴리스 후보</a></li>
+<li><a href="#stable">Stable</a></li>
+</ol>
+<p>아래는 각 마일스톤에 따라 Tauri 워킹 그룹이 추진하고 있는 단계입니다.</p>
+<h3 id="beta"><a aria-hidden="" tabindex="-1" href="#beta">베타</a></h3>
+<p>베타 단계로 진입하려면 Tauri 2.0의 모든 기능이 완성되고 알려진 주요 문제 없이 작동해야 합니다. 이는 Tauri 워킹 그룹이 공개 Tauri API에 만족하고 있으며, 커뮤니티의 피드백을 받으면 변경될 가능성이 있지만 획기적인 변화를 예상하지 않는다는 것을 의미합니다.</p>
+<p>베타 버전이 출시되면 코드 베이스를 잠그고 감사 단계로 넘어갈 것입니다. 이 시점 이후에는 Tauri 2.0에 새로운 기능이 추가되지 않습니다.</p>
+<p>보안은 타우리에게 매우 중요합니다. 저희는 외부 감사인과 협력하여 Tauri 코드를 검토하여 Tauri 개발자와 사용자에게 최대한의 보안을 제공할 수 있도록 노력하고 있습니다. Tauri 1.0에서도 이와 유사한 접근 방식을 사용하여 Radically Open Security와 협력하여 보안 감사를 진행했습니다<a href="https://github.com/tauri-apps/tauri/blob/dev/audits/Radically_Open_Security-v1-report.pdf">(Tauri 1.0 보안 감사 보고서</a>).</p>
+<p>2.0의 보안 감사에 대한 자세한 내용은 추후 공개될 예정입니다.</p>
+<h3 id="release-candidate"><a aria-hidden="" tabindex="-1" href="#release-candidate">릴리스 후보</a></h3>
+<p>모든 감사 결과가 해결되면 릴리스 후보 단계로 넘어갑니다. 이 단계에서는 안정적인 릴리스를 준비하기 위해 타우리 커뮤니티에 테스트 드라이브를 제공하고, 버그가 있는지 확인하고, 피드백을 제공하도록 요청할 것입니다.</p>
+<p>RC 단계에서는 얼리어답터들의 도움을 받아 문제점을 발견하고 빠르게 해결할 수 있는 과실을 맺을 수 있도록 시간이 제한됩니다. 여기에는 우리가 알고 있는 것과 보여주는 것을 일치시키기 위한 문서화 스프린트도 포함될 것입니다. 이에 대한 자세한 내용은 릴리스 후보 단계에 가까워질수록 공유될 예정입니다.</p>
+<h3 id="stable"><a aria-hidden="" tabindex="-1" href="#stable">안정화</a></h3>
+<p>타우리 2.0이 출시되어 누구나 멋진 것을 만들 수 있도록 일반에 공개될 예정입니다. 또한 패치와 소규모 업데이트를 게시하는 현재의 접근 방식에 따라 계속해서 버그를 수정하고 업데이트를 릴리스할 것입니다.</p>
+<h3 id="where-we-are"><a aria-hidden="" tabindex="-1" href="#where-we-are">현재 상황</a></h3>
+<p>안정적인 릴리스를 향해 나아가는 데는 많은 부분이 있습니다. 두 가지 주요 부분은 보안 감사를 통한 발견 및 수정 사항과 커뮤니티의 피드백 및 조정 사항입니다. 이 두 가지는 매우 중요하며, Tauri의 보안과 품질에 영향을 주지 않으면서도 우선순위를 정할 수 있기를 원합니다.</p>
+<p>이러한 우선순위 때문에 아직 Tauri 2.0의 안정적인 출시 일정은 확정되지 않았습니다. 저희는 내부적으로 목표가 있지만, 피드백에 유연하게 대응할 수 있도록 노력하고 있습니다.</p>
+<p>지금 말씀드릴 수 있는 것은 대략 2024년 초에 타우리 2.0의 안정적인 출시를 목표로 하고 있다는 것입니다. 가능한 한 빨리 베타 단계에 진입하기 위해 박차를 가하고 있습니다.</p>
+<p>타우리 2.0의 개발이 진척됨에 따라 커뮤니티에 업데이트를 공유할 예정입니다. 최신 정보를 얻는 가장 좋은 방법은 베타, 릴리스 후보, 최종 안정화 단계를 거치면서 Tauri가 출시되는 과정을 지켜보는 것입니다. <a href="https://twitter.com/TauriApps">트위터</a>, <a href="https://fosstodon.org/@TauriApps">마스토돈</a>, <a href="https://discord.com/invite/tauri">디스코드에서도</a> 계속 주시할 수 있습니다.</p>
+<h2 id="getting-involved"><a aria-hidden="" tabindex="-1" href="#getting-involved">참여하기</a></h2>
+<p>타우리 2.0의 안정화를 위해 노력하는 동안 커뮤니티가 참여할 수 있는 다양한 방법이 있습니다. 더 많은 참여와 피드백을 받을수록 모두에게 더 나은 타우리 2.0이 될 것입니다. 다음은 몇 가지 참여 방법입니다:</p>
+<ul>
+<li>타우리의 시험 버전을 테스트하고 Discord와 GitHub 이슈를 통해 피드백을 제공하세요.</li>
+<li><a href="https://beta.tauri.app/">https://beta.tauri.app</a> 에서 문서 및 번역에 기여하세요.</li>
+<li>Discord 및 GitHub 이슈에서 다른 사람들을 지원하고 발생하는 주요 이슈에 대한 피드백을 제공하여 Tauri 커뮤니티에 도움을 주세요.</li>
+<li>Tauri 2.0과 관련된 콘텐츠 기획을 시작하세요(최소 2.0 베타 버전까지 기다리는 것이 좋습니다). 동영상, 블로그, 강좌 등 콘텐츠 아이디어에 대해 공동 작업을 하고 싶으시다면 Discord의 타우리 워킹 그룹에 연락해 주세요.</li>
+</ul>
+<hr>
+<p>이를 통해 현재 상황과 앞으로의 방향, 그리고 이를 위해 여러분이 할 수 있는 일에 대해 조금이나마 투명하게 알려드릴 수 있기를 바랍니다. <a href="https://github.com/tauri-apps/tauri-docs/discussions/1522">이 게시물에</a> 대해 <a href="https://discord.com/invite/tauri">Discord에 가입하고</a> <a href="https://github.com/tauri-apps/tauri-docs/discussions/1522">GitHub 토론에 참여하여</a> 피드백을 보내주세요. 행복한 빌드!</p></div><p>© 2023 Tauri 기여자. CC-BY / MIT</p></div>
+      </article>
+    </body>
+  </html>
+  
