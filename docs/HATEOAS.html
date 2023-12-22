@@ -1,0 +1,98 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+      <title>HATEOAS</title>
+      <link rel="canonical" href="https://en.wikipedia.org/wiki/HATEOAS">
+      <style>
+        pre {
+          padding: 1rem;
+          background-color: #263238;
+          color: #fff
+        }
+      </style>
+    </head>
+    <body>
+      <article>
+        <div id="readability-page-1" class="page"><div>
+							
+
+						<p>무료 백과사전 위키백과에서 제공</p>
+					</div><div lang="en" dir="ltr" id="mw-content-text">
+<p><b>애플리케이션 상태 엔진으로서의 하이퍼미디어</b><b>(HATEOAS</b>)는 다른 네트워크 <a href="https://en.wikipedia.org/wiki/Application_architecture" title="Application architecture">애플리케이션 아키텍처</a>와 구별되는 <a href="https://en.wikipedia.org/wiki/Representational_state_transfer" title="Representational state transfer">REST 애플리케이션 아키텍처의</a> 제약 조건입니다.</p><p>HATEOAS를 사용하면 클라이언트는 애플리케이션 서버가 <a href="https://en.wikipedia.org/wiki/Hypermedia" title="Hypermedia">하이퍼미디어를</a> 통해 동적으로 정보를 제공하는 네트워크 애플리케이션과 상호 작용합니다. REST 클라이언트는 하이퍼미디어에 대한 일반적인 이해 외에 애플리케이션 또는 서버와 상호 작용하는 방법에 대한 사전 지식이 거의 또는 전혀 필요하지 않습니다. 
+</p><p>이와는 대조적으로 CORBA( <a href="https://en.wikipedia.org/wiki/Common_Object_Request_Broker_Architecture" title="Common Object Request Broker Architecture">Common Object Request Broker Architecture</a> )의 클라이언트와 서버는 문서 또는 <a href="https://en.wikipedia.org/wiki/Interface_description_language" title="Interface description language">인터페이스 설명 언어</a> (IDL)를 통해 공유되는 고정 <a href="https://en.wikipedia.org/wiki/Interface_(computing)" title="Interface (computing)">인터페이스를</a> 통해 상호 작용합니다.</p><p>HATEOAS에 의해 부과된 제한은 클라이언트와 서버를 분리합니다. 이를 통해 서버 기능이 독립적으로 발전할 수 있습니다.</p><p>이 용어는 2000년에 <a href="https://en.wikipedia.org/wiki/Roy_Fielding" title="Roy Fielding">로이 필딩이</a> 박사 학위 논문에서 사용했다.<sup id="cite_ref-Fielding-Ch5_1-0"><a href="#cite_note-Fielding-Ch5-1">[1]</a></sup></p>
+<meta property="mw:PageProp/toc">
+<h2><span id="Example">예시</span><span><span>[</span><a href="https://en.wikipedia.org/w/index.php?title=HATEOAS&amp;action=edit&amp;section=1" title="Edit section: Example"><span>편집]</span></a></span></h2>
+<p>사용자 에이전트가 엔트리 포인트 <a href="https://en.wikipedia.org/wiki/Uniform_Resource_Locator" title="Uniform Resource Locator">URL을</a> 통해 REST API에 HTTP 요청을 합니다. 사용자 에이전트가 수행할 수 있는 모든 후속 요청은 각 요청에 대한 응답 내에서 발견됩니다. 이러한 표현에 사용되는 <a href="https://en.wikipedia.org/wiki/Media_type" title="Media type">미디어 유형과</a> 포함될 수 있는 <a href="https://en.wikipedia.org/wiki/Link_relation" title="Link relation">링크 관계는</a> API의 일부입니다. 클라이언트는 프레젠테이션 내의 링크를 선택하거나 미디어 유형에 따라 제공되는 다른 방식으로 프레젠테이션을 조작하여 애플리케이션 상태를 전환합니다. 이러한 방식으로 RESTful 상호 작용은 대역 외 정보가 아닌 하이퍼미디어에 의해 주도됩니다.<sup id="cite_ref-untangled2008_2-0"><a href="#cite_note-untangled2008-2">[2]</a></sup>.</p><p>예를 들어, 이 GET 요청은 계정 리소스를 가져와서 JSON 표현으로 세부 정보를 요청합니다:<sup id="cite_ref-cookbook_3-0"><a href="#cite_note-cookbook-3">[3]</a></sup>.</p>
+<div dir="ltr"><pre translate="no"><span></span><span>GET</span> <span>/accounts/12345</span> <span>HTTP</span><span>/</span><span>1.1</span>
+<span>Host</span><span>:</span> <span>bank.example.com</span>
+</pre></div>
+<p>응답은 다음과 같습니다:</p>
+<div dir="ltr"><pre translate="no"><span></span><span>HTTP</span><span>/</span><span>1.1</span> <span>200</span> <span>OK</span>
+
+{
+    "account": {
+        "account_number": 12345,
+        "balance": {
+            "currency": "usd",
+            "value": 100.00
+        },
+        "links": {
+            "deposits": "/accounts/12345/deposits",
+            "withdrawals": "/accounts/12345/withdrawals",
+            "transfers": "/accounts/12345/transfers",
+            "close-requests": "/accounts/12345/close-requests"
+        }
+    }
+}
+</pre></div>
+<p>응답에는 다음과 같은 후속 링크가 포함됩니다: POST 입금, 출금, 이체 또는 폐쇄 요청(계좌를 폐쇄하기 위한).</p><p>예를 들어, 나중에 계좌가 한도 초과 인출된 후에는 계좌가 초과 인출되었기 때문에 사용 가능한 링크가 달라집니다.</p>
+<div dir="ltr"><pre translate="no"><span></span><span>HTTP</span><span>/</span><span>1.1</span> <span>200</span> <span>OK</span>
+
+{
+    "account": {
+        "account_number": 12345,
+        "balance": {
+            "currency": "usd",
+            "value": -25.00
+        },
+        "links": {
+            "deposits": "/accounts/12345/deposits"
+        }
+    }
+}
+</pre></div>
+<p>이제 더 많은 돈을 입금하기 위한 링크(입금에 게시하기) 하나만 사용할 수 있습니다. 현재 <i>상태에서는</i> 다른 링크를 사용할 수 없습니다. 따라서 <i>엔진 오브 애플리케이션 상태라는</i> 용어가 사용됩니다. 가능한 작업은 리소스 상태에 따라 달라집니다.</p><p>클라이언트가 서버에서 제공하는 모든 미디어 유형과 통신 메커니즘을 이해할 필요는 없습니다. 새로운 미디어 유형을 이해하는 능력은 서버가 클라이언트에 제공하는<a href="https://en.wikipedia.org/wiki/Code_on_demand" title="Code on demand">"주문형 코드</a>"를 통해 런타임에 획득할 수 있습니다<sup id="cite_ref-Fielding-Ch5_1-1"><a href="#cite_note-Fielding-Ch5-1">[1]</a></sup>.</p>
+<h2><span id="Origins">기원</span><span><span>[</span><a href="https://en.wikipedia.org/w/index.php?title=HATEOAS&amp;action=edit&amp;section=2" title="Edit section: Origins"><span>편집</span></a><span>]</span></span></h2>
+<p><a href="https://en.wikipedia.org/wiki/Roy_Fielding" title="Roy Fielding">로이 필딩의</a> 박사 학위 논문에서 정의된 바와 같이 HATEOAS 제약 조건은 REST의 "균일한 인터페이스" 기능의 필수적인 부분입니다.<sup id="cite_ref-Fielding-Ch5_1-2"><a href="#cite_note-Fielding-Ch5-1">[1]</a></sup> 필딩은 자신의 블로그에서 이 개념을 자세히 설명하면서 하이퍼텍스트가 아닌 "유형화된" API(즉, 해석하는 데 특정 대역 외 지식이 필요한)는 "REST"라고 부를 수 없다고 주장했습니다. 위의 은행 JSON 예제(그리고 아마도 <i>REST 쿡북의</i> 원본 XML 예제<sup id="cite_ref-cookbook_3-1"><a href="#cite_note-cookbook-3">[3]</a></sup> )는 그의 기준을 충족하지 못하지만<sup id="cite_ref-untangled2008_2-1"><a href="#cite_note-untangled2008-2">[2]</a></sup>,<sup id="cite_ref-htmx_4-1"><a href="#cite_note-htmx-4">[4</a></sup>] 그럼에도 불구하고 "REST"에 대한 대중적인 이해의 일부로 주류화되어 왔습니다.</p><p>필딩은 이 제약 조건과 다른 REST 제약 조건의 일부 엄격한 목적이 "수십 년에 걸친 소프트웨어 설계, 즉 모든 세부 사항이 소프트웨어의 수명과 독립적인 진화를 촉진하기 위한 것"이라고 설명합니다. 많은 제약 조건이 단기적인 효율성과 직접적으로 반대되는 것입니다. 불행히도 사람들은 단기 설계에는 상당히 능숙하지만 장기 설계에는 일반적으로 끔찍합니다."<sup id="cite_ref-untangled2008_2-2"><a href="#cite_note-untangled2008-2">[2]</a></sup></p>
+<h2><span id="Implementations">구현</span><span><span>[</span><a href="https://en.wikipedia.org/w/index.php?title=HATEOAS&amp;action=edit&amp;section=3" title="Edit section: Implementations"><span>편집</span></a><span>]</span></span></h2>
+<ul><li><a href="https://en.wikipedia.org/wiki/HTML" title="HTML">HTML</a> 자체는 하이퍼 미디어, <code translate="no">&lt;form&gt;...&lt;/form&gt;</code> 요소는 링크에 대한 HTTP 요청을 제어합니다.<sup id="cite_ref-untangled2008_2-3"><a href="#cite_note-untangled2008-2">[2]</a></sup><sup id="cite_ref-htmx_4-2"><a href="#cite_note-htmx-4">[4]</a></sup></li>
+<li><a href="https://en.wikipedia.org/wiki/Hypertext_Application_Language" title="Hypertext Application Language">HAL</a>, JSON 또는 XML 위에 구축 된 하이퍼 미디어. 링크는 정의하지만 동작(HTTP 요청)은 정의하지 않습니다.</li>
+<li><a href="https://en.wikipedia.org/wiki/JSON-LD" title="JSON-LD">JSON-LD</a>, JSON의 하이퍼링크에 대한 표준. 액션을 다루지 않습니다.</li>
+<li><a href="https://en.wikipedia.org/w/index.php?title=Siren_(specification)&amp;action=edit&amp;redlink=1" title="Siren (specification) (page does not exist)">사이렌</a>, JSON 위에 구축된 하이퍼미디어. 링크와 액션을 정의합니다.<sup id="cite_ref-5"><a href="#cite_note-5">[5]</a></sup>.</li>
+<li><a href="https://en.wikipedia.org/w/index.php?title=Collection%2BJSON&amp;action=edit&amp;redlink=1" title="Collection+JSON (page does not exist)">Collection+JSON</a>, JSON 위에 구축된 하이퍼미디어.  링크와 액션을 정의합니다.<sup id="cite_ref-6"><a href="#cite_note-6">[6]</a></sup>.</li>
+<li><a href="https://en.wikipedia.org/w/index.php?title=JSON:API&amp;action=edit&amp;redlink=1" title="JSON:API (page does not exist)">JSON:API</a>, 링크와 액션을 정의합니다.<sup id="cite_ref-7"><a href="#cite_note-7">[7]</a></sup>.</li>
+<li><a href="https://en.wikipedia.org/w/index.php?title=Hydra_(specification)&amp;action=edit&amp;redlink=1" title="Hydra (specification) (page does not exist)">히드라</a>. 동작 정의를 추가하기 위해 JSON-LD 위에 구축됩니다.<sup id="cite_ref-8"><a href="#cite_note-8">[8]</a></sup></li></ul>
+<h2><span id="See_also">또한보십시오</span><span><span>[</span><a href="https://en.wikipedia.org/w/index.php?title=HATEOAS&amp;action=edit&amp;section=4" title="Edit section: See also"><span>편집]</span></a></span></h2>
+<ul><li><a href="https://en.wikipedia.org/wiki/Hypertext_Application_Language" title="Hypertext Application Language">하이퍼텍스트 애플리케이션 언어</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Universal_Description_Discovery_and_Integration" title="Universal Description Discovery and Integration">범용 설명 검색 및 통합은</a> <a href="https://en.wikipedia.org/wiki/Web_Services_Description_Language" title="Web Services Description Language">웹 서비스 설명 언어에</a> 해당합니다.</li></ul>
+<h2><span id="References">참조</span><span><span>[</span><a href="https://en.wikipedia.org/w/index.php?title=HATEOAS&amp;action=edit&amp;section=5" title="Edit section: References"><span>편집</span></a><span>]</span></span></h2>
+<div><ol>
+<li id="cite_note-Fielding-Ch5-1">^<span> <a href="#cite_ref-Fielding-Ch5_1-0"><sup><i><b>a</b></i></sup></a> <a href="#cite_ref-Fielding-Ch5_1-1"><sup><i><b>b</b></i></sup></a> <a href="#cite_ref-Fielding-Ch5_1-2"><sup><i><b>c</b></i></sup></a></span> <span><cite id="CITEREFFielding2000">필딩, 로이 토마스 (2000). <a rel="nofollow" href="https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm#sec_5_1_5">"표현 상태 전송 (REST)"</a>. <a rel="nofollow" href="https://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm"><i>아키텍처 스타일 및 네트워크 기반 소프트웨어 아키텍처 설계</i></a> (박사). <a href="https://en.wikipedia.org/wiki/University_of_California,_Irvine" title="University of California, Irvine">캘리포니아 대학교 어바인</a>. 피. 82. <a href="https://en.wikipedia.org/wiki/Special:BookSources/0599871180" title="Special:BookSources/0599871180"><bdi>ISBN</bdi></a></cite> 0599871180</span>. <span><span title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Adissertation&amp;rft.title=Architectural+Styles+and+the+Design+of+Network-based+Software+Architectures&amp;rft.inst=University+of+California%2C+Irvine&amp;rft.date=2000&amp;rft.isbn=0599871180&amp;rft.aulast=Fielding&amp;rft.aufirst=Roy+Thomas&amp;rft_id=https%3A%2F%2Fwww.ics.uci.edu%2F~fielding%2Fpubs%2Fdissertation%2Frest_arch_style.htm%23sec_5_1_5&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3AHATEOAS"></span></span></li>
+<li id="cite_note-untangled2008-2">^<span> <a href="#cite_ref-untangled2008_2-0"><sup><i><b>a</b></i></sup></a> <a href="#cite_ref-untangled2008_2-1"><sup><i><b>b</b></i></sup></a> <a href="#cite_ref-untangled2008_2-2"><sup><i><b>c</b></i></sup></a> <a href="#cite_ref-untangled2008_2-3"><sup><i><b>d</b></i></sup></a></span> <span><cite id="CITEREFFielding2008"><a href="https://en.wikipedia.org/wiki/Roy_Fielding" title="Roy Fielding">필딩, 로이 T.</a> (2008 년 10 월 20</cite></span>일). <span><cite id="CITEREFFielding2008"> <a rel="nofollow" href="https://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven">"REST API는 하이퍼 텍스트 기반이어야합니다."</a><span>.</span></cite></span>검색 됨 <span><cite id="CITEREFFielding2008"><span> <span>5 월 20</span></span></cite></span>일 <span><cite id="CITEREFFielding2008"><span> 2010</span>.</cite><span title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=unknown&amp;rft.btitle=REST+APIs+must+be+hypertext-driven&amp;rft.date=2008-10-20&amp;rft.aulast=Fielding&amp;rft.aufirst=Roy+T.&amp;rft_id=https%3A%2F%2Froy.gbiv.com%2Funtangled%2F2008%2Frest-apis-must-be-hypertext-driven&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3AHATEOAS"></span></span></li>
+<li id="cite_note-cookbook-3"><span> <a href="#cite_ref-cookbook_3-0"><sup><i><b>ㅏ</b></i></sup></a></span><span> <a href="#cite_ref-cookbook_3-1"><sup><i><b>b</b></i></sup></a></span> <span><cite id="CITEREFThijssen2016">티센, 조슈아 (2016-10-29). <a rel="nofollow" href="http://restcookbook.com/Basics/hateoas/">"HATEOAS 란 무엇이며 내 REST API에 중요한 이유는 무엇입니까?"</a>. <i>REST 요리 책</i><span>.</span></cite></span>검색 됨 <span><cite id="CITEREFThijssen2016"><span> <span>2020-02-05</span></span>.</cite><span title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=unknown&amp;rft.jtitle=REST+CookBook&amp;rft.atitle=What+is+HATEOAS+and+why+is+it+important+for+my+REST+API%3F&amp;rft.date=2016-10-29&amp;rft.aulast=Thijssen&amp;rft.aufirst=Joshua&amp;rft_id=http%3A%2F%2Frestcookbook.com%2FBasics%2Fhateoas%2F&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3AHATEOAS"></span></span></li>
+<li id="cite_note-htmx-4">^<span> <a href="#cite_ref-htmx_4-0"><sup><i><b>a</b></i></sup></a> <a href="#cite_ref-htmx_4-1"><sup><i><b>b</b></i></sup></a> <a href="#cite_ref-htmx_4-2"><sup><i><b>c</b></i></sup></a></span> <span><cite id="CITEREFGross">그로스, 카슨. <a rel="nofollow" href="https://htmx.org/essays/hateoas/">"하테오 아스"</a>. <i>htmx.org</i>. <q>이것은 XML이나 JSON이 HTML과 같은 방식으로 자연스러운 하이퍼 미디어가 아니었다는 사실에도 불구하고.</q></cite><span title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=unknown&amp;rft.jtitle=htmx.org&amp;rft.atitle=HATEOAS&amp;rft.aulast=Gross&amp;rft.aufirst=Carson&amp;rft_id=https%3A%2F%2Fhtmx.org%2Fessays%2Fhateoas%2F&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3AHATEOAS"></span></span></li>
+<li id="cite_note-5"><span><a rel="nofollow" href="https://github.com/kevinswiber/siren">사이렌:</a> <a href="https://en.wikipedia.org/wiki/GitHub" title="GitHub">깃허브에서</a><a rel="nofollow" href="https://github.com/kevinswiber/siren">엔티티를 표현하기 위한 하이퍼미디어 사양</a></span></li>
+<li id="cite_note-6"><span><b><a href="#cite_ref-6">^</a></b></span> <span><cite><a rel="nofollow" href="http://amundsen.com/media-types/collection/">"컬렉션 + JSON - 하이퍼 미디어 유형"</a><span>.</span><span> 검색됨 <span>2021-10-25</span></span>.</cite><span title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=unknown&amp;rft.btitle=Collection%2BJSON+-+Hypermedia+Type&amp;rft_id=http%3A%2F%2Famundsen.com%2Fmedia-types%2Fcollection%2F&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3AHATEOAS"></span></span></li>
+<li id="cite_note-7"><span><b><a href="#cite_ref-7">^</a></b></span> <span><cite><a rel="nofollow" href="https://jsonapi.org/format">"JSON API:</a><a rel="nofollow" href="https://jsonapi.org/format"> 최신 사양"</a><span>.</span></cite></span>검색 됨 <span><cite><span> <span>2021-10-25</span></span>.</cite><span title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=unknown&amp;rft.btitle=JSON+API%3A+Latest+Specification&amp;rft_id=https%3A%2F%2Fjsonapi.org%2Fformat&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3AHATEOAS"></span></span></li>
+<li id="cite_note-8"><span><b><a href="#cite_ref-8">^</a></b></span> <span><cite><a rel="nofollow" href="http://www.markus-lanthaler.com/hydra">"Hydra : 하이퍼 미디어 기반 웹 API"</a><span>.</span></cite></span>검색 됨 <span><cite><span> <span>2021-10-27</span></span>.</cite><span title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=unknown&amp;rft.btitle=Hydra%3A+Hypermedia-Driven+Web+APIs&amp;rft_id=http%3A%2F%2Fwww.markus-lanthaler.com%2Fhydra&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3AHATEOAS"></span></span></li>
+</ol></div>
+
+
+
+
+</div></div>
+      </article>
+    </body>
+  </html>
+  
