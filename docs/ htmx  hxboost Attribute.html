@@ -1,0 +1,50 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+      <title></> htmx ~ hx-boost Attribute</title>
+      <link rel="canonical" href="https://htmx.org/attributes/hx-boost/">
+      <style>
+        pre {
+          padding: 1rem;
+          background-color: #263238;
+          color: #fff
+        }
+      </style>
+    </head>
+    <body>
+      <article>
+        <div id="readability-page-1" class="page"><div>
+    
+  
+  <p><code translate="no">hx-boost</code> 속성을 사용하면 일반 앵커와 양식 태그를 "부스트"하여 대신 AJAX를 사용할 수 있습니다.  이는 사용자가 자바스크립트를 활성화하지 않은 경우에도 사이트가 계속 작동한다는 <a rel="noopener" target="_blank" href="https://en.wikipedia.org/wiki/Progressive_enhancement">좋은</a> 대체 기능이 있습니다.</p>
+<p>앵커 태그의 경우 앵커를 클릭하면 <code translate="no">href</code> 에 지정된 URL에 <code translate="no">GET</code> 요청이 실행되고 해당 URL이 푸시되어 기록 항목이 만들어집니다.  대상은 <code translate="no">&lt;body&gt;</code> 태그이며 <code translate="no">innerHTML</code>스왑 전략이 기본적으로 사용됩니다.  <code translate="no">click</code> 트리거를 제외한 모든 태그는 적절한 속성을 사용하여 수정할 수 있습니다.</p>
+<p>양식의 경우 요청은 <code translate="no">method</code> 속성의 메서드에 따라 <code translate="no">GET</code> 또는 <code translate="no">POST</code> 으로 변환되고 <code translate="no">submit</code> 에 의해 트리거됩니다. 이 경우에도 타겟은 페이지의 <code translate="no">body</code> 가 되며 <code translate="no">innerHTML</code>스왑이 사용됩니다. 그러나 URL은 <em>푸시되지</em> 않으며 히스토리 항목이 생성되지 않습니다. (URL을 푸시하려면<a href="https://htmx.org/attributes/hx-push-url/">hx-push-url</a> 속성을 사용하면 됩니다.</p>
+<p>다음은 몇 가지 부스트 링크의 예입니다:</p>
+<pre translate="no" data-lang="html"><code translate="no" data-lang="html"><span>&lt;</span><span>div </span><span>hx-boost</span><span>=</span><span>"true"</span><span>&gt;
+</span><span>  &lt;</span><span>a </span><span>href</span><span>=</span><span>"/page1"</span><span>&gt;Go To Page 1&lt;/</span><span>a</span><span>&gt;
+</span><span>  &lt;</span><span>a </span><span>href</span><span>=</span><span>"/page2"</span><span>&gt;Go To Page 2&lt;/</span><span>a</span><span>&gt;
+</span><span>&lt;/</span><span>div</span><span>&gt;
+</span></code></pre>
+<p>이러한 링크는 각 URL에 ajax <code translate="no">GET</code> 요청을 실행하여 본문의 내부 콘텐츠를 해당 URL로 대체합니다.</p>
+<p>다음은 부스트된 양식의 예입니다:</p>
+<pre translate="no" data-lang="html"><code translate="no" data-lang="html"><span>&lt;</span><span>form </span><span>hx-boost</span><span>=</span><span>"true" </span><span>action</span><span>=</span><span>"/example" </span><span>method</span><span>=</span><span>"post"</span><span>&gt;
+</span><span>    &lt;</span><span>input </span><span>name</span><span>=</span><span>"email" </span><span>type</span><span>=</span><span>"email" </span><span>placeholder</span><span>=</span><span>"Enter email..."</span><span>&gt;
+</span><span>    &lt;</span><span>button</span><span>&gt;Submit&lt;/</span><span>button</span><span>&gt;
+</span><span>&lt;/</span><span>form</span><span>&gt;
+</span></code></pre>
+<p>이 양식은 지정된 URL에 ajax <code translate="no">POST</code> 요청을 발행하고 본문의 내부 콘텐츠를 해당 요청으로 대체합니다.</p>
+<h2 id="notes">노트</h2>
+<ul>
+<li><code translate="no">hx-boost</code> 는 상속되며 부모 요소에 배치할 수 있습니다.</li>
+<li>동일한 도메인으로 연결되고 로컬 앵커가 아닌 링크만 부스트됩니다.</li>
+<li>모든 요청은 AJAX를 통해 이루어지므로 리디렉션과 같은 작업을 수행할 때 이를 염두에 두어야 합니다.</li>
+<li>요청이 부스트된 앵커 또는 양식에서 발생하는지 확인하려면 요청 헤더에서 <a href="https://htmx.org/reference/#request_headers"><code translate="no">HX-Boosted</code></a> 를 확인합니다.</li>
+<li>다음을 사용하여 하위 요소에서 부스트를 선택적으로 비활성화합니다. <code translate="no">hx-boost="false"</code></li>
+</ul>
+
+</div></div>
+      </article>
+    </body>
+  </html>
+  
