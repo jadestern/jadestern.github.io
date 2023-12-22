@@ -1,0 +1,154 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+      <title></> htmx ~ HATEOAS</title>
+      <link rel="canonical" href="https://htmx.org/essays/hateoas/">
+      <style>
+        pre {
+          padding: 1rem;
+          background-color: #263238;
+          color: #fff
+        }
+      </style>
+    </head>
+    <body>
+      <article>
+        <div id="readability-page-1" class="page"><div>
+    
+
+  
+  
+
+  
+
+
+
+
+
+<section>
+<h2 id="preface-hateoas-an-alternative-explanation">#<a href="#preface-hateoas-an-alternative-explanation" aria-label="Anchor link for: preface-hateoas-an-alternative-explanation">서문</a> <em>HATEOAS - 대체 설명</em></h2>
+<p>이 페이지는 JSON을 사용하는 <a rel="noopener" target="_blank" href="https://en.wikipedia.org/wiki/HATEOAS">HATEOAS에 대한 위키백과 항목을</a> 재작업한 것입니다. 여기서는 HTML을 사용하여 개념을 설명하고 이를 JSON API와 대조합니다.  이 개념에 대한 설명은 위키백과에 적합하지 않지만, 저희 생각에는 더 정확하다고 생각합니다.</p>
+</section>
+<p>애플리케이션 상태 엔진으로서의 하이퍼미디어(HATEOAS)는 다른 네트워크 애플리케이션 아키텍처와 구별되는 <a rel="noopener" target="_blank" href="https://en.wikipedia.org/wiki/Representational_state_transfer">REST 애플리케이션 아키텍처의</a> 제약 조건입니다.</p>
+<p>HATEOAS를 사용하면 클라이언트는 애플리케이션 서버가 <a rel="noopener" target="_blank" href="https://en.wikipedia.org/wiki/Hypermedia"><em>하이퍼미디어를</em></a> 통해 동적으로 정보를 제공하는 네트워크 애플리케이션과 상호 작용합니다. REST 클라이언트는 하이퍼미디어에 대한 일반적인 이해 외에 애플리케이션 또는 서버와 상호 작용하는 방법에 대한 사전 지식이 거의 필요하지 않습니다.</p>
+<p>반면, 오늘날의 JSON 기반 웹 클라이언트는 일반적으로 <a rel="noopener" target="_blank" href="https://swagger.io/">스와거와</a> 같은 도구를 통해 문서를 통해 공유되는 고정된 인터페이스를 통해 상호 작용합니다.</p>
+<p>HATEOAS의 제한은 클라이언트와 서버를 분리합니다. 이를 통해 서버 기능이 독립적으로 발전할 수 있습니다.</p>
+<h2 id="example">#<a href="#example" aria-label="Anchor link for: example">예시</a></h2>
+<p>HTTP를 구현하는 사용자 에이전트가 간단한 URL을 통해 REST 엔드포인트에 HTTP 요청을 합니다. 사용자 에이전트가 수행할 수 있는 모든 후속 요청은 각 요청에 대한 하이퍼미디어 응답 내에서 발견됩니다. 이러한 표현에 사용되는 미디어 유형과 포함될 수 있는 링크 관계는 표준화되어 있습니다. 클라이언트는 하이퍼미디어 표현 내의 링크에서 선택하거나 미디어 유형에 따라 제공되는 다른 방식으로 표현을 조작하여 애플리케이션 상태를 전환합니다.</p>
+<p>이러한 방식으로 RESTful 상호 작용은 대역 외 정보가 아닌 하이퍼미디어에 의해 주도됩니다.</p>
+<p>구체적인 예를 통해 이를 명확히 알 수 있습니다.  은행 계좌 리소스를 가져오는 웹 브라우저에서 실행되는 이 GET 요청을 생각해 보세요:</p>
+<pre translate="no" data-lang="txt"><code translate="no" data-lang="txt"><span>GET /accounts/12345 HTTP/1.1
+</span><span>Host: bank.example.com
+</span></code></pre>
+<p>서버는 HTML을 사용한 하이퍼미디어 표현으로 응답합니다:</p>
+<pre translate="no" data-lang="html"><code translate="no" data-lang="html"><span>HTTP/1.1 200 OK
+</span><span>
+</span><span>&lt;</span><span>html</span><span>&gt;
+</span><span>  &lt;</span><span>body</span><span>&gt;
+</span><span>    &lt;</span><span>div</span><span>&gt;Account number: 12345&lt;/</span><span>div</span><span>&gt;
+</span><span>    &lt;</span><span>div</span><span>&gt;Balance: $100.00 USD&lt;/</span><span>div</span><span>&gt;
+</span><span>    &lt;</span><span>div</span><span>&gt;Links:
+</span><span>        &lt;</span><span>a </span><span>href</span><span>=</span><span>"/accounts/12345/deposits"</span><span>&gt;deposits&lt;/</span><span>a</span><span>&gt;
+</span><span>        &lt;</span><span>a </span><span>href</span><span>=</span><span>"/accounts/12345/withdrawals"</span><span>&gt;withdrawals&lt;/</span><span>a</span><span>&gt;
+</span><span>        &lt;</span><span>a </span><span>href</span><span>=</span><span>"/accounts/12345/transfers"</span><span>&gt;transfers&lt;/</span><span>a</span><span>&gt;
+</span><span>        &lt;</span><span>a </span><span>href</span><span>=</span><span>"/accounts/12345/close-requests"</span><span>&gt;close-requests&lt;/</span><span>a</span><span>&gt;
+</span><span>    &lt;/</span><span>div</span><span>&gt;
+</span><span>  &lt;</span><span>body</span><span>&gt;
+</span><span>&lt;/</span><span>html</span><span>&gt;
+</span></code></pre>
+<p>응답에는 입금, 출금, 이체 또는 폐쇄 요청(계좌 해지)을 입력할 수 있는 UI로 이동하는 등의 후속 작업이 포함됩니다.</p>
+<p>나중에 계좌가 한도 초과 인출된 후의 상황을 생각해 보세요.  이제 이 계좌 상태 변경으로 인해 다른 링크 세트를 사용할 수 있습니다.</p>
+<pre translate="no" data-lang="html"><code translate="no" data-lang="html"><span>HTTP/1.1 200 OK
+</span><span>
+</span><span>&lt;</span><span>html</span><span>&gt;
+</span><span>  &lt;</span><span>body</span><span>&gt;
+</span><span>    &lt;</span><span>div</span><span>&gt;Account number: 12345&lt;/</span><span>div</span><span>&gt;
+</span><span>    &lt;</span><span>div</span><span>&gt;Balance: -$50.00 USD&lt;/</span><span>div</span><span>&gt;
+</span><span>    &lt;</span><span>div</span><span>&gt;Links:
+</span><span>        &lt;</span><span>a </span><span>href</span><span>=</span><span>"/accounts/12345/deposits"</span><span>&gt;deposits&lt;/</span><span>a</span><span>&gt;
+</span><span>    &lt;/</span><span>div</span><span>&gt;
+</span><span>  &lt;</span><span>body</span><span>&gt;
+</span><span>&lt;/</span><span>html</span><span>&gt;
+</span></code></pre>
+<p>더 많은 돈을 입금하기 위한 링크는 하나만 사용할 수 있습니다. 계좌의 현재 초과 인출 상태에서는 다른 작업을 사용할 수 없으며, 이 사실은 <em>하이퍼미디어에</em> 내부적으로 반영됩니다.  웹 브라우저는 초과 인출된 계좌의 개념이나 계좌가 무엇인지조차 알지 못합니다.  단지 사용자에게 하이퍼미디어 표현을 표시하는 방법만 알고 있을 뿐입니다.</p>
+<p>따라서 우리는 하이퍼미디어를 애플리케이션 상태 엔진이라는 개념을 가지고 있습니다. 가능한 작업은 리소스의 상태에 따라 달라지며 이 정보는 하이퍼미디어에 인코딩됩니다.</p>
+<p>위의 HTML 응답을 상태 필드가 있는 계정 표현을 반환할 수 있는 일반적인 JSON API와 대조해 보세요:</p>
+<pre translate="no" data-lang="json"><code translate="no" data-lang="json"><span>HTTP/</span><span>1.1 200</span><span> OK
+</span><span>
+</span><span>{
+</span><span>    </span><span>"account"</span><span>: {
+</span><span>        </span><span>"account_number"</span><span>: </span><span>12345</span><span>,
+</span><span>        </span><span>"balance"</span><span>: {
+</span><span>            </span><span>"currency"</span><span>: </span><span>"usd"</span><span>,
+</span><span>            </span><span>"value"</span><span>: </span><span>-50.00
+</span><span>        },
+</span><span>        </span><span>"status"</span><span>: </span><span>"overdrawn"
+</span><span>    }
+</span><span>}
+</span></code></pre>
+<p>여기서 클라이언트는 <code translate="no">status</code> 필드의 값이 무엇을 의미하는지, 이 값이 사용자 인터페이스 렌더링에 어떤 영향을 미치는지, 이 값으로 어떤 작업을 수행할 수 있는지 구체적으로 알고 있어야 합니다.  또한 클라이언트는 응답에 인코딩되지 않으므로 이 리소스를 조작하기 위해 어떤 URL을 사용해야 하는지 알아야 합니다.  이는 일반적으로 JSON API에 대한 설명서를 참조하여 알 수 있습니다.</p>
+<p>이러한 대역 외 정보 요구 사항 때문에 이 JSON API는 HATEOAS를 구현하는 RESTful API와 구별됩니다.</p>
+<p>이는 두 접근 방식 간의 핵심적인 차이점을 보여줍니다. RESTful, HATEOAS HTML 표현에서는 모든 작업이 응답에 직접 인코딩됩니다.  JSON API 예제에서는 원격 리소스를 처리하고 작업하기 위해 대역 외 정보가 필요합니다.</p>
+<h2 id="origins">#<a href="#origins" aria-label="Anchor link for: origins">오리진</a></h2>
+<p>HATEOAS 제약 조건은 로이 필딩의 <a rel="noopener" target="_blank" href="https://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm">박사 학위 논문에</a> 정의된 대로 REST의 <a rel="noopener" target="_blank" href="https://en.wikipedia.org/wiki/Representational_state_transfer#Uniform_interface">"균일한 인터페이스"</a> 기능의 필수적인 부분입니다. Fielding의 논문은 당시 주로 HTML과 HTTP로 구성된 초기 웹 아키텍처에 대한 논의였습니다.</p>
+<p>필딩은 <a rel="noopener" target="_blank" href="https://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven">자신의 블로그에서</a> 하이퍼미디어의 개념과 중요한 요구사항에 대해 자세히 설명했습니다.</p>
+<h2 id="hateoas-and-json">#<a href="#hateoas-and-json" aria-label="Anchor link for: hateoas-and-json">HATEOAS와</a>JSON</h2>
+<p><em>참고: 이 섹션의 중립적 어조는 논쟁의 여지가 있습니다.</em></p>
+<p>2000년대 초반에 REST의 개념은 초기 웹을 설명하는 초기 개념 환경에서 웹 개발의 다른 영역, 즉 처음에는 XML API 개발(종종 <a rel="noopener" target="_blank" href="https://en.wikipedia.org/wiki/SOAP">SOAP</a> 사용)과 그다음에는 JSON API 개발로 적용되었습니다.  이는 XML이나 JSON 모두 HTML과 같은 방식으로 자연스러운 하이퍼미디어가 아니었음에도 불구하고 그렇게 되었습니다.</p>
+<p>이러한 새로운 영역에서 REST를 준수하는 다양한 수준을 특성화하기 위해 다양한 수준의 "성숙도"로 구성된 API로 구성된 <a rel="noopener" target="_blank" href="https://en.wikipedia.org/wiki/Richardson_Maturity_Model">리처드슨 성숙도 모델이</a> 제안되었으며, 가장 높은 수준인 레벨 3은 "하이퍼미디어 컨트롤"로 구성됩니다.</p>
+<p>JSON은 자연스러운 하이퍼미디어가 아니며, 따라서 하이퍼미디어 개념은 그 위에만 적용될 수 있습니다.  리처드슨 성숙도 모델의 레벨 3을 충족하려는 JSON 엔지니어는 위의 은행 계좌 예시에 해당하는 다음 JSON을 반환할 수 있습니다:</p>
+<pre translate="no" data-lang="json"><code translate="no" data-lang="json"><span>HTTP/</span><span>1.1 200</span><span> OK
+</span><span>
+</span><span>{
+</span><span>    </span><span>"account"</span><span>: {
+</span><span>        </span><span>"account_number"</span><span>: </span><span>12345</span><span>,
+</span><span>        </span><span>"balance"</span><span>: {
+</span><span>            </span><span>"currency"</span><span>: </span><span>"usd"</span><span>,
+</span><span>            </span><span>"value"</span><span>: </span><span>100.00
+</span><span>        },
+</span><span>        </span><span>"links"</span><span>: {
+</span><span>            </span><span>"deposits"</span><span>: </span><span>"/accounts/12345/deposits"</span><span>,
+</span><span>            </span><span>"withdrawals"</span><span>: </span><span>"/accounts/12345/withdrawals"</span><span>,
+</span><span>            </span><span>"transfers"</span><span>: </span><span>"/accounts/12345/transfers"</span><span>,
+</span><span>            </span><span>"close-requests"</span><span>: </span><span>"/accounts/12345/close-requests"
+</span><span>        }
+</span><span>    }
+</span><span>}
+</span></code></pre>
+<p>여기서 '하이퍼미디어 컨트롤'은 계정 개체의 <code translate="no">links</code> 속성에 인코딩되어 있습니다.</p>
+<p>안타깝게도 이 API의 클라이언트는 여전히 꽤 많은 추가 정보를 알아야 합니다:</p>
+<ul>
+<li>이 URL에 대해 어떤 http 메서드를 사용할 수 있는가?</li>
+<li>문제의 돌연변이를 표현하기 위해 이러한 URL에 <code translate="no">GET</code> 을 발급할 수 있는가?</li>
+<li>주어진 URL에 <code translate="no">POST</code> 을 보낼 수 있다면 어떤 값이 예상되나요?</li>
+</ul>
+<p>사용자가 첫 번째 HTML 예제에서 찾은 <code translate="no">/accounts/12345/deposits</code> 링크를 클릭한 후 브라우저에서 검색한 다음 HTTP 응답과 위의 JSON을 비교해 보세요:</p>
+<pre translate="no" data-lang="html"><code translate="no" data-lang="html"><span>HTTP/1.1 200 OK
+</span><span>
+</span><span>&lt;</span><span>html</span><span>&gt;
+</span><span>  &lt;</span><span>body</span><span>&gt;
+</span><span>    &lt;</span><span>form </span><span>method</span><span>=</span><span>"post" </span><span>action</span><span>=</span><span>"/accounts/12345/deposits"</span><span>&gt;
+</span><span>        &lt;</span><span>input </span><span>name</span><span>=</span><span>"amount" </span><span>type</span><span>=</span><span>"number" </span><span>/&gt;
+</span><span>        &lt;</span><span>button</span><span>&gt;Submit&lt;/</span><span>button</span><span>&gt;
+</span><span>    &lt;/</span><span>form</span><span>&gt;
+</span><span>  &lt;</span><span>body</span><span>&gt;
+</span><span>&lt;/</span><span>html</span><span>&gt;
+</span></code></pre>
+<p>이 HTML 응답은 계정 잔액을 업데이트하는 데 필요한 모든 정보를 인코딩하여 <code translate="no">form</code> 에 <code translate="no">method</code>및 <code translate="no">action</code> 속성과 함께 리소스를 올바르게 업데이트하는 데 필요한 입력을 제공합니다.</p>
+<p>JSON 표현에는 HTML 표현과 동일한 독립적인 "통일된 인터페이스"가 없습니다.</p>
+<p>로이 필딩이 말한 것처럼 'REST' 개념에서 아무리 멀리 떨어져 있더라도 JSON API에 레이블을 붙이는 것은 'REST'와는 거리가 멉니다:</p>
+<blockquote>
+<p>HTTP 기반 인터페이스를 REST API라고 부르는 사람들이 너무 많아서 답답합니다. 오늘의 예는 SocialSite REST API입니다. 바로 RPC입니다. RPC라고 외칩니다. 너무 많은 커플링이 표시되어 있어 X 등급을 받아야 합니다.</p>
+</blockquote>
+<p>JSON API에 보다 정교한 하이퍼미디어 제어를 적용하려는 시도가 있었지만, 업계에서는 대체로 이러한 접근 방식을 거부하고 HATEOAS 및 기타 REST 아키텍처의 요소를 포기하는 단순한 RPC 스타일 API를 선호하고 있습니다.</p>
+<p>이러한 사실은 HTML과 같은 자연스러운 하이퍼미디어가 RESTful 시스템을 구축하는 데 실질적으로 필요하다는 주장에 대한 강력한 증거입니다.</p>
+
+
+  <p>
+    &lt;/&gt;  </p>
+</div></div>
+      </article>
+    </body>
+  </html>
+  
