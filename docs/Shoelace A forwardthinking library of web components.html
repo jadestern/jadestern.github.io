@@ -1,0 +1,132 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+      <title>Shoelace: A forward-thinking library of web components.</title>
+      <link rel="canonical" href="https://shoelace.style/">
+      <style>
+        pre {
+          padding: 1rem;
+          background-color: #263238;
+          color: #fff
+        }
+      </style>
+    </head>
+    <body>
+      <article>
+        <div id="readability-page-1" class="page"><article id="content">
+        <div>
+          <div>
+            <div>
+              <p><img src="https://shoelace.style/assets/images/wordmark.svg" alt="Shoelace"></p>
+              <ul>
+                <li>모든 프레임워크에서 작동 🧩</li>
+                <li>CDN과 함께 작동 🚛</li>
+                <li>CSS로 완벽하게 사용자 정의 가능 🎨</li>
+                <li>어두운 테마 포함 🌛</li>
+                <li>접근성을 염두에 두고 제작 ♿️</li>
+                <li>최고 수준의 <a href="https://shoelace.style/frameworks/react">React 지원</a> ⚛️</li>
+                <li>내장된 현지화 💬</li>
+                <li>오픈 소스 😸</li>
+                <li>
+                  그 어느 때보다 <a href="https://blog.fontawesome.com/shoelace-joins-font-awesome/" rel="noopener noreferrer" target="_blank">멋진</a> <img src="https://shoelace.style/assets/images/awesome.svg" alt="Awesome emoji"></li>
+              </ul>
+            </div>
+            <p><img src="https://shoelace.style/assets/images/undraw-content-team.svg" alt="Cartoon of people assembling components while standing on a giant laptop.">
+            </p>
+          </div>
+          
+          <h2 id="quick-start">
+            빠른 시작<a href="#quick-start" aria-label="Direct link to &quot;Quick Start&quot;"></a></h2>
+          <p>페이지에 다음 코드를 추가하세요.</p>
+          
+          <pre translate="no"><code translate="no" id="code-block-1"><span><span><span>&lt;</span>link</span> <span>rel</span><span><span>=</span><span>"</span>stylesheet<span>"</span></span> <span>href</span><span><span>=</span><span>"</span>https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.12.0/cdn/themes/light.css<span>"</span></span> <span>/&gt;</span></span>
+<span><span><span>&lt;</span>script</span> <span>type</span><span><span>=</span><span>"</span>module<span>"</span></span> <span>src</span><span><span>=</span><span>"</span>https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.12.0/cdn/shoelace-autoloader.js<span>"</span></span><span>&gt;</span></span><span></span><span><span><span>&lt;/</span>script</span><span>&gt;</span></span>
+</code><sl-copy-button from="code-block-1"></sl-copy-button></pre>
+          <p>이제 슈레이스의 모든 구성 요소에 액세스할 수 있습니다! 버튼을 추가해 보세요:</p>
+
+          <div id="code-preview-source-group-1">
+                <pre translate="no"><code translate="no" id="code-block-2"><span><span><span>&lt;</span>sl-button</span><span>&gt;</span></span>Click me<span><span><span>&lt;/</span>sl-button</span><span>&gt;</span></span>
+</code><sl-copy-button from="code-block-2"></sl-copy-button></pre>
+              </div>
+
+          
+          <h2 id="new-to-web-components">
+            웹 컴포넌트를 처음 사용하시나요?<a href="#new-to-web-components" aria-label="Direct link to &quot;New to Web Components?&quot;"></a></h2>
+          <p>
+            요약하자면, 드디어 <a href="https://html.spec.whatwg.org/multipage/custom-elements.html" rel="noopener noreferrer" target="_blank">자체 HTML 요소를</a>만들어 원하는 프레임워크에서 사용할 수 있는 방법이 생겼습니다!          </p>
+          <p>
+            앵귤러, 뷰, 리액트와 같은 프레임워크의 인기 덕분에 컴포넌트 중심 개발은 우리 일상의 일부가 되었습니다. 컴포넌트는 스타일과 동작을 재사용 가능한 빌딩 블록으로 캡슐화하는 데 도움이 됩니다. 컴포넌트는 디자인, 개발, 테스트 측면에서 많은 의미가 있습니다.          </p>
+          <p>하지만 안타깝게도 <em>프레임워크별</em> 컴포넌트는 여러 가지 면에서 단점이 있습니다:</p>
+          <ul>
+            <li>해당 컴포넌트가 설계된 프레임워크에서만 사용할 수 있습니다 🔒.</li>
+            <li>수명이 해당 프레임워크의 수명으로 제한됨 ⏳</li>
+            <li>
+              새로운 프레임워크/버전이 나오면 컴포넌트를 업데이트하는 데 상당한 노력이 필요함 😭.     </li>
+          </ul>
+          <p>
+            웹 컴포넌트는 이러한 문제를 해결합니다. 웹 컴포넌트는 <a href="https://caniuse.com/#feat=custom-elementsv1" rel="noopener noreferrer" target="_blank">모든 최신 브라우저에서 지원되며</a> 프레임워크에 구애받지 않고 <a href="https://developer.mozilla.org/en-US/docs/Web/Web_Components" rel="noopener noreferrer" target="_blank">표준의 일부이므로</a> 향후 수년 동안 지원될 것입니다.          </p>
+          <p>이것이 바로 슈레이스의 기반 기술입니다.</p>
+          <h2 id="what-problem-does-this-solve">
+            어떤 문제를 해결하나요?<a href="#what-problem-does-this-solve" aria-label="Direct link to &quot;What Problem Does This Solve?&quot;"></a></h2>
+          <p>
+            슈레이스는 프레임워크에 구애받지 않는 기술을 기반으로 전문적으로 디자인되고 고도로 사용자 정의 가능한 UI 컴포넌트 모음을 제공합니다. 왜 처음부터 디자인 시스템을 구축하는 데 수백 시간 이상을 소비해야 할까요? 왜 하나의 프레임워크에서만 작동하는 컴포넌트 라이브러리를 만들어야 할까요?          </p>
+          <p>슈레이스를 사용하면 가능합니다:</p>
+          <ul>
+            <li>더 빠르게 빌드 시작(직접 버튼을 누를 필요 없음)</li>
+            <li>동일한 UI 컴포넌트를 공유하는 서로 다른 프레임워크로 여러 앱을 빌드할 수 있습니다.</li>
+            <li>기존 디자인에 맞게 컴포넌트를 완벽하게 커스터마이징할 수 있습니다.</li>
+            <li>필요에 따라 컴포넌트를 점진적으로 채택(프레임워크를 버릴 필요 없음)</li>
+            <li>기본 구성 요소를 다시 빌드하지 않고도 프레임워크 업그레이드 또는 전환 가능</li>
+          </ul>
+          <p>
+            조직에서 디자인 시스템을 구축하려는 경우, <a href="https://medium.com/eightshapes-llc/and-you-thought-buttons-were-easy-26eb5b5c1871" rel="noopener noreferrer" target="_blank">슈레이스를 사용하면 수천 달러를 절약할</a> 수 있습니다. 필요한 모든 기본 구성 요소가 바로 여기에 있으며, 브랜드에 맞게 맞춤 설정할 수 있습니다. 또한 웹 표준을 기반으로 구축되었기 때문에 브라우저는 앞으로도 계속 지원할 것입니다.          </p>
+          <p>
+            조직의 디자인 시스템을 위한 출발점으로 사용하든, 재미있는 개인 프로젝트를 위해 사용하든, 슈레이스로 할 수 있는 일에는 제한이 없습니다.          </p>
+          <h2 id="browser-support">
+            브라우저 지원<a href="#browser-support" aria-label="Direct link to &quot;Browser Support&quot;"></a></h2>
+          <p>슈레이스는 다음 브라우저의 최신 두 버전에서 테스트되었습니다.</p>
+          <p><img src="https://shoelace.style/assets/images/chrome.png" alt="Chrome" width="64" height="64">
+          <img src="https://shoelace.style/assets/images/edge.png" alt="Edge" width="64" height="64">
+          <img src="https://shoelace.style/assets/images/firefox.png" alt="Firefox" width="64" height="64">
+          <img src="https://shoelace.style/assets/images/opera.png" alt="Opera" width="64" height="64">
+          <img src="https://shoelace.style/assets/images/safari.png" alt="Safari" width="64" height="64"></p><p>이전 버전의 중요한 버그 수정은 그 심각성과 영향에 따라 해결됩니다.</p>
+          <p>
+            IE11 또는 크롬 엣지 이전 버전을 지원해야 하는 경우 이 라이브러리는 적합하지 않습니다. 레거시 브라우저에서 웹 컴포넌트를 어느 정도 폴리필링할 수는 있지만, 이를 지원하는 것은 이 프로젝트의 범위를 벗어납니다. 그런 브라우저에서 슈레이스를 사용한다면 곤란한 시간을 보내게 될 것입니다. ⛷   </p>
+          <h2 id="license">
+            라이선스<a href="#license" aria-label="Direct link to &quot;License&quot;"></a></h2>
+          <p>
+            슈레이스는 <a href="https://twitter.com/claviska" rel="noopener noreferrer" target="_blank">코리 라비스카가</a> 뉴햄프셔에서 만들었습니다. <a href="https://github.com/shoelace-style/shoelace/blob/next/LICENSE.md" rel="noopener noreferrer" target="_blank">MIT 라이선스</a> 조건에 따라 사용할 수 있습니다.          </p>
+          <h2 id="attribution">
+            저작자 표시<a href="#attribution" aria-label="Direct link to &quot;Attribution&quot;"></a></h2>
+          <p>슈레이스가 가능하도록 도와주신 다음 프로젝트와 개인에게 특별히 감사드립니다.</p>
+          <ul>
+            <li>
+              컴포넌트는 <a href="https://lit.dev/" rel="noopener noreferrer" target="_blank">Lit로</a>빌드됩니다.            </li>
+            <li>
+              컴포넌트 메타데이터는 <a href="https://github.com/open-wc/custom-elements-manifest" rel="noopener noreferrer" target="_blank">사용자 정의 요소 매니페스트 분석기에</a>의해 생성됩니다.            </li>
+            <li>
+              문서는 <a href="https://www.11ty.dev/" rel="noopener noreferrer" target="_blank">11ty에서</a>제공      </li>
+            <li>
+              CDN 서비스는 <a href="https://www.jsdelivr.com/" rel="noopener noreferrer" target="_blank">jsDelivr에서</a>제공합니다.            </li>
+            <li>
+              색상 기본 요소는 <a href="https://tailwindcss.com/" rel="noopener noreferrer" target="_blank">Tailwind에서</a>영감을 얻었습니다.            </li>
+            <li>
+              아이콘은 <a href="https://icons.getbootstrap.com/" rel="noopener noreferrer" target="_blank">부트스트랩 아이콘</a>제공      </li>
+            <li>
+              홈페이지 일러스트레이션은 <a href="https://undraw.co/" rel="noopener noreferrer" target="_blank">unDraw</a>제공      </li>
+            <li>
+              드롭다운, 툴팁 등의 위치 지정은 <a href="https://floating-ui.com/" rel="noopener noreferrer" target="_blank">플로팅 UI에서</a>처리합니다.            </li>
+            <li>
+              애니메이션은 <a href="https://animate.style/" rel="noopener noreferrer" target="_blank">animate.css</a>제공      </li>
+            <li>
+              검색은 <a href="https://lunrjs.com/" rel="noopener noreferrer" target="_blank">Lunr</a>제공      </li>
+            <li>
+              신발끈 로고는 신발끈 하나로 디자인한 <a href="https://twitter.com/adamkolson" rel="noopener noreferrer" target="_blank">Adam K Olson의</a>작품입니다.            </li>
+          </ul>
+        </div>
+      </article></div>
+      </article>
+    </body>
+  </html>
+  
