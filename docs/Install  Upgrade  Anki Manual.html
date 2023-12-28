@@ -1,0 +1,156 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+      <title>Install & Upgrade - Anki Manual</title>
+      <link rel="canonical" href="https://docs.ankiweb.net/platform/windows/installing.html#qt5-vs-qt6">
+      <style>
+        pre {
+          padding: 1rem;
+          background-color: #263238;
+          color: #fff
+        }
+      </style>
+    </head>
+    <body>
+      <article>
+        <div id="readability-page-1" class="page">
+        
+        
+
+        
+        
+
+        
+        
+
+        
+        
+
+        <nav id="sidebar" aria-label="Table of contents">
+            
+            
+        </nav>
+
+        <div id="page-wrapper">
+
+            <div class="page">
+                                
+                <div id="menu-bar">
+                    
+
+                    <h2>Anki 매뉴얼</h2>
+
+                    
+                </div>
+
+                
+
+                
+                
+
+                <div id="content">
+                    <main>
+                        <h2 id="installing--upgrading-anki-on-windows"><a href="#installing--upgrading-anki-on-windows">Windows에서 Anki 설치 및 업그레이드하기</a></h2>
+<ul>
+<li><a href="#requirements">요구 사항</a></li>
+<li><a href="#installing">설치하기</a></li>
+<li><a href="#qt5-vs-qt6">Qt5와 Qt6 비교</a></li>
+<li><a href="#upgrading">업그레이드</a></li>
+<li><a href="#add-on-compatibility">애드온 호환성</a></li>
+<li><a href="#problems">문제</a></li>
+</ul>
+<h2 id="requirements"><a href="#requirements">요구 사항</a></h2>
+<p>최신 Anki 릴리스를 사용하려면 64비트 버전의 Windows 10 또는 11을 실행하는 컴퓨터가 필요합니다.</p>
+<ul>
+<li>Windows 7 및 8.1을 지원한 마지막 Anki 릴리스는 Anki 2.1.49였습니다.</li>
+<li>32비트 Windows를 지원한 마지막 Anki 릴리스는 <a href="https://github.com/ankitects/anki/releases/tag/2.1.35">Anki 2.1.35 대체</a> 버전이었습니다.</li>
+</ul>
+<p>구형 컴퓨터를 사용하는 경우 <a href="https://github.com/ankitects/anki/releases">릴리스 페이지에서</a> 이전 릴리스를 다운로드할 수 있습니다.</p>
+<h2 id="installing"><a href="#installing">설치하기</a></h2>
+<p>Anki를 설치하려면 다음과 같이 하세요:</p>
+<ol>
+<li><a href="https://apps.ankiweb.net/">https://apps.ankiweb.net</a> 에서 Anki를 다운로드합니다. -qt5와 -qt6 중에서 선택하는 방법은 다음 섹션을 참조하세요.</li>
+<li>설치 프로그램을 데스크톱 또는 다운로드 폴더에 저장합니다.</li>
+<li>설치 프로그램을 두 번 클릭하여 실행합니다. 오류 메시지가 표시되면 <a href="https://github.com/ankitects/anki-manual/blob/main/src/platform/windows/installation-issues.md">설치 문제 페이지를</a> 참조하세요.</li>
+<li>Anki가 설치되면 바탕화면에서 새 별 아이콘을 두 번 클릭하여 Anki를 시작합니다.</li>
+</ol>
+<h2 id="qt5-vs-qt6"><a href="#qt5-vs-qt6">Qt5와 Qt6 비교</a></h2>
+<p>최신 Anki 버전은 Qt5와 Qt6 버전이 별도로 제공됩니다. 대부분의 사용자에게는 Qt6 버전이 권장됩니다.</p>
+<p>Qt6 버전의 장점:</p>
+<ul>
+<li>덜 일반적인 언어에 대한 지원 개선 등 다양한 버그가 수정되었습니다.</li>
+<li>매우 큰 이미지가 Qt5 버전보다 빠르게 로드됩니다.</li>
+<li>보안 업데이트. Qt5 라이브러리에 대한 지원은 2020년 11월에 중단되었으므로 그 이후에 발견된 보안 결함은 수정되지 않은 상태로 유지됩니다.</li>
+<li>일부 사용자는 Qt5에서 <a href="https://github.com/ankitects/anki/issues/1105">사용자 지정 단축키를</a>사용하여 <a href="https://github.com/ankitects/anki/issues/1105">입력 언어를 전환할</a>때 멈추는 현상을 경험합니다.</li>
+</ul>
+<p>Qt6 버전의 단점:</p>
+<ul>
+<li>일부 애드온은 현재 Qt5 버전에서만 작동합니다.</li>
+</ul>
+<h2 id="upgrading"><a href="#upgrading">업그레이드</a></h2>
+<p>Anki 2.1.6+에서 업그레이드하는 경우, 이전 버전을 먼저 제거할 필요가 없습니다. Anki가 열려 있는 경우 닫은 다음 위의 설치 단계를 따르기만 하면 됩니다. 업그레이드할 때 카드가 보존됩니다.</p>
+<p>2.1.6 이전 Anki 버전에서 업그레이드하거나 표준 버전에서 대체 버전으로 또는 그 반대로 전환하는 경우, 먼저 이전 버전을 제거하면 Anki의 프로그램 데이터는 제거되지만 카드 데이터는 삭제되지 않습니다.</p>
+<p>이전 버전으로 다운그레이드하려면<a href="http://changes.ankiweb.net/">먼저 다운그레이드해야</a> 합니다.</p>
+<h2 id="add-on-compatibility"><a href="#add-on-compatibility">애드온 호환성</a></h2>
+<p>일부 애드온은 최신 Anki 릴리스에서 항상 작동하지 않을 수 있습니다. 최신 Anki 버전으로 업그레이드했는데 애드온이 작동을 멈춘다면 <a href="https://github.com/ankitects/anki/releases">릴리스 페이지에서</a> 이전 Anki 버전을 다운로드할 수 있습니다.</p>
+<h2 id="problems"><a href="#problems">문제</a></h2>
+<p>Anki를 설치하거나 시작할 때 문제가 발생하면 다음 페이지를 참조하세요:</p>
+<ul>
+<li><a href="https://docs.ankiweb.net/platform/windows/installation-issues.html">설치 문제</a></li>
+<li><a href="https://docs.ankiweb.net/platform/windows/startup-issues.html">시작 문제</a></li>
+</ul>
+
+                    </main>
+
+                    <nav aria-label="Page navigation">
+                        
+                            <a rel="prev" href="https://docs.ankiweb.net/platform/intro.html" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i></i>
+                            </a>
+
+                            <a rel="next" href="https://docs.ankiweb.net/platform/windows/installing.html" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i></i>
+                            </a>
+
+                        
+                    </nav>
+                </div>
+            </div>
+
+            <nav aria-label="Page navigation">
+                    <a rel="prev" href="https://docs.ankiweb.net/platform/intro.html" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i></i>
+                    </a>
+
+                    <a rel="next" href="https://docs.ankiweb.net/platform/windows/installing.html" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        
+
+
+        
+        
+        
+
+        
+        
+        
+
+        
+
+
+    
+
+</div>
+      </article>
+    </body>
+  </html>
+  
