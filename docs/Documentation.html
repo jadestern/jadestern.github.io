@@ -1,0 +1,31 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+      <title>Documentation</title>
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+      <script src="//unpkg.com/alpinejs" defer></script>
+    </head>
+    <body>
+      <main class="container" x-data="{ dark: false }">
+      	<button x-on:click="dark = !dark" class="contrast outline">Switch Theme</button>
+	      <article x-bind:data-theme="! dark ? 'dark' : 'light'">
+	        <div id="readability-page-1" class="page"><section id="start" role="document"><hgroup><h2>사용법</h2><h2>패키지 관리자나 종속성 없이 작동합니다 🙂!</h2></hgroup><p>Pico CSS를 시작하는 방법은 4가지가 있습니다:</p><h3>수동으로 설치</h3><p><a href="https://github.com/picocss/pico/archive/refs/tags/v1.5.11.zip">Pico를 다운로드하고</a> 웹사이트의 <code translate="no">/css/pico.min.css</code> <code translate="no">&lt;<b>head</b>&gt;</code> 에 링크합니다.</p><pre translate="no"><code translate="no">&lt;<b>link</b> <i>rel</i>=<u>"stylesheet"</u> <i>href</i>=<u>"css/pico.min.css"</u>&gt;</code></pre><h3>CDN에서 설치</h3><p>또는 <a href="https://www.jsdelivr.com/package/npm/@picocss/pico">jsDelivr CDN을</a> 사용하여 pico.css를 링크할 수 있습니다.</p><pre translate="no"><code translate="no">&lt;<b>link</b> <i>rel</i>=<u>"stylesheet"</u> <i>href</i>=<u>"https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css"</u>&gt;</code></pre><h3>NPM으로 설치</h3><pre translate="no"><code translate="no"><b>npm</b> <i>install</i> <u>@picocss/pico</u></code></pre><h3>컴포저로 설치</h3><pre translate="no"><code translate="no"><b>composer</b> <i>require</i> <u>picocss/pico</u></code></pre><p>스타터 HTML 템플릿:</p><pre translate="no"><code translate="no"><em>&lt;!doctype html&gt;</em>
+&lt;<b>html</b> <i>lang</i>=<u>"en"</u>&gt;
+  &lt;<b>head</b>&gt;
+    &lt;<b>meta</b> <i>charset</i>=<u>"utf-8"</u>&gt;
+    &lt;<b>meta</b> <i>name</i>=<u>"viewport"</u> <i>content</i>=<u>"width=device-width, initial-scale=1"</u>&gt;
+    &lt;<b>link</b> <i>rel</i>=<u>"stylesheet"</u> <i>href</i>=<u>"css/pico.min.css"</u>&gt;
+    &lt;<b>title</b>&gt;Hello, world!&lt;/<b>title</b>&gt;
+  &lt;/<b>head</b>&gt;
+  &lt;<b>body</b>&gt;
+    &lt;<b>main</b> <i>class</i>=<u>"container"</u>&gt;
+      &lt;<b>h1</b>&gt;Hello, world!&lt;/<b>h1</b>&gt;
+    &lt;/<b>main</b>&gt;
+  &lt;/<b>body</b>&gt;
+&lt;/<b>html</b>&gt;</code></pre></section></div>
+	      </article>
+			</main>
+    </body>
+  </html>
+  
