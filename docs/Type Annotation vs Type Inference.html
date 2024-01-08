@@ -1,0 +1,200 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+      <title>Type Annotation vs Type Inference</title>
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+      <style>
+        pre {
+          padding: 1rem;
+          background-color: #263238;
+          color: #fff
+        }
+      </style>
+      <script src="//unpkg.com/alpinejs" defer></script>
+    </head>
+    <body>
+      <main class="container" x-data="{ dark: false }">
+      	<button x-on:click="dark = ! dark">Theme Switch</button>
+	      <article x-bind:dark-theme="! dark ? 'dark' : 'light'">
+	        <div id="readability-page-1" class="page"><article id="article-show-container" data-article-id="1720139" data-article-slug="type-annotation-vs-type-inference-521j" data-author-id="1048798" data-author-name="harshit mishra " data-author-username="harshit_senpai" data-co-author-ids="" data-path="/harshit_senpai/type-annotation-vs-type-inference-521j" data-pin-path="/stories/feed/pinned_article" data-pinned-article-id="" data-published="true" data-scheduled="false" lang="en">
+        <header id="main-title">
+            <a href="https://res.cloudinary.com/practicaldev/image/fetch/s--SvK61S7G--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/c4ikr5ai7ppuy3hiliiw.png">
+              <img src="https://res.cloudinary.com/practicaldev/image/fetch/s--SvK61S7G--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/c4ikr5ai7ppuy3hiliiw.png" width="1000" height="420" alt="Cover image for Type Annotation vs Type Inference">
+            </a>
+
+          
+        </header>
+
+        <div>
+            
+  <nav>
+    
+
+    
+  </nav>
+
+
+          <div data-article-id="1720139" id="article-body">
+            <p>타입스크립트 세계에서는 할당 가능한 모든 값에 타입이 있습니다(지난 블로그에서 설명한 대로). 이제 특정 값의 유형을 식별하기 위해 유형 주석과 유형 추론이 있습니다.</p>
+
+<h2>
+ <a name="type-annotations-" href="#type-annotations-">
+  </a>
+  1️⃣Type 어노테이션 -</h2>
+
+<p>타입 어노테이션의 핵심은 변수가 참조할 값의 유형을 타입스크립트에 알려주기 위해 작성하는 소량의 코드입니다.<br>
+따라서 개발자는 타입스크립트에 작업 중인 값의 유형을 알려줍니다.</p>
+<h3>
+ <a name="example-of-type-annotations" href="#example-of-type-annotations">
+  </a>
+  타입 어노테이션의 예</h3>
+
+<p><em><strong>변수를 사용한 타입 어노테이션</strong></em><br>
+</p>
+
+<div>
+<pre translate="no"><code translate="no">const numCars: number = 5;
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>전체 화면 모드 시작</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>전체 화면 모드 종료</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<p><code translate="no">:number</code> 는 타입 어노테이션으로, 이제 타입스크립트에 숫자 유형만 numCars 변수에 할당할 것이며 다른 유형을 할당하려고 하면 오류가 빠르게 표시될 것임을 알려줍니다.</p>
+
+<p><a href="https://res.cloudinary.com/practicaldev/image/fetch/s--Q1FeKf8t--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_800/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ve8locrcy3veudki28bw.png"><img src="https://res.cloudinary.com/practicaldev/image/fetch/s--Q1FeKf8t--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_800/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ve8locrcy3veudki28bw.png" alt="example of Type Annotation for variables" loading="lazy" width="592" height="138"></a></p>
+
+<p>다른 타입을 사용하는 타입 어노테이션의 더 많은 예는 :<br>
+</p>
+
+<div>
+<pre translate="no"><code translate="no">let speed: string = 'fast';
+let isSuperCar: boolean = false;
+let sunroof: null = null;
+let nothing: undefined = undefined;
+const todayDate: Date = new Date();
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>전체 화면 모드로 들어가기</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>전체 화면 모드 종료</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<h2>
+ <a name="type-inference-" href="#type-inference-">
+  </a>
+  2️⃣Type 추론 -</h2>
+
+<p>타입 추론은 간단히 말해 타입스크립트가 값이 어떤 타입을 가질지 알아내려고 하는 방법입니다.<br>
+변수를 사용한 타입 추론의 일반적인 예는 다음과 같습니다:</p>
+
+<p><code translate="no">let isSuperCar = false;</code></p>
+
+<p>이제 부울이 아닌 값을 할당하려고 하면 오류가 표시됩니다.</p>
+
+<p><a href="https://res.cloudinary.com/practicaldev/image/fetch/s--cqC056vj--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_800/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/hr83hk266psqlnqm2d8g.png"><img src="https://res.cloudinary.com/practicaldev/image/fetch/s--cqC056vj--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_800/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/hr83hk266psqlnqm2d8g.png" alt="example of Type Inference with variables" loading="lazy" width="658" height="133"></a></p>
+
+<p>오류에서 볼 수 있듯이 타입스크립트에서 isSuperCar가 어떤 타입을 가질지 알려주지 않았음에도 불구하고 <code translate="no">isSuperCar</code> 값이 어떤 타입을 가질지 식별했습니다.</p>
+
+<h2>
+ <a name="when-to-use-type-annotation-and-type-inference-" href="#when-to-use-type-annotation-and-type-inference-">
+  </a>
+  3️⃣When 에서 타입 어노테이션과 타입 유추를 사용하세요.</h2>
+
+<h3>
+ <a name="when-to-use-type-annotation" href="#when-to-use-type-annotation">
+  </a>
+  타입 어노테이션을 사용해야 하는 경우:</h3>
+
+<ul>
+<li>
+유형 추론이 불가능한 변수가 있을 때, 부울 또는 숫자 값을 가질 수 있는 변수가 있다고 가정해 보겠습니다. 이 경우 유형 추론만으로는 변수의 유형을 스스로 식별할 수 없으므로 다음과 같은 구문에서 유형 추론이 필요합니다:</li>
+</ul>
+
+<div>
+<pre translate="no"><code translate="no">//A car can either have one sunroof or none
+
+let sunroof: boolean | number = false;
+
+//Now if we assign it a value of 1, we will not get an error 
+
+sunroof = 1;
+
+//It will not give an error as we have annotated that it is going to have either a boolean or a number as a value
+
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>전체 화면 모드로 전환</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>전체 화면 모드 종료</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<ul>
+<li><p>한 줄에 값을 선언하고 나중에 초기화할 때,<br>
+는 선언과 초기화가 같은 줄에 있기 때문에 이전의 유형 추론이 작동했습니다.</p></li>
+<li><p>이 경우 함수가 'any' 유형을 반환할 때는 미리 값을 명확히 해야 합니다.</p></li>
+</ul>
+
+<h3>
+ <a name="when-to-use-type-inference-" href="#when-to-use-type-inference-">
+  </a>
+  유형 추론을 사용하는 경우 -</h3>
+
+<p>위의 코너 케이스를 제외하고는 항상 유형 추론에 의존하려고 노력합니다.</p>
+
+<p><strong><em>다음 블로그에서는 타입 어노테이션, 타입 추론 및 코너 케이스를 중심으로 더 많은 예제를 살펴보겠습니다.</em></strong></p>
+
+
+          </div>
+
+            
+  <nav>
+    
+
+    
+  </nav>
+
+        </div>
+          
+  
+
+
+
+      </article></div>
+	      </article>
+			</main>
+    </body>
+  </html>
+  
