@@ -1,0 +1,134 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>Don't upload your PWA to the app stores</title>
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+      <script src="//unpkg.com/alpinejs" defer></script>
+    </head>
+    <body x-data="{ dark: false }" x-bind:data-theme="dark ? 'dark' : 'light'">
+      <main class="container">
+      	<button x-on:click="dark = !dark" class="contrast outline">Switch Theme</button>
+	      <article>
+	        <div id="readability-page-1" class="page"><div data-article-id="1723838" id="article-body">
+            <p><a href="https://progressier.com/">프로그레시어에서</a> 가장 많이 받는 질문 중 하나는 "PWA를 앱 스토어에 업로드하려면 어떻게 해야 하나요?"입니다. 저는 이렇게 대답합니다. "하지 마세요."라고 대답합니다. 그 이유는 다음과 같습니다:</p>
+
+<h2>
+ <a name="1-this-wont-get-new-users" href="#1-this-wont-get-new-users">
+  </a>
+  1. 신규 사용자를 확보할 수 없습니다.</h2>
+
+<p>앱 스토어는 포화 상태입니다. 단순히 앱을 업로드하는 것만으로 신규 사용자를 확보할 수 있던 시대는 지났습니다. 오늘날 수백만 개의 앱 사이에서 눈에 띄는 것은 거의 불가능한 일입니다. 사용자 확보를 위한 전략으로 앱 스토어 검색에 의존하는 것은 더 이상 유효하지 않습니다.</p>
+
+<h2>
+ <a name="2-so-many-horror-stories" href="#2-so-many-horror-stories">
+  </a>
+  2. 수많은 공포 이야기</h2>
+
+<p>자의적인 거부부터 복잡한 가이드라인에 이르기까지 개발자가 앱 스토어에서 겪는 어려움과 좌절은 수많은 <a href="https://wall.love/appstore">공포의</a> 사례를 통해 알 수 있습니다.</p>
+
+<p>최근 HEY의 최신 앱은 "아무것도 하지 않는다"는 이유로 <a href="https://world.hey.com/dhh/apple-rejects-the-hey-calendar-from-their-app-store-4316dc03">앱 스토어에서 거부되었습니다</a>. <a href="https://twitter.com/dhh/status/1272968382329942017">3년 전에도</a> 비슷한 문제를 겪은 적이 있었기 때문에 이번이 처음도 아니었습니다.</p>
+
+<p><a href="https://res.cloudinary.com/practicaldev/image/fetch/s--6IXICTks--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_800/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/8powvoywa5976vpjeiti.png"><img src="https://res.cloudinary.com/practicaldev/image/fetch/s--6IXICTks--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_800/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/8powvoywa5976vpjeiti.png" alt="HEY app rejected by Apple" loading="lazy" width="800" height="303"></a></p>
+
+<p><a href="https://hey.com/">HEY는</a> 재정적 자원과 많은 소셜 미디어 팔로워를 보유한 대기업입니다. 이들도 <a href="https://www.hey.com/apple/">Apple로부터 괴롭힘을</a> 당한다고 느낀다면, 소규모 앱 개발자들은 어떤 상황일지 상상해 보세요. 게다가 HEY는 PWA가 아니라 네이티브 앱입니다.</p>
+
+<p>앱 스토어에 업데이트를 제출할 때마다 주사위를 굴려야 합니다. Apple이나 Google이 모호한 가이드라인의 실제 또는 인지된 위반을 이유로 앱을 삭제할 수 있는 위험에 직면하게 됩니다.</p>
+
+<h2>
+ <a name="3-it-defeats-the-whole-purpose" href="#3-it-defeats-the-whole-purpose">
+  </a>
+  3. 전체 목적을 달성하지 못함</h2>
+
+<p>PWA는 오픈 웹에서 번성하며, 오픈 웹이 그들의 자연스러운 서식지입니다. 앱 스토어로 옮기면 웹의 자유와 유연성이라는 본질이 사라집니다. </p>
+
+<p>앱 스토어에 업로드하는 것은 새가 탁 트인 하늘을 맛본 후 다시 새장으로 돌아가는 것과 같습니다. 이렇게 불필요한 제한으로 되돌아가는 것은 PWA를 훌륭한 기술로 만든 원동력을 약화시킵니다.</p>
+
+<h2>
+ <a name="4-pwas-dont-belong-there" href="#4-pwas-dont-belong-there">
+  </a>
+  4. PWA는 앱스토어에 어울리지 않는다</h2>
+
+<p>Apple의 <a href="https://developer.apple.com/app-store/review/guidelines/#design">앱 스토어 가이드라인에는</a> PWA가 허용되지 않는다고 명시되어 있습니다:</p>
+
+<blockquote>
+<p><em>가이드라인 4.2 - 디자인 - 최소한의 기능:</em><br>
+<em>앱에는 웹사이트를 재패키징한 것 이상의 기능, 콘텐츠, UI가 포함되어야 합니다. 앱이 특별히 유용하거나 독특하지 않거나 '앱다운' 앱이 아니라면 앱 스토어에 등록할 수 없습니다.</em></p>
+</blockquote>
+
+<p>사실 저는 이 점에 대해서는 Apple의 의견에 동의합니다. PWA는 본질적으로 오픈 웹에 속합니다.</p>
+
+<p>개발자가 앱 스토어에 PWA를 업로드하는 것을 돕기 위해 Microsoft가 주도하는 오픈 소스 이니셔티브인 <a href="https://pwabuilder.com/">PWABuilder조차도</a> 가이드라인을 준수하기보다는 검토자의 감독으로 인해 애플 앱 스토어에 등록되는 경우가 많다고 <a href="https://github.com/pwa-builder/PWABuilder/issues/3961#issuecomment-1499747962">인정하고</a> 있습니다.</p>
+
+<p><a href="https://res.cloudinary.com/practicaldev/image/fetch/s--8nsrhSeS--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_800/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/57qursx7r5my90a3ynzt.png"><img src="https://res.cloudinary.com/practicaldev/image/fetch/s--8nsrhSeS--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_800/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/57qursx7r5my90a3ynzt.png" alt="PWAs don't belong on the app stores" loading="lazy" width="800" height="413"></a></p>
+
+<p>이것만으로도 알아야 할 모든 것을 알 수 있습니다.</p>
+
+<h2>
+ <a name="5-app-stores-arent-more-convenient" href="#5-app-stores-arent-more-convenient">
+  </a>
+  5. 앱스토어가 더 편리하지 않다</h2>
+
+<p>일반적인 생각과는 달리, 브라우저에서 직접 PWA를 설치하는 것이 스토어에서 앱을 다운로드하는 것만큼 효율적입니다. 설치 과정은 클릭 수와 소요 시간 모두 비슷합니다.</p>
+
+<p>앱 스토어가 더 편리하거나 본질적으로 더 안전한 앱을 제공한다는 생각은 잘못된 생각입니다. 실제로 PWA는 최신 웹 브라우저의 엄격한 보안 프로토콜을 준수하는 설계 덕분에 고유한 보안 이점을 자랑합니다.</p>
+
+<h2>
+ <a name="6-functionality-limitations" href="#6-functionality-limitations">
+  </a>
+  6. 기능 제한</h2>
+
+<p>직관적일 수도 있고 아닐 수도 있지만, 앱 스토어에서 설치하는 것보다 브라우저에서 직접 작동할 때 더 강력하고 풍부한 기능을 제공하는 것이 PWA입니다. </p>
+
+<p>PWA가 앱 스토어에 등록되려면 추가 소프트웨어 안에 래핑되어야 합니다. 이 래퍼는 주류 브라우저에 비해 덜 강력하고 세밀하게 조정되지 않는 경향이 있으며, 이는 <a href="https://github.com/pwa-builder/PWABuilder/issues/4528">PWABuilder도 인정하는</a> 사실입니다.</p>
+
+<p>흔히 오해하는 것은 앱 스토어에 PWA를 업로드하면 두 가지 장점을 모두 얻을 수 있다는 것입니다. 하지만 이러한 접근 방식은 네이티브 앱과 웹 앱의 장점은 살리지 못한 채 단점만 계승하는 정반대의 결과를 초래하는 경우가 많습니다.</p>
+
+<p>PWA는 직접 설치할 때 탁월하고 네이티브 앱은 고유한 강점이 있습니다. 앱스토어의 PWA는 형편없습니다.</p>
+
+<p>하지만 실제로 사용자들은 브라우저보다 앱 스토어에서 설치하는 것을 더 신뢰하는 경향이 있습니다. 앱 스토어에 PWA를 업로드해야 하는 타당한 이유가 하나 있다면 바로 이 점입니다.</p>
+
+<h2>
+ <a name="7-pwas-can-do-notifications-now" href="#7-pwas-can-do-notifications-now">
+  </a>
+  7. 이제 PWA도 알림을 할 수 있습니다.</h2>
+
+<p><a href="https://dev.to/progressier/pwa-what-changed-in-2023-3co4">2023년 iOS에 푸시 알림이 도입되면서</a> PWA는 중요한 기능 격차를 해소했습니다. 이러한 발전은 기능의 완성도를 위해 앱 스토어에 의존할 필요성을 더욱 줄여줍니다. PWA가 네이티브 앱의 대안이 되기까지 마지막 남은 퍼즐 조각이었던 셈입니다.</p>
+
+<h2>
+ <a name="8-its-more-work" href="#8-its-more-work">
+  </a>
+  8. 더 많은 작업</h2>
+
+<p>PWA, 즉 <a href="https://medium.com/stackademic/what-the-heck-is-a-progressive-app-anyway-53a077d23825">범용 앱은</a> 브라우저가 있는 모든 기기에서 손쉽게 설치할 수 있습니다. 이 방정식에 앱 스토어를 추가하면 실질적인 이점 없이 프로세스만 복잡해집니다. 더 많은 코드, 더 많은 빌드, 더 많은 배포를 처리해야 합니다. 왜 자발적으로 그런 일을 감수하겠습니까?</p>
+
+<h2>
+ <a name="9-form-factor-doesnt-matter" href="#9-form-factor-doesnt-matter">
+  </a>
+  9. 폼 팩터는 중요하지 않다</h2>
+
+<p>스타일보다 실속을 우선시하세요. 앱 스토어는 신뢰성을 제공할 수 있지만, PWA는 본질적으로 보안이 취약하며 브라우저의 기능에 의해 제한됩니다. </p>
+
+<p>순수 웹 앱으로 성공을 거둔 <a href="https://install.page/chatgpt">ChatGPT와</a> <a href="https://javascript.plainenglish.io/why-the-wordle-acquisition-is-great-news-for-the-web-fe3d19fbb5f4">Wordle과</a> 같은 성공 사례는 플랫폼은 앱 자체의 품질과 유용성에 부차적이라는 것을 보여줍니다.</p>
+
+<p>그러니 앱 스토어는 잊어버리세요. 필요 없습니다.</p>
+
+<h2>
+ <a name="10-progressier" href="#10-progressier">
+  </a>
+  10. Progressier</h2>
+
+<p>저는 개발자에게 최상의 브라우저 기반 PWA 설치 환경을 제공하기 위해 <a href="https://progressier.com/">Progressier를</a> 만들었습니다. 그리고 구글/애플의 앱 스토어 설치 환경과 <em>거의</em> 비슷하다고 말할 수 있습니다.</p>
+
+<p>그리고 애플이나 구글과 달리 사용자를 차단할 수 없습니다! Progressier를 사용하면 PWA가 도메인에서 안전하게 독립적으로 작동합니다. 따라서 프로그레시어 사용을 중단하더라도 사용자는 앱을 계속 사용하고 설치할 수 있습니다.</p>
+
+<p>지금까지 앱 스토어를 우회하고 오픈 웹에서 PWA의 잠재력을 최대한 활용해야 하는 10가지 확실한 이유를 살펴보았습니다.</p>
+
+
+          </div></div>
+	      </article>
+			</main>
+    </body>
+  </html>
+  
