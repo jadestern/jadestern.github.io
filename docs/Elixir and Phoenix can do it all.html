@@ -1,0 +1,142 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>Elixir and Phoenix can do it all!</title>
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+      <script src="//unpkg.com/alpinejs" defer></script>
+    </head>
+    <body x-data="{ dark: false }" x-bind:data-theme="dark ? 'dark' : 'light'">
+      <main class="container">
+      	<button x-on:click="dark = !dark" class="contrast outline">Switch Theme</button>
+	      <article>
+	        <div id="readability-page-1" class="page"><article>
+         <dl>
+             <dt>작성자</dt>
+             <dd>
+                <img alt="Jason Stiebs" src="https://fly.io/static/images/jason.webp">
+               <dl>
+                 <dt>이름</dt>
+                 <dd>
+                   제이슨 스티브스            </dd>
+                  <dt>페레그린</dt>
+                  <dd>
+                    
+                     <a href="https://twitter.com/peregrine" target="_blank">페레그린 </a>           </dd>
+               </dl>
+             </dd>
+         </dl>
+
+        <section>
+            <figure>
+               <img src="https://fly.io/phoenix-files/elixir-and-phoenix-can-do-it-all/assets/elixir-cover.webp" alt="A fly bird wearing indiana jones clothing, in an ancient tomb discovering elixir and a lightsaber.">
+                
+                 <figcaption> <span>이미지</span> </figcaption>제공: <figcaption><svg role="img" style="pointer-events: none; width: 17px; height: 17px;" viewBox="0 0 20 20" fill="currentColor" fill-rule="evenodd">
+  <g buffered-rendering="static">
+    <path fill-rule="evenodd" d="M1 8a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 018.07 3h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0016.07 6H17a2 2 0 012 2v7a2 2 0 01-2 2H3a2 2 0 01-2-2V8zm13.5 3a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM10 14a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path>
+  </g>
+</svg><a href="https://annieruygtillustration.com/" target="_blank">애니 루이그트 </a> </figcaption>           </figure>
+          <p>우리는 Fly.io입니다. 우리는 전 세계에서 호스팅하는 하드웨어에서 사용자를 위한 앱을 실행합니다. Fly.io는 Phoenix 애플리케이션을 실행하기에 좋은 곳입니다. <a href="https://fly.io/docs/elixir/">시작하는</a> 방법을 확인해 보세요!</p>
+<p>10년째 Elixir/Phoenix 개발자로 일하고 있는 저로서는 Elixir와 Phoenix가 우리를 위해 할 수 있는 모든 것을 당연하게 여기기 쉽습니다. 그래서 저는 한 걸음 물러서서 Elixir와 Phoenix를 선택하면 무료로 제공되는 모든 기능을 나열하고 싶었습니다.</p>
+
+<p>이 포스팅의 목표는 정보 및 링크 목록을 덤프하고 사용자가 자신의 길을 선택할 수 있도록 하는 것입니다. 이 주제나 엘릭서 및 피닉스에 대해 잘 모르신다면 이 링크를 클릭하고 한 번 살펴 보시면 그 품질과 깊이에 놀라실 것입니다!</p>
+
+<p>이 포스팅의 영감은 <a href="https://twitter.com/wojtekmach/status/1710020808523846087">사샤 쥬리치가</a> 리트윗한 <a href="https://www.youtube.com/watch?v=JvBT4XBdoUE">GOTO 컨퍼런스 강연의</a> 다음 슬라이드를 공유한 것에서 얻었습니다.</p>
+
+<p><img src="https://fly.io/phoenix-files/elixir-and-phoenix-can-do-it-all/assets/elixir-does-all.jpeg"></p>
+
+<p>이 이미지는 기술 스택에서 <a href="https://www.erlang.org/">Erlang 가상 머신이</a> 대체할 수 있는 몇 가지 기술적 요구 사항을 열거하고 있습니다. 다른 프로젝트가 이러한 작업을 잘 수행할 수 없다는 말은 아닙니다. <a href="https://fly.io/">Fly.io의</a> 자체 스택에서도 이러한 작업을 수행할 수 있고 수행하고 있습니다. 요점은 이러한 생태계에서는 애초에 이러한 문제를 <em>해결해야</em> 한다는 점인데, 이 글을 검토할 때 호세 발림이 가장 잘 설명했습니다:</p>
+
+<blockquote>
+<p>문제를 해결하는 대신 문제를 완전히 제거하는 것</p>
+</blockquote>
+<h2 id="the-beam"><a href="#the-beam" aria-label="Anchor"></a>빔</h2>
+<p>과 같은 놀라운 기능에 대한 기본 지원은 위의 목록에 포함되지 않았습니다:</p>
+
+<ul>
+<li>액터 프로세스 모델, 즉 동시성으로 인해 프로세스가 있고 이 프로세스가 다른 프로세스에 메시지를 보내는 것을 의미합니다. 공유 메모리 없음. BEAM에 내장된 스케줄러로 완전히 관리됩니다. 수백만 개의 프로세스가 있어도 문제가 없습니다. 두려움 없는 동시성!</li><li>분산: 두 대의 서버가 원활하고 자동으로 통신할 수 있습니다. 작동 방식이 <a href="https://fly.io/phoenix-files/beam-clustering-made-easy/">놀랍습니다</a>.</li><li>RPC: 원격으로 함수나 프로세스를 호출하는 것은 로컬 함수를 호출하는 것만큼이나 쉬우며, 연결이나 직렬화 또는 역직렬화에 대해 신경 쓸 필요가 없습니다. 이것이 바로 Fly가 Elixir와 Phoenix를 사용하는 많은 이유 중 하나이며, <a href="https://fly.io/docs/reference/private-networking/">와이어가드 기반 네트워크와</a> 글로벌 호스팅을 통해 이러한 사용이 사소하고 바람직합니다.</li><li>병렬 가비지 컬렉션, 즉 VM이 소프트 실시간이며 일시 중지를 최소화합니다!</li><li>전반적으로 낮은 리소스 사용량 강조</li><li>UDP/TCP/SSL 서버 지원 내장.</li><li>키 밸류 스토어 <a href="https://www.erlang.org/doc/man/ets.html">ETS</a> 내장.</li><li>코드 <a href="https://www.erlang.org/doc/apps/erts/tracing">추적</a> 및 <a href="https://www.erlang.org/doc/man/observer">관찰을</a> 위한 툴링.</li><li>37년 동안 지속적으로 개발 및 프로덕션에 사용.</li></ul>
+
+<p>이 목록의 장점은 Elixir와 Phoenix 팀이 제대로 된 작업을 수행했다면 이 중 어떤 것도 생각할 필요가 없다는 것입니다. 그저 여러분을 위해 작동하며 이 거인의 어깨 위에 서게 해줍니다.</p>
+<h3 id="elixir"><a href="#elixir" aria-label="Anchor"></a>엘릭서</h3>
+<p>Elixir 프로그래밍 언어는 개발자에게 더 많은 것을 제공합니다:</p>
+
+<ul>
+<li>완벽한 종속성 관리와 <a href="https://elixir-lang.org/getting-started/mix-otp/introduction-to-mix.html">믹스</a> 및 <a href="https://hex.pm/">헥스를</a> 지원하는 빌드 도구.</li><li>최신 도구가 내장되어 있습니다:<ul>
+<li><a href="https://hexdocs.pm/ex_unit/1.15/ExUnit.html">테스트</a></li><li><a href="https://github.com/elixir-lang/ex_doc">문서</a></li><li>서식 지정</li></ul>
+</li><li>깔끔하고 <a href="https://fly.io/phoenix-files/elixir-docs-are-built-different/">문서화되어</a> 있으며 완벽하게 검사된 <a href="https://hexdocs.pm/elixir/1.15.7/Kernel.html">표준 라이브러리를</a> 갖춘 언어. 이 언어에는 군더더기가 <em>거의</em> 없다는 점이 놀랍습니다. 다른 언어로 들어가면 <em>사용하지 않는</em> 것으로 표시되어 있거나 예제나 문서가 없는 임의의 함수나 모듈을 찾을 수 있습니다. 엘릭서는 그렇지 않습니다.</li><li>최신 <a href="https://fly.io/phoenix-files/elixir-docs-are-built-different/">문서가</a> 있습니다:<ul>
+<li>치트시트 내장</li><li>사용자 지정 마크다운 내장</li><li>소스 링크</li><li>검색</li><li>머메이드, Math.js, Vega-Lite 등을 지원합니다!</li></ul>
+</li><li>다음과 같은 최신 언어 기능:<ul>
+<li><a href="https://hexdocs.pm/elixir/1.15.7/Enum.html">열거형</a>, <a href="https://hexdocs.pm/elixir/1.15.7/Stream.html">스트림</a>, <a href="https://hexdocs.pm/elixir/1.15.7/Access.html">액세스</a>같은 높은 수준의 컬렉션과 기능을 지원하는<a href="https://elixir-lang.org/getting-started/protocols.html">프로토콜</a> </li><li><a href="https://hexdocs.pm/elixir/1.15.7/Stream.html">스트림</a>, 느리고 성능이 뛰어난 데이터 처리 가능</li><li>모든 기능을 갖춘 <a href="https://hexdocs.pm/elixir/1.15.7/Calendar.html">날짜/시간/날짜/캘린더</a> 모듈.</li><li>사소한 병렬 처리를 위한<a href="https://hexdocs.pm/elixir/1.15.7/Task.html">작업</a>.</li><li>사소한 공유 상태 관리를 위한<a href="https://hexdocs.pm/elixir/1.15.7/Agent.html">에이전트</a>.</li><li>환경별 구성을 위한<a href="https://hexdocs.pm/elixir/1.15.7/Config.html">구성</a> </li><li>로컬, 분산, 확장 가능한 키-값 프로세스 저장을 위한<a href="https://hexdocs.pm/elixir/1.15.7/Registry.html">레지스트리</a>.</li></ul>
+</li></ul>
+
+<p>이는 Elixir 더 랭귀지가 제공하는 기능의 일부에 불과합니다. 여기에는 훨씬 더 많은 기능을 지원하는 패키지 레지스트리 <a href="https://hex.pm/">Hex</a> 내의 <em>심층적인</em> 라이브러리 카탈로그는 포함되어 있지 않습니다.</p>
+
+<p>Hex의 몇 가지 예시입니다:</p>
+
+<ul>
+<li>HuggingFace가 통합된 <a href="https://github.com/elixir-nx/bumblebee">범블비를</a> 사용한 머신 러닝으로 전 세계적으로 배치 및 배포가 가능합니다.</li><li><a href="https://github.com/elixir-nx/scholar">Scholar를</a> 사용한 NumPy에 필적하는 수학/과학.</li><li><a href="https://hexdocs.pm/gen_stage/GenStage.html">GenStage</a> 또는 <a href="https://github.com/dashbitco/broadway">Broadway를</a>사용한 복잡한 분산형 빅데이터 처리</li><li><a href="https://nerves-project.org/">Nerves를</a> 사용한 임베디드 및 IoT 프로그래밍.</li><li>속성 및 생성 기반 테스트를 위한<a href="https://hex.pm/packages/stream_data">스트림 데이터</a>.</li><li>보안 및 정적 분석을 위한<a href="https://hex.pm/packages/sobelow">소벨로우</a>.</li><li>작업자/작업 대기열 구현을 위한<a href="https://hex.pm/packages/oban">Oban</a>.</li><li>높은 수준의 HTTP 클라이언트를 위한<a href="https://hex.pm/packages/req">요구</a> 사항.</li><li>HTTP 서버용<a href="https://github.com/elixir-plug/plug/">플러그</a>.</li><li> 순수한 Elixir HTTP1/2 서버를 위한 <a href="https://github.com/mtrudel/bandit">Bandit</a>!</li><li>엘릭서를 사용한 통합 문서와 같은 Juypter용<a href="https://livebook.dev/">라이브북</a>!</li><li>비디오 스트림 처리를 위한<a href="https://membrane.stream/">멤브레인</a>.</li><li>임의의 정밀도 십진수 연산을 위한<a href="https://hexdocs.pm/decimal/readme.html">Decimal</a>.</li><li>고성능 JSON 인코딩/디코딩을 위한<a href="https://hexdocs.pm/jason/readme.html">Jason</a>.</li><li>이미지 조작을 위한<a href="https://hex.pm/packages/image">Image</a>.</li><li>웹 브라우저를 제외하고 <em>가장</em> 완벽한 국제화 및 로케일 라이브러리를 위한<a href="https://github.com/elixir-cldr/cldr">CLDR</a>. 숫자, 목록, 단위, 날짜\시간\날짜, 데이터 정렬, 지역 등을 지원합니다.</li><li>드롭다운 및 배쉬 비트가 필요할 때를 대비해 정말 간단한 Rust 및 Zig FFI 지원을 위한<a href="https://github.com/rusterlium/rustler">Rustler와</a> <a href="https://github.com/E-xyza/zigler">Zigler</a>.</li></ul>
+
+<p>엘릭서 에코시스템에서 다루지 않은 것은 거의 없습니다!</p>
+<h2 id="phoenix-and-liveview"><a href="#phoenix-and-liveview" aria-label="Anchor"></a>피닉스와 라이브뷰</h2>
+<p>재미는 여기서 멈추지 않습니다. 피닉스가 제공하는 모든 놀라운 툴을 기반으로 다양한 기능이 추가되었기 때문입니다:</p>
+
+<ul>
+<li>모든 기능을 갖춘 HTTP 라이브러리<ul>
+<li>고급 <a href="https://hexdocs.pm/phoenix/Phoenix.Router.html">라우팅</a></li><li><a href="https://hexdocs.pm/phoenix/Phoenix.Router.html#module-pipelines-and-plugs">플러그 가능한 단계</a></li><li><a href="https://hexdocs.pm/phoenix/components.html">HTML</a> 및 <a href="https://hexdocs.pm/phoenix/json_and_apis.html">JSON</a> 처리 기능 내장</li><li>정상적인 보안 기본값을 갖춘 <a href="https://hexdocs.pm/phoenix/using_ssl.html">HTTPS</a> 사용</li><li><a href="https://hexdocs.pm/phoenix/mix_phx_gen_auth.html#tracking-sessions">보안 쿠키 세션</a></li><li><a href="https://hexdocs.pm/phoenix/Phoenix.Token.html">보안 토큰</a></li><li>MVC 스타일 앱을 위한<a href="https://hexdocs.pm/phoenix/controllers.html">컨트롤러</a> 액션.</li><li>내장된 <a href="https://hexdocs.pm/gettext/Gettext.html">국제화 도구</a></li></ul>
+</li><li>웹소켓<ul>
+<li>채널을 통한<a href="https://hexdocs.pm/phoenix/channels.html">멀티플렉싱</a> </li><li>백오프 및 일반적인 오류 모드를 처리하는 JavaScript 라이브러리</li><li>직렬화</li><li><a href="https://hexdocs.pm/phoenix/Phoenix.Socket.html#module-socket-fields">세션</a></li><li><a href="https://www.phoenixframework.org/blog/the-road-to-2-million-websocket-connections">수백만 개의 클라이언트로 확장 가능</a>.</li><li><a href="https://hexdocs.pm/phoenix_pubsub/Phoenix.PubSub.html">PubSub완전</a>분산</li><li>"핫 경로"에 최적화되어 있습니다.</li><li><a href="https://hexdocs.pm/phoenix/Phoenix.Presence.html">현재</a> 상태 모니터링 및 채널에 있는 <em>사용자</em> 추적</li><li>완전 분산</li><li>CRDT를 사용하여 구축</li><li>자바스크립트 지원</li></ul>
+</li><li>개발 툴링:<ul>
+<li><a href="https://hexdocs.pm/phoenix/Phoenix.CodeReloader.html">실시간 코드 로딩</a></li><li><a href="https://hexdocs.pm/plug/Plug.Debugger.html">유용하고 실행 가능한</a> 오류</li><li>엔드 투 엔드 테스트 내장. (크롬 드라이버 필요 없음)</li></ul>
+</li><li>JavaScript<ul>
+<li>번들링/축소/무결성/캐시 버스팅<ul>
+<li>자동으로 설치되는 <a href="https://hex.pm/packages/esbuild">esbuild</a> 사용</li></ul>
+</li><li>NPM 지원</li><li>사소한 커스텀 JS</li></ul>
+</li><li>테일윈드를 통한 CSS<ul>
+<li>번들링/축소/무결성/캐시 버스팅<ul>
+<li>자동으로 설치되는 <a href="https://hex.pm/packages/tailwind">테일윈드</a> 사용</li></ul>
+</li><li>사용자 정의 CSS는 간단합니다.</li></ul>
+</li><li><a href="https://hexdocs.pm/phoenix_live_view/welcome.html">라이브 뷰</a><ul>
+<li>서버에서 렌더링된 라이브 HTML과 CSS를 순수 Elixir로 간단하게 구현합니다.</li><li>HTML 및 Html 어트리뷰트 컴파일 시간 <a href="https://hexdocs.pm/phoenix/components.html#heex">검증</a></li><li>최신 웹에<a href="https://dashbit.co/blog/latency-rendering-liveview">고도로 최적화</a> </li><li>개발자를 위한 디버그 도구</li><li>간편한<a href="https://hexdocs.pm/phoenix_live_view/js-interop.html">JS 인터롭</a> </li><li>지연 시간<a href="https://hexdocs.pm/phoenix_live_view/js-interop.html#simulating-latency">시뮬레이션</a></li><li>연결당<a href="https://fly.io/phoenix-files/a-liveview-is-a-process/">단일 빔 프로세스</a> </li><li>디스크 또는 클라우드에 간단한 <a href="https://hexdocs.pm/phoenix/file_uploads.html">파일 업로드</a>.</li></ul>
+</li><li><a href="https://hexdocs.pm/ecto/Ecto.html">Ecto를</a>사용한 데이터베이스<ul>
+<li><a href="https://github.com/elixir-sqlite/ecto_sqlite3">Postgres/MySQL/Sqlite</a> <a href="https://hex.pm/packages?search=ecto&amp;sort=recent_downloads">등</a></li><li>원시 <a href="https://hexdocs.pm/ecto_sql/Ecto.Adapters.SQL.html#query!/4">SQL</a> 이스케이프 <a href="https://hexdocs.pm/ecto/Ecto.Query.html#module-fragments">해치가</a>포함된<a href="https://hexdocs.pm/ecto/Ecto.Query.html">전체 쿼리 DSL</a> </li><li><a href="https://hexdocs.pm/ecto_sql/Ecto.Migration.html">마이그레이션 업/다운/스키마 덤프</a></li><li><a href="https://hexdocs.pm/ecto/Ecto.Schema.html">전체 스키마</a> 및 <a href="https://hexdocs.pm/ecto/Ecto.Changeset.html">변경</a> 유효성 검사</li><li><a href="https://hexdocs.pm/ecto/Ecto.Repo.html#transaction-api">트랜잭션</a> 지원</li><li><a href="https://hexdocs.pm/ecto/Ecto.Multi.html">다단계</a> 쿼리/트랜잭션</li></ul>
+</li><li><a href="https://hexdocs.pm/phoenix/mix_phx_gen_auth.html">전체 권한 부여/인증 생성기</a><ul>
+<li>등록, 로그인, 비밀번호 찾기, 이메일 인증 및 세션</li><li>라이브뷰 또는 서버 HTML</li></ul>
+</li><li><a href="https://github.com/swoosh/swoosh">이메일 렌더링 및 전송</a></li><li>내장된 <a href="https://hexdocs.pm/phoenix/telemetry.html#metrics">지표 추적</a></li><li>한 줄로 전체 <a href="https://github.com/phoenixframework/phoenix_live_dashboard">지표 대시보드</a>추가 가능</li><li><a href="https://hexdocs.pm/phoenix/releases.html#containers">도커파일 생성기</a></li></ul>
+
+<p>이 목록만 살펴봐도 거의 모든 문제를 해결하기 위해 회사를 시작하거나 웹사이트를 구축하는 데 필요한 모든 것이 있습니다. 여기에 가장 작은 서버부터 전 세계 모든 대륙에 수백만 명의 고객을 보유한 글로벌 분산 네트워크까지 확장할 수 있는 BEAM의 기능까지! 약간 숨이 가쁘게 들릴지 모르지만, 이 모든 링크를 정리하는 것만으로도 숨이 턱턱 막힙니다.</p>
+<h2 id="wrap-up"><a href="#wrap-up" aria-label="Anchor"></a>마무리</h2>
+<p>한 발 물러서서 보면 소규모 팀이 이렇게 많은 것을 성취할 수 있다는 사실이 놀랍습니다. Phoenix의 모든 놀라운 기능은 그 밑에 있는 환상적인 Elixir 프로젝트의 어깨 위에 구축되었습니다. 37년 동안 꾸준히 개발되어 온 Erlang 프로젝트가 그 뒤를 받치고 있습니다.</p>
+
+<p>아직 Phoenix나 Elixir를 살펴보지 않으셨다면, 위의 링크 중 눈에 띄는 부분을 살펴보시기 바랍니다. <a href="https://livebook.dev/">라이브북이나</a> <a href="https://elixir-lang.org/install.html#by-operating-system">네이티브로</a> Elixir를 설치 및 설정하는 것이 그 어느 때보다 쉬워졌습니다!</p>
+<figure>
+  <figcaption>
+    <h2>Fly.io ❤️ 엘릭서</h2>
+    <p>Fly.io는 피닉스 라이브뷰 앱을 실행할 수 있는 좋은 방법입니다. 시작하기가 정말 쉽습니다. 몇 분 안에 실행할 수 있습니다.</p>
+     <a href="https://fly.io/docs/elixir/">
+        지금 바로 피닉스 앱을 배포하세요! <span>→</span> </a></figcaption>
+  <p><img src="https://fly.io/static/images/cta-cat.webp" srcset="https://fly.io/static/images/cta-cat@2x.webp 2x" alt="">
+  </p>
+</figure>
+
+
+          
+        </section>
+        <dl>
+            <dt>
+              다음 포스트 ↑   </dt>
+            <dd>
+              
+               <a href="https://fly.io/phoenix-files/abusing-liveview-new-async-assigns-feature/">라이브뷰의 새로운 비동기 할당 기능 </a>활용하기            </dd>
+            <dt>
+              이전 게시물 ↓   </dt>
+            <dd>
+              
+               <a href="https://fly.io/phoenix-files/chatgpt-doesnt-know-what-day-it-is/">ChatGPT가 오늘이 무슨 요일인지 모르시나요? </a>           </dd>
+        </dl>
+      </article></div>
+	      </article>
+			</main>
+    </body>
+  </html>
+  
