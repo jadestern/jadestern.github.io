@@ -1,0 +1,305 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>Meet Phoenix: A Rails-like Framework for Modern Web Apps on Elixir</title>
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+      <script src="//unpkg.com/alpinejs" defer></script>
+    </head>
+    <body x-data="{ dark: false }" x-bind:data-theme="dark ? 'dark' : 'light'">
+      <main class="container">
+      	<button x-on:click="dark = !dark" class="contrast outline">Switch Theme</button>
+	      <article>
+	        <div id="readability-page-1" class="page"><div data-cid="blog-post-layout-main-content-3" data-testid="body"><p>피닉스 프레임워크는 루비 온 레일즈와 같은 프레임워크의 생산성을 제공하면서 동시에 <a href="https://github.com/mroth/phoenix-showdown#benchmarking">가장 빠른 프레임워크</a> 중 하나로 빠른 속도로 인기를 얻고 있습니다. 생산성을 높이려면 성능을 희생해야 한다는 통념을 깨는 것입니다.</p>
+
+<p>그렇다면 피닉스란 정확히 무엇일까요?</p>
+
+<p>Phoenix는 Elixir 프로그래밍 언어로 구축된 웹 프레임워크입니다. Erlang 가상 머신을 기반으로 구축된 Elixir는 최신 웹 애플리케이션에서 점점 더 필요성이 커지고 있는 지연 시간이 짧고 내결함성이 있는 분산 시스템을 구축하는 데 사용됩니다. Elixir에 대한 자세한 내용은 <a href="https://www.toptal.com/elixir/getting-started-elixir-programming-language">이 블로그 게시물</a> 또는 <a href="http://elixir-lang.org/getting-started/introduction.html">공식 가이드에서</a> 확인할 수 있습니다.</p>
+
+<p><a href="https://www.toptal.com/ruby-on-rails">루비 온 레일즈 개발자라면</a> 성능 향상을 약속하는 Phoenix에 관심을 가져야 합니다. 다른 프레임워크의 개발자도 Phoenix가 웹 개발에 어떻게 접근하는지 살펴볼 수 있습니다.</p>
+
+<div data-testid="image-container"><figure><picture data-testid="picture"><source srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-srcset="https://assets.toptal.io/images?url=https%3A%2F%2Fuploads.toptal.io%2Fblog%2Fimage%2F121964%2Ftoptal-blog-image-1484937405580-ad4b313cf134d079fc8d0dc1d98c2dfb.png&amp;width=320, https://assets.toptal.io/images?url=https%3A%2F%2Fuploads.toptal.io%2Fblog%2Fimage%2F121964%2Ftoptal-blog-image-1484937405580-ad4b313cf134d079fc8d0dc1d98c2dfb.png&amp;width=320&amp;dpr=2 2x" media="(max-width: 320px)"><source srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-srcset="https://assets.toptal.io/images?url=https%3A%2F%2Fuploads.toptal.io%2Fblog%2Fimage%2F121964%2Ftoptal-blog-image-1484937405580-ad4b313cf134d079fc8d0dc1d98c2dfb.png&amp;width=425, https://assets.toptal.io/images?url=https%3A%2F%2Fuploads.toptal.io%2Fblog%2Fimage%2F121964%2Ftoptal-blog-image-1484937405580-ad4b313cf134d079fc8d0dc1d98c2dfb.png&amp;width=425&amp;dpr=2 2x" media="(min-width: 320.1px) and (max-width: 425px)"><source srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-srcset="https://assets.toptal.io/images?url=https%3A%2F%2Fuploads.toptal.io%2Fblog%2Fimage%2F121964%2Ftoptal-blog-image-1484937405580-ad4b313cf134d079fc8d0dc1d98c2dfb.png&amp;width=524, https://assets.toptal.io/images?url=https%3A%2F%2Fuploads.toptal.io%2Fblog%2Fimage%2F121964%2Ftoptal-blog-image-1484937405580-ad4b313cf134d079fc8d0dc1d98c2dfb.png&amp;width=524&amp;dpr=2 2x" media="(min-width: 425.1px) and (max-width: 524px)"><source srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-srcset="https://assets.toptal.io/images?url=https%3A%2F%2Fuploads.toptal.io%2Fblog%2Fimage%2F121964%2Ftoptal-blog-image-1484937405580-ad4b313cf134d079fc8d0dc1d98c2dfb.png&amp;width=768, https://assets.toptal.io/images?url=https%3A%2F%2Fuploads.toptal.io%2Fblog%2Fimage%2F121964%2Ftoptal-blog-image-1484937405580-ad4b313cf134d079fc8d0dc1d98c2dfb.png&amp;width=768&amp;dpr=2 2x" media="(min-width: 524.1px) and (max-width: 768px)"><source srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-srcset="https://assets.toptal.io/images?url=https%3A%2F%2Fuploads.toptal.io%2Fblog%2Fimage%2F121964%2Ftoptal-blog-image-1484937405580-ad4b313cf134d079fc8d0dc1d98c2dfb.png&amp;width=1024, https://assets.toptal.io/images?url=https%3A%2F%2Fuploads.toptal.io%2Fblog%2Fimage%2F121964%2Ftoptal-blog-image-1484937405580-ad4b313cf134d079fc8d0dc1d98c2dfb.png&amp;width=1024&amp;dpr=2 2x" media="(min-width: 768.1px) and (max-width: 1024px)"><source srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-srcset="https://assets.toptal.io/images?url=https%3A%2F%2Fuploads.toptal.io%2Fblog%2Fimage%2F121964%2Ftoptal-blog-image-1484937405580-ad4b313cf134d079fc8d0dc1d98c2dfb.png&amp;width=1200, https://assets.toptal.io/images?url=https%3A%2F%2Fuploads.toptal.io%2Fblog%2Fimage%2F121964%2Ftoptal-blog-image-1484937405580-ad4b313cf134d079fc8d0dc1d98c2dfb.png&amp;width=1200&amp;dpr=2 2x" media="(min-width: 1024.1px) and (max-width: 1200px)"><source srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-srcset="https://assets.toptal.io/images?url=https%3A%2F%2Fuploads.toptal.io%2Fblog%2Fimage%2F121964%2Ftoptal-blog-image-1484937405580-ad4b313cf134d079fc8d0dc1d98c2dfb.png" media="(min-width: 1200.1px)"><img alt="Meet Phoenix on Elixir: A Rails-like Framework for Modern Web Apps" data-checker="" data-src="https://assets.toptal.io/images?url=https%3A%2F%2Fuploads.toptal.io%2Fblog%2Fimage%2F121964%2Ftoptal-blog-image-1484937405580-ad4b313cf134d079fc8d0dc1d98c2dfb.png" decoding="async" src="https://assets.toptal.io/images?url=https%3A%2F%2Fuploads.toptal.io%2Fblog%2Fimage%2F121964%2Ftoptal-blog-image-1484937405580-ad4b313cf134d079fc8d0dc1d98c2dfb.png"></picture></figure></div>
+
+<p>이 글에서는 루비 온 레일즈에서 피닉스로 넘어오는 경우 염두에 두어야 할 몇 가지 사항을 알아보겠습니다.</p>
+
+<p>루비와 달리 엘릭서는 함수형 프로그래밍 언어라는 점이 가장 큰 차이점일 수 있습니다. 하지만 생산성을 극대화하기 위해 Phoenix를 배우는 사람이라면 누구나 알아야 할 몇 가지 주요 차이점이 있습니다.</p>
+
+<h2 id="naming-conventions-are-simpler">명명 규칙이 더 간단합니다.</h2>
+
+<p>이것은 사소한 것이지만, 루비 온 레일즈에서 왔다면 엉망이 되기 쉽습니다.</p>
+
+<p>Phoenix에서는 모든 것을 단수형으로 작성하는 것이 규칙입니다. 따라서 루비 온 레일즈에서와 같이 "사용자 컨트롤러"가 아닌 "사용자 컨트롤러"를 사용하게 됩니다. 이는 데이터베이스 테이블의 이름을 지정할 때를 제외하고는 모든 경우에 적용되며, 테이블의 이름을 복수형으로 지정하는 것이 일반적입니다.</p>
+
+<p>루비 온 레일즈에서 복수형을 언제 어디서 사용해야 하는지 배우고 나면 별것 아닌 것처럼 보일 수도 있지만, 처음 루비 온 레일즈를 배울 때는 약간 혼란스러웠고, 다른 많은 분들도 혼란스러웠을 것입니다. Phoenix를 사용하면 걱정할 일이 한 가지 줄어듭니다.</p>
+
+<h2 id="routing-is-easier-to-manage">라우팅 관리가 더 쉬워집니다.</h2>
+
+<p>피닉스와 루비 온 레일은 라우팅에 있어서는 매우 유사합니다. 주요 차이점은 요청이 처리되는 방식을 제어할 수 있는 방법에 있습니다.</p>
+
+<p>Ruby on Rails(및 기타 Rack 애플리케이션)에서는 미들웨어를 통해 이 작업을 수행하는 반면, Phoenix에서는 "플러그"라고 하는 것을 통해 이 작업을 수행합니다.</p>
+
+<p>플러그는 연결을 처리하는 데 사용하는 것입니다.</p>
+
+<p>예를 들어, <code translate="no">Rails::Rack::Logger</code> 미들웨어는 Rails에서 요청을 기록하지만, Phoenix에서는 <code translate="no">Plug.Logger</code> 플러그를 사용하여 요청을 기록합니다. 기본적으로 Rack 미들웨어에서 할 수 있는 모든 작업은 플러그를 사용하여 수행할 수 있습니다.</p>
+
+<p>다음은 Phoenix의 라우터 예제입니다:</p>
+
+<pre translate="no"><code translate="no">defmodule HelloWorld.Router do
+  use HelloWorld.Web, :router
+
+  pipeline :browser do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_flash
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+  end
+
+  pipeline :api do
+    plug :accepts, ["json"]
+  end
+
+  scope "/", HelloWorld do
+    pipe_through :browser
+
+    get "/", HelloController, :index
+  end
+
+  scope "/api", HelloWorld do
+    pipe_through :api
+  end
+end
+</code></pre>
+
+<p>먼저 파이프라인을 살펴봅시다.</p>
+
+<p>이것은 요청이 통과하는 플러그 그룹입니다. 미들웨어 스택이라고 생각하면 됩니다. 예를 들어 요청이 HTML을 기대하는지 확인하고, 세션을 가져오고, 요청이 안전한지 확인하는 데 사용할 수 있습니다. 이 모든 과정은 컨트롤러에 도달하기 전에 이루어집니다.</p>
+
+<p>여러 개의 파이프라인을 지정할 수 있으므로 특정 경로에 필요한 플러그를 선택해서 사용할 수 있습니다. 예를 들어 저희 라우터에는 페이지(HTML) 요청과 API(JSON) 요청을 위한 서로 다른 파이프라인이 있습니다.</p>
+
+<p>서로 다른 유형의 요청에 정확히 동일한 파이프라인을 사용하는 것이 항상 합리적일 수는 없습니다. Phoenix는 이러한 유연성을 제공합니다.</p>
+
+<h2 id="views-and-templates-are-two-different-things">보기와 템플릿은 서로 다른 두 가지입니다.</h2>
+
+<p>피닉스의 뷰는 루비 온 레일의 뷰와 동일하지 않습니다.</p>
+
+<p>Phoenix의 뷰는 템플릿을 렌더링하고 템플릿에서 원시 데이터를 더 쉽게 사용할 수 있도록 하는 함수를 제공합니다. Phoenix의 뷰는 템플릿 렌더링이 추가되었다는 점을 제외하면 루비 온 레일즈의 헬퍼와 가장 유사합니다.</p>
+
+<p>브라우저에 "Hello, World!"를 표시하는 예제를 작성해 보겠습니다.</p>
+
+<h4 id="ruby-on-rails">루비 온 레일즈:</h4>
+
+<p><strong>app/controllers/hello_controller.rb:</strong></p>
+
+<pre translate="no"><code translate="no">class HelloController &lt; ApplicationController
+  def index
+  end
+end
+</code></pre>
+
+<p><strong>app/views/hello/index.html.erb:</strong></p>
+
+<pre translate="no"><code translate="no">&lt;h1&gt;Hello, World!&lt;/h1&gt;
+</code></pre>
+
+<h4 id="phoenix">Phoenix:</h4>
+
+<p><strong>웹/컨트롤러/헬로_컨트롤러.ex:</strong></p>
+
+<pre translate="no"><code translate="no">defmodule HelloWorld.HelloController do
+  use HelloWorld.Web, :controller
+
+  def index(conn, _params) do
+    render conn, "index.html"
+  end
+end
+</code></pre>
+
+<p><strong>웹/보기/헬로_보기.ex:</strong></p>
+
+<pre translate="no"><code translate="no">defmodule HelloWorld.HelloView do
+  use HelloWorld.Web, :view
+end
+</code></pre>
+
+<p><strong>웹/템플릿/헬로/인덱스.html.eex:</strong></p>
+
+<pre translate="no"><code translate="no">&lt;h1&gt;Hello, World!&lt;/h1&gt;
+</code></pre>
+
+<p>이 예제들은 모두 브라우저에 "Hello, World!"를 표시하지만 몇 가지 주요 차이점이 있습니다.</p>
+
+<p>첫째, Ruby on Rails와 달리 Phoenix에서 렌더링하려는 템플릿을 명시적으로 명시해야 합니다.</p>
+
+<p>다음으로 컨트롤러와 템플릿 사이에 있는 뷰를 Phoenix에 포함시켜야 했습니다.</p>
+
+<p>이제 뷰가 비어 있는데 왜 뷰가 필요한지 궁금할 것입니다.  여기서 핵심은 내부적으로 Phoenix가 템플릿을 아래 코드와 거의 동일한 함수로 컴파일한다는 것입니다:</p>
+
+<pre translate="no"><code translate="no">defmodule HelloWorld.HelloView do
+  use HelloWorld.Web, :view
+
+  def render("index.html", _assigns) do
+    raw("&lt;h1&gt;Hello, World!&lt;/h1&gt;")
+  end
+end
+</code></pre>
+
+<p>템플릿을 삭제하고 새 렌더링 함수를 사용해도 동일한 결과를 얻을 수 있습니다. 이 기능은 텍스트나 JSON만 반환하려는 경우에 유용합니다.</p>
+
+<h2 id="models-are-just-that-data-models">모델은 바로 데이터 모델입니다.</h2>
+
+<p>Phoenix에서 모델은 주로 데이터 유효성 검사, 스키마, 다른 모델과의 관계 및 표시 방식을 처리합니다.</p>
+
+<p>모델에서 스키마를 지정하는 것이 처음에는 이상하게 들릴 수 있지만, 이를 통해 데이터베이스에 지속되지 않는 필드인 '가상' 필드를 쉽게 만들 수 있습니다. 예제를 살펴보겠습니다:</p>
+
+<pre translate="no"><code translate="no">defmodule HelloPhoenix.User do
+  use HelloPhoenix.Web, :model
+
+  schema "users" do
+    field :name, :string
+    field :email, :string
+    field :password, :string, virtual: true
+    field :password_hash, :string
+  end
+end
+</code></pre>
+
+<p>여기서는 '사용자' 테이블에 이름, 이메일, 비밀번호, password_hash의 네 가지 필드를 정의합니다.</p>
+
+<p>여기에서는 "가상"으로 설정된 "비밀번호" 필드를 제외하고는 흥미로운 것이 많지 않습니다.</p>
+
+<p>이렇게 하면 데이터베이스에 변경 사항을 저장하지 않고도 이 필드를 설정하고 가져올 수 있습니다. 비밀번호를 해시로 변환하는 로직이 있기 때문에 유용하며, 이를 "password_hash" 필드에 저장한 다음 데이터베이스에 저장합니다.</p>
+
+<p>여전히 마이그레이션을 만들어야 하며, Ruby on Rails에서처럼 필드가 모델에 자동으로 로드되지 않기 때문에 모델의 스키마가 필요합니다.</p>
+
+<p>피닉스와 루비 온 레일즈의 차이점은 모델이 데이터베이스에 대한 지속성을 처리하지 않는다는 것입니다. 이 작업은 아래 예시와 같이 데이터베이스 정보로 구성된 "Repo"라는 모듈에서 처리합니다:</p>
+
+<pre translate="no"><code translate="no">config :my_app, Repo,
+  adapter: Ecto.Adapters.Postgres,
+  database: "ecto_simple",
+  username: "postgres",
+  password: "postgres",
+  hostname: "localhost"
+</code></pre>
+
+<p>이 코드는 <code translate="no">config/dev.exs</code> 또는 <code translate="no">config/test.exs</code> 과 같은 환경별 구성 파일에 포함되어 있습니다. 그러면 Repo를 사용하여 생성 및 업데이트와 같은 데이터베이스 작업을 수행할 수 있습니다.</p>
+
+<pre translate="no"><code translate="no">Repo.insert(%User{name: "John Smith", example: "john@example.com"}) do
+  {:ok, user} -&gt; # Insertion was successful
+  {:error, changeset} -&gt; # Insertion failed
+end
+</code></pre>
+
+<p>이것은 Phoenix의 컨트롤러에서 흔히 볼 수 있는 예입니다.</p>
+
+<p>사용자에게 이름과 이메일을 제공하면 Repo가 데이터베이스에 새 레코드를 만들려고 시도합니다. 그런 다음 예시와 같이 선택적으로 시도의 성공 또는 실패를 처리할 수 있습니다.</p>
+
+<p>이 코드를 더 잘 이해하려면 Elixir의 패턴 매칭을 이해해야 합니다. 함수가 반환하는 값은 튜플입니다. 이 함수는 두 값의 튜플, 상태, 그리고 모델 또는 변경 집합 중 하나를 반환합니다. 변경 집합은 변경 사항을 추적하고 모델의 유효성을 검사하는 방법입니다(변경 집합은 다음 섹션에서 설명합니다).</p>
+
+<p>위에서 아래로, 사용자를 데이터베이스에 삽입하려고 시도한 함수가 반환한 튜플의 패턴과 일치하는 첫 번째 튜플은 정의된 함수를 실행합니다.</p>
+
+<p>아톰 대신 상태에 대한 변수를 설정할 수도 있지만(기본적으로 루비에서 심볼은 기호입니다), 그러면 성공한 시도와 실패한 시도를 모두 일치시키고 두 상황에 모두 동일한 함수를 사용할 수 있습니다. 일치시킬 원자를 지정하면 해당 상태에 맞는 함수를 정의할 수 있습니다.</p>
+
+<p>루비 온 레일즈에는 ActiveRecord를 통해 모델에 지속성 기능이 내장되어 있습니다. 이로 인해 모델에 더 많은 책임이 추가되고 결과적으로 모델 테스트가 더 복잡해질 수 있습니다. Phoenix에서는 지속성 로직으로 모든 모델이 부풀어 오르는 것을 방지하고 합리적인 방식으로 분리되었습니다.</p>
+
+<h2 id="changesets-allow-clear-validation-and-transformation-rules">변경 집합은 명확한 유효성 검사 및 변환 규칙을 허용합니다.</h2>
+
+<p>루비 온 레일즈에서 데이터 유효성 검사 및 변환은 찾기 어려운 버그의 원인이 될 수 있습니다. "before_create"와 같은 콜백 및 유효성 검사에 의해 데이터가 언제 변환되는지 즉시 알 수 없기 때문입니다.</p>
+
+<p>Phoenix에서는 변경 집합을 사용하여 이러한 유효성 검사 및 변환을 명시적으로 수행합니다. 이 기능은 제가 Phoenix에서 가장 좋아하는 기능 중 하나입니다.</p>
+
+<p>이전 모델에 변경 집합을 추가하여 변경 집합을 살펴보겠습니다:</p>
+
+<pre translate="no"><code translate="no">defmodule HelloPhoenix.User do
+  use HelloPhoenix.Web, :model
+
+  schema "users" do
+    field :name, :string
+    field :email, :string
+    field :password, :string, virtual: true
+    field :password_hash, :string
+  end
+  
+  def changeset(struct, params \\ %{}) do
+    struct
+    |&gt; cast(params, [:name, :email, :password])
+    |&gt; validate_required([:email, :password])
+  end
+end
+</code></pre>
+
+<p>여기서 변경 집합은 두 가지 작업을 수행합니다.</p>
+
+<p>먼저 Ruby on Rails의 "strong_parameters"와 유사하게 허용된 필드의 화이트리스트인 "cast" 함수를 호출한 다음 "email" 및 "password" 필드가 포함되어 있는지 확인하고 "name" 필드를 선택 사항으로 만듭니다. 이렇게 하면 허용한 필드만 사용자가 수정할 수 있습니다.</p>
+
+<p>이 접근 방식의 좋은 점은 하나의 변경 집합으로 제한되지 않는다는 것입니다. 여러 개의 변경 집합을 만들 수 있습니다. 등록용 변경 집합과 사용자 업데이트용 변경 집합을 만드는 것이 일반적입니다. 등록할 때만 비밀번호 필드를 요구하고 사용자를 업데이트할 때는 요구하지 않으려는 경우가 있을 수 있습니다.</p>
+
+<p>이 접근 방식을 Ruby on Rails에서 일반적으로 수행되는 방식과 비교하면, 유효성 검사가 "만들기"에만 실행되도록 지정해야 합니다. 이 때문에 복잡한 모델이 있는 경우 Rails에서 코드가 무엇을 하고 있는지 파악하기가 어려울 때가 있습니다.</p>
+
+<h2 id="importing-functionality-is-straightforward-yet-flexible">기능 임포트는 간단하면서도 유연합니다.</h2>
+
+<p>"Ecto"라는 라이브러리의 대부분의 기능을 모델로 가져올 수 있습니다. 모델에는 보통 이 줄이 맨 위에 있습니다:</p>
+
+<pre translate="no"><code translate="no">use HelloPhoenix.Web, :model
+</code></pre>
+
+<p>"HelloPhoenix.Web" 모듈은 "web/web.ex"에 있습니다. 모듈에는 다음과 같이 "model"이라는 함수가 있어야 합니다:</p>
+
+<pre translate="no"><code translate="no">def model do
+  quote do
+    use Ecto.Schema
+
+    import Ecto
+    import Ecto.Changeset
+    import Ecto.Query
+  end
+end
+</code></pre>
+
+<p>여기에서 Ecto에서 어떤 모듈을 가져오는지 확인할 수 있습니다. 여기에서 원하는 다른 모듈을 제거하거나 추가할 수 있으며 모든 모델로 가져올 수 있습니다.</p>
+
+<p>또한 뷰와 컨트롤러에 대해 각각 동일한 용도로 사용되는 "view" 및 "controller"와 같은 유사한 기능도 있습니다.</p>
+
+<p><code translate="no">quote</code> 및 <code translate="no">use</code> 키워드는 혼동될 수 있습니다. 이 예제에서 따옴표는 해당 함수를 호출하는 모듈의 컨텍스트에서 해당 코드를 직접 실행하는 것으로 생각할 수 있습니다. 따라서 모듈에서 따옴표 안에 코드를 작성한 것과 동일합니다.</p>
+
+<p>사용 키워드를 사용하면 코드가 호출되는 컨텍스트에서 코드를 실행할 수도 있습니다. 기본적으로 지정된 모듈이 필요한 다음, 해당 모듈을 실행하는 모듈에서 <code translate="no">__using__</code> 매크로를 호출하여 해당 매크로가 호출된 컨텍스트에서 실행합니다. <a href="http://elixir-lang.org/getting-started/meta/quote-and-unquote.html#quoting">인용</a> 및 <a href="http://elixir-lang.org/getting-started/alias-require-and-import.html#use">사용에</a> 대한 자세한 내용은 공식 가이드에서 확인할 수 있습니다.</p>
+
+<p>이렇게 하면 프레임워크에서 특정 함수가 어디에 있는지 이해하는 데 도움이 되고 프레임워크가 많은 '마법'을 부린다는 느낌을 줄이는 데 도움이 됩니다.</p>
+
+<h2 id="concurrency-is-at-the-core">동시성이 핵심입니다.</h2>
+
+<p>Elixir의 주요 기능인 동시성은 Phoenix에서 무료로 제공됩니다. 스레드 안전과 안정성에 대한 걱정 없이 여러 프로세스를 생성하고 여러 코어에서 실행할 수 있는 애플리케이션을 만들 수 있습니다.</p>
+
+<p>Elixir에서 새 프로세스를 이렇게 간단하게 생성할 수 있습니다:</p>
+
+<pre translate="no"><code translate="no">spawn fn -&gt; 1 + 2 end
+</code></pre>
+
+<p><code translate="no">spawn</code> 이후와 <code translate="no">end</code> 이전의 모든 요청은 새 프로세스에서 실행됩니다.</p>
+
+<p>실제로 Phoenix의 모든 요청은 자체 프로세스에서 처리됩니다. Elixir는 Erlang VM의 강력한 성능을 사용하여 안정적이고 효율적인 동시성을 "무료로" 제공합니다.</p>
+
+<p>또한 웹소켓은 클라이언트와 서버 간에 개방형 연결을 유지해야 하므로(즉, 수천 개의 동시 연결을 처리할 수 있도록 애플리케이션을 구축해야 하므로), Phoenix는 웹소켓을 사용하는 서비스를 실행하는 데 탁월한 선택이 될 수 있습니다.</p>
+
+<p>이러한 요구 사항은 Ruby on Rails를 기반으로 구축된 프로젝트에 많은 복잡성을 더할 수 있지만, Phoenix는 Elixir를 통해 이러한 요구 사항을 무료로 충족할 수 있습니다.</p>
+
+<p>Phoenix 애플리케이션에서 웹소켓을 사용하려면 <a href="http://www.phoenixframework.org/docs/channels">채널을</a> 사용해야 합니다. 이는 루비 온 레일즈에서 <code translate="no">ActionCable</code> 와 동일하지만 별도의 서버를 실행할 필요가 없기 때문에 설정이 덜 복잡합니다.</p>
+
+<h2 id="phoenix-makes-building-modern-web-apps-painless">Phoenix를 사용하면 최신 웹 앱을 쉽게 구축할 수 있습니다.</h2>
+
+<p>지금까지는 주로 차이점에 초점을 맞추었지만, Phoenix는 Ruby on Rails와 몇 가지 공통점이 있습니다.</p>
+
+<p>피닉스는 루비 온 레일즈와 거의 동일한 MVC 패턴을 따르므로 주요 차이점을 알았으므로 어떤 코드가 어디로 이동하는지 파악하는 것은 어렵지 않습니다. 또한 Phoenix에는 모델, 컨트롤러, 마이그레이션 등을 생성하기 위한 Ruby on Rails와 유사한 생성기가 있습니다.</p>
+
+<p>Elixir를 학습한 후 Phoenix에 익숙해지면 루비 온 레일즈의 생산성 수준에 서서히 다가갈 수 있습니다.</p>
+
+<p>생산성이 떨어진다고 느끼는 몇 안 되는 경우는 루비의 주옥같은 라이브러리로 해결할 수 있는 문제를 만났을 때 Elixir에서 유사한 라이브러리를 찾을 수 없을 때입니다. 다행히도 이러한 격차는 성장하는 Elixir 커뮤니티에 의해 서서히 채워지고 있습니다.</p>
+
+<p>Phoenix의 차이점은 복잡한 루비 온 레일즈 프로젝트를 관리할 때 발생하는 많은 어려움을 해결하는 데 도움이 됩니다. 모든 문제를 해결하지는 못하지만 올바른 방향으로 나아가는 데 도움이 됩니다. 생산성을 위해 느린 프레임워크를 선택하는 것은 더 이상 유효한 변명이 아니며, Phoenix를 사용하면 두 가지를 모두 얻을 수 있습니다.</p>
+</div></div>
+	      </article>
+			</main>
+    </body>
+  </html>
+  
