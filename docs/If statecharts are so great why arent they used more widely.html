@@ -1,0 +1,60 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>If statecharts are so great, why aren't they used more widely?</title>
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+      <script src="//unpkg.com/alpinejs" defer></script>
+    </head>
+    <body x-data="{ dark: false }" x-bind:data-theme="dark ? 'dark' : 'light'">
+      <main class="container">
+      	<button x-on:click="dark = !dark" class="contrast outline">Switch Theme</button>
+	      <article>
+	        <div id="readability-page-1" class="page"><section id="main_content_wrap">
+        
+
+<p>스테이트차트가 매우 유용하고 이 모든 이점을 가지고 있는데 왜 모든 개발자가 이 기법을 사용하지 않을까요?</p>
+
+<h2 id="constructing-the-user-interface-with-statecharts">스테이트차트로 사용자 인터페이스 구성하기</h2>
+
+<p>이안 호록스는 이에 대한 섹션을 통해 다음과 같이 말합니다.</p>
+
+<blockquote>
+  <p>[...] 제가 말하는 것처럼 스테이트차트가 강력하다면 왜 널리 사용되지 않을까요? [...] 스테이트차트가 사용자 인터페이스에 널리 사용되지 않는 이유는 이러한 인터페이스를 이런 식으로 설계할 수 있다는 것이 분명하지 않기 때문입니다. [...] 사용 가능한 강력한 개발 도구 덕분에 사용자 인터페이스 구축이 쉽다는 일반적인 인식이 있습니다.  사실 사용자 인터페이스 도구가 모든 문제를 해결하는 것은 아니며 사용자 인터페이스 코드를 유지 관리하는 데 드는 비용이 엄청날 수 있습니다.</p>
+
+  <p><cite>Ian Horrocks, 스테이트차트로 사용자 인터페이스 구축하기, 202페이지</cite></p>
+</blockquote>
+
+<p>Horrocks는 또한 이 주제에 관한 대부분의 책이 신호등, 디지털 시계, 자동차의 기어 등과 같은 전기 장치를 기반으로 한 예제를 가지고 있다고 언급합니다.  이러한 예제는 사용자 인터페이스에 스테이트차트를 사용하거나 일반적으로 복잡성을 해결하고자 하는 개발자에게는 도움이 되지 않습니다.  statecharts.dev 프로젝트는 1999년에 나온 프로그래밍 서적 이상의 지침을 제공할 수 있기를 희망합니다.</p>
+
+<h2 id="do-the-simplest-thing-that-could-possibly-work">"작동할 수 있는 가장 간단한 것을 하라"</h2>
+
+<p>프로그래머는 "작동할 수 있는 가장 간단한 것"을 구현하도록 일찍부터 교육받지만, 스테이트차트가 이에 부합하는 경우는 드뭅니다. <em>가장 단순한 것의</em> 원칙은 (많은 원칙이 그렇듯이) 잘못 이해되고 있으며, 이 원칙이 올바르게 적용된다면 상태차트는 수많은 암시적 부울보다 <em>더 단순한</em> 것으로 정의될 수 있습니다.</p>
+
+<p>암시적 부울, 스위치 문 등 <strong>가장 쉽게</strong> 작동할 수 있는 것은 <em>항상</em> 암시적 부울의 집합일 것입니다. 왜냐하면 정의상 모든 if 문만 올바르게 사용하면 언젠가는 <em>작동할</em> <em>수</em> 있기 때문입니다.  그러나 단순화 단계를 잊어버리거나 완전히 건너뛰는 경우가 많습니다.  이 단계에서 복잡한 암시적 상태를 <em>단순화하기</em> 위해 상태 차트를 도입할 수 있습니다.</p>
+
+<h2 id="yagni">야그니</h2>
+
+<p>일화적인 증거에 따르면 상태차트가 사용되지 않는 주된 이유는 '굳이 <em>필요하지</em> 않겠지'의 줄임말인 YAGNI 사고방식 때문이라고 합니다.  복잡성은 한 번에 하나의 부울로 증가하며, 복잡성과 함께 버그가 발생하지만, 온도가 서서히 올라가는 것을 느끼지 못하는 냄비 속 개구리처럼 개발자는 복잡성이 증가하는 것을 알아차리지 못합니다.</p>
+
+<p>컴포넌트를 개발할 때는 그 동작에 대한 간단한 모델과 다양한 모드로 시작하기 때문에 아주 초기에는 컴포넌트에 몇 개의 부울이 추가되기 시작합니다.  부울은 <code translate="no">boolean requestIsActive</code> 과 같이 명시적일 수도 있고, 변수의 null 또는 '진실성'과 같이 암시적일 수도 있습니다: <code translate="no">var request = makeHttpRequest(...)</code></p>
+
+<p>그러면 컴포넌트는 이러한 명시적 또는 암시적 플래그(예: <code translate="no">if (! requestIsActive)</code> 또는 <code translate="no">if (request == null)</code>)를 기반으로 이벤트에 어떻게 반응할지 결정을 내리기 시작합니다. 이 방법은 두세 가지 다른 동작이 있는 아주 작은 규모에서는 꽤 잘 작동합니다.  하지만 곧 다양한 변수의 상태를 일관성 있게 유지하기 위해 수정하는 지저분한 if 문이나 switch 문을 발견하게 될 것입니다.</p>
+
+<p>마치 너무 늦기 전까지는 상태 차트가 필요하지 않은 것처럼 말이죠.</p>
+
+<h2 id="other-simpler-solutions-do-exist">더 간단한 다른 솔루션도 존재합니다.</h2>
+
+<p>상태 차트를 대체할 수 있는 방법이 있습니다.  상태 머신과 같은 더 간단한 솔루션을 사용하면 일부 이점을 얻을 수 있습니다.</p>
+
+<p>개발자들은 때때로 부울의 불협화음에 대한 문제점을 알고 있습니다.  그들은 행동 문제를 해결하기 위해 부울보다 더 나은 해결책을 찾았을 수도 있습니다.  일반적인 해결책은 각 "상태"에 대해 하나씩 존재하는 상태 "열거형", 들어오는 모든 이벤트를 처리하고 열거형 값 간의 특정 전환만 허용하는 스위치 문입니다.  또 다른 해결책은 컴포넌트의 동작 방식에 대한 지식을 자체 객체에 저장하고 "상태"가 변경될 때 함께 전환하는 <a href="https://en.wikipedia.org/wiki/State_pattern">상태 패턴입니다</a>.  물론 이러한 방식은 "분산 부울"에 비해 크게 개선된 방식이며, 때로는 당면한 복잡성을 처리하기에 충분할 수 있습니다.</p>
+
+<p>상태 차트는 상태 머신의 눈에 띄는 결함을 해결하기 위해 발명되었습니다(단순 열거형과 상태 패턴 모두 본질적으로 상태 머신을 구현합니다).   스테이트차트로 해결한 문제(예: <a href="https://statecharts.dev/state-machine-state-explosion.html">상태 폭발</a>)가 어떤 문제에 적용되지 않는 경우도 있습니다.  이러한 경우에는 더 간단한 솔루션으로 충분하다고 판단하여 상태 차트가 상태 머신에 비해 갖는 다른 장점을 무시하고 상태 차트를 고려하지 않을 수도 있습니다.</p>
+
+      </section></div>
+	      </article>
+			</main>
+    </body>
+  </html>
+  
