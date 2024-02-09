@@ -1,0 +1,163 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>From many to one: Moving our JavaScript code into a monorepo | Aha! software</title>
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+      <script src="//unpkg.com/alpinejs" defer></script>
+    </head>
+    <body x-data="{ dark: false }" x-bind:data-theme="dark ? 'dark' : 'light'">
+      <main class="container">
+      	<button x-on:click="dark = !dark" class="contrast outline">Switch Theme</button>
+	      <article>
+	        <div id="readability-page-1" class="page"><div>
+
+<h2>모노레포가 필요한가요?</h2>
+<p>처음 Aha! 에 입사했을 때 <a href="https://www.aha.io/engineering/articles/engineering-onboarding-at-aha">엔지니어링 온보딩</a> 프로그램이 얼마나 체계적으로 구성되어 있는지 놀랐어요. 저는 몇 주 동안 모든 팀과 친해지고 시스템의 각 부분을 익히는 데 시간을 보냈습니다. 그 당시에는 몰랐던 사실은 이러한 온보딩 대화가 기본적인 기술 지식 이상의 것을 제공한다는 것이었습니다. 전체 개발 워크플로에 대한 문을 열어주었죠. 웹 컴포넌트 라이브러리의 간단한 스타일 변경에 두 번의 풀 리퀘스트와 30분이 걸리는 것을 보고는 특이한 문제점이 있다는 것을 알았습니다.</p>
+<p>모든 제품이 단일 Rails 리포지토리에 존재하므로 비즈니스 로직, UI 등을 공유하는 <a href="https://www.aha.io/engineering/articles/from-one-many-building-a-product-suite-with-a-monolith">다중 제품 모놀리스를</a> 운영한다고 해도 과언이 아닙니다. 따라서 제품에 관계없이 새로운 기능을 쉽고 빠르게 작업할 수 있습니다. 이와 대조적으로, 예전에는 대부분의 JavaScript 코드가 비공개 npm 패키지로 존재했습니다. 비공개 패키지는 여러 곳에서 코드를 재사용하는 데는 좋지만, 한 곳에서 주로 사용하는 경우에는 프로세스에 너무 많은 오버헤드가 추가되므로 최선의 선택이 아닙니다. 저희의 경우 대부분의 패키지를 Rails 모놀리스로만 가져왔습니다.</p>
+<p>Aha! 엔지니어링 팀은 <a href="https://www.aha.io/company/the-responsive-method">인터럽트 중심적이며</a>, 필요에 따라 컨텍스트를 쉽게 전환하고 버그를 해결하거나 팀원을 지원하거나 다른 작업을 할 수 있는 동시에 작업을 수행하는 데 도움이 되는 <a href="https://www.aha.io/engineering/articles/cli-tools-at-aha">도구를 만들기</a> 위해 많은 노력을 기울이고 있습니다. 비공개 npm 패키지를 작업하는 프로세스는 인터럽트 기반이 전혀 아니었습니다. 비공개 패키지 중 하나를 작업해야 한다면 웹 컴포넌트 라이브러리에서 스타일을 변경하는 것처럼 간단한 작업이라도 상당한 시간이 소요될 것이라는 것을 알고 있었습니다.</p>
+<p>지루할 수도 있지만 수동 프로세스는 매우 간단했습니다:</p>
+<ol>
+<li>패키지의 리포지토리를 복제합니다.</li>
+<li>올바른 노드 버전으로 npm 종속 요소를 설치합니다.</li>
+<li>로컬 개발 환경을 시작합니다.</li>
+<li>코드베이스를 변경합니다.</li>
+<li>패키지의 로컬 개발 환경에서 변경 사항을 테스트합니다.</li>
+<li>yalc를 사용하여 변경 사항을 Rails 앱에 연결합니다.</li>
+<li>로컬 앱 환경에서 변경 사항을 테스트합니다.</li>
+<li>변경 사항에 만족할 때까지 4단계부터 7단계까지 반복합니다.</li>
+<li>비공개 패키지 리포지토리에 새 변경 사항이 포함된 풀 리퀘스트를 만듭니다.</li>
+<li>코드 검토를 요청합니다.</li>
+<li>코드 검토가 완료되면 풀 리퀘스트를 병합하고 새 패키지 버전을 npm에 푸시합니다.</li>
+<li>Rails 앱에서 풀 리퀘스트를 생성하여 패키지 버전을 범프합니다.</li>
+<li>코드 검토를 요청합니다.</li>
+<li>코드 검토가 완료되면 풀 리퀘스트를 병합하고 프로덕션에 배포합니다.</li>
+</ol>
+<p>비공개 npm 패키지와 관련된 모든 것을 배포하는 데 걸리는 시간은 저희가 생각했던 것보다 훨씬 길었고, 코드 검토를 두 번 요청해야 하므로 검토를 하는 사람도 시간이 많이 걸렸습니다. 입사 첫 몇 주 동안은 이 문제에 대해 들어본 적도 없었습니다. 하지만 Aha에서 근무한 첫 몇 달 동안 여러 개의 비공개 npm 패키지로 계속 작업하면서 이것이 개발자 경험을 정말 저하시킨다는 것을 금방 깨달았습니다.</p>
+<h2>모노레포가 필요하다 - 이제 어떻게 해야 할까요?</h2>
+<p>이 문제를 직접 경험한 후 저는 무언가 조치를 취해야 한다는 것을 알았습니다. Aha에서는 회의가 많지는 않지만 매주 관리자와 함께 회의를 진행합니다. 이 시간은 앞으로 어떤 작업을 하고 싶은지 이야기하기에 완벽한 시간입니다. 저는 현재 아키텍처에서 실현 가능한지 여부를 판단하기 위해 모노레포 개념 증명(POC) 작업을 자원했습니다. 저희는 모노레포에 대해 매우 구체적인 목표를 세웠습니다:</p>
+<ul>
+<li>Git 히스토리를 유지해야 합니다: 일부 패키지는 몇 년이 지났기 때문에 모든 기록을 잃고 싶지 않았습니다.</li>
+<li>단순해야 합니다: 이미 복잡한 코드베이스에 복잡성을 더하고 싶지 않았습니다.</li>
+<li>개발자 경험을 개선해야 합니다: 우리는 부담을 다른 곳으로 옮기고 싶지 않았고 진정한 솔루션을 찾고 있었습니다.</li>
+<li>호환성이 있어야 합니다: 도구나 CI를 크게 변경하고 싶지 않았습니다.</li>
+</ul>
+<h2>Git 기록 유지</h2>
+<p>코드는 살아있는 생명체이며, 모노레포를 진행하기 위해 해결해야 할 주요 문제 중 하나는 코드의 이력을 유지하는 것이었습니다. 우리는 패키지를 Rails 앱의 루트에 있는 "패키지로"라는 폴더로 마이그레이션하고 싶다는 것을 알고 있었습니다. 리포지토리 간에 코드를 이동할 때 Git 기록을 유지하기 위해 취할 수 있는 몇 가지 옵션이 있지만, 저희는 <code translate="no">git mv</code> 와 <code translate="no">git merge --allow-unrelated-histories.</code> 의 조합을 사용하는 간단한 방법을 선택했습니다. 리포지토리를 Rails 앱으로 이동하기 위해 따랐던 단계는 매우 간단했습니다:</p>
+<pre translate="no"><code translate="no"># At the root of the package repository
+
+# Move all the code into packages/package-name so we can merge it into our rails app.
+git mv -k * packages/[package-name]
+git mv -k .* packages/[package-name]
+
+# Commit and push changes
+git add --all
+git commit -m "package-name: prepare codebase for monorepo"
+git push origin master
+
+# At the root of our rails app
+
+# Add the package remote to our rails app
+git remote add [package-name] [package-name].git
+git fetch [package-name]
+
+# Merge the package repository into our rails app
+git merge [package-name]/master --allow-unrelated-histories
+
+# Remove package remote
+git remote remove [package-name]
+
+# Commit and push changes
+git add --all
+git commit -m "Add package-name to the monorepo"
+git push origin master
+
+</code></pre>
+<p>이 간단한 명령어를 사용하여 Git 기록을 유지하면서 패키지 코드를 Rails 앱으로 옮길 수 있었습니다.</p>
+<h2>단순하게 유지하기</h2>
+<p>Git 히스토리를 파악한 후에는 다음 작업으로 넘어갔는데, 솔직히 말해서 가장 중요한 작업은 코드베이스에 너무 복잡성을 더하지 않는 모노레포를 구축하는 방법을 알아내는 것이었습니다. 자바스크립트 모노레포에 대한 정보를 검색하면 다음과 같은 내용을 찾을 수 있습니다:</p>
+<p><img src="https://www.aha.io/2fb085559962c64e681a0f98649cb783/node_package_managers.png" alt="Node package managers"></p>
+<blockquote>
+<p>모노레포를 관리하기 위한 훌륭한 도구가 많이 있지만, 여기서는 의도적으로 JavaScript와 TypeScript를 염두에 두고 만들어진 도구에만 초점을 맞추고 있습니다.</p>
+</blockquote>
+<p>간단히 말해, <a href="https://lerna.js.org/">Lerna</a>, <a href="https://nx.dev/">Nx</a>, <a href="https://turbo.build/repo">Turborepo</a>, <a href="https://rushjs.io/">Rush.js와</a> 같은 도구를 볼 수 있습니다. 이러한 도구의 설명서를 읽기 시작하면 npm, Yarn 또는 pnpm과 함께 사용할 수 있기 때문에 가능한 조합이 매우 많다는 것을 알 수 있습니다. 따라서 프로젝트의 구성과 필요에 따라 특정 조합이 다른 조합보다 더 적합할 수 있습니다.</p>
+<p>저희는 릴리스 사이의 큰 변경에 대한 걱정 없이 몇 년 동안 성장할 수 있는 도구를 선택하고 싶었습니다. 또한 사용하기 쉬운 인터페이스가 필요했습니다. 하지만 모든 도구를 다 사용해 보지 않으면 어떤 도구가 자신에게 적합한지 알기 어렵죠? 저희는 처음에 사용해보고 싶었던 도구 목록에서 Lerna와 Rush.js를 제외했습니다. Nx의 배후에 있는 회사가 <a href="https://dev.to/nrwl/lerna-is-dead-long-live-lerna-3jal">Lerna의 관리권을</a> 인수했기 때문에 Nx와 Lerna 중에서 Nx만 사용해보고 싶었습니다. Rush.js는 많은 기능을 갖춘 훌륭한 도구이지만 수백 개의 패키지가 있는 모노레포에서 빛을 발하도록 설계되었기 때문에 우리에게는 적합하지 않았습니다. 우리가 모노레포에서 원했던 것과 비슷한 기능을 공유하고 있었기 때문에 <a href="https://nx.dev/">Nx와</a> <a href="https://turbo.build/repo">Turborepo를</a> 평가하는 POC를 진행하기로 결정했습니다. 여기에는 다음이 포함됩니다:</p>
+<ul>
+<li>로컬 컴퓨팅 캐싱</li>
+<li>로컬 작업 오케스트레이션</li>
+<li>분산 컴퓨팅 캐싱</li>
+<li>영향을 받는 프로젝트/패키지 탐지</li>
+<li>작업 공간 분석</li>
+<li>종속성 그래프 시각화</li>
+</ul>
+<p>저희는 필요하지 않은 도구는 사용하고 싶지 않았기 때문에 POC에 pnpm 워크스페이스도 포함시켰습니다. 이러한 기능이 많지는 않지만 당시에는 모노레포에 이러한 기능이 모두 필요한지 여부가 불분명했습니다. POC를 수행한 후 각 도구의 장단점을 더 잘 이해할 수 있었습니다.</p>
+<h2>Nx + pnpm</h2>
+<p>가장 먼저 시도한 도구는 <a href="https://nx.dev/">Nx였습니다</a>. 매우 강력하고 확장 가능한 도구이긴 하지만 코드베이스에 불필요한 복잡성을 더했습니다. 엔지니어가 작업을 수행하기 위해 배워야 하는 또 다른 계층을 추가하고 싶지 않았습니다. <a href="https://nx.dev/core-features/run-tasks#define-tasks">Nx에서 작업을 정의하는 방식과 타깃의 개념은</a> 이해하기 쉽지만 도구 자체에 고유한 특징이 있습니다. 따라서 한 번 선택한 후 다른 도구로 전환할 때 어려움을 겪을 수 있습니다. 확장성이 있긴 하지만 플러그인 에코시스템이 있다는 것은 다른 사람의 코드를 사용하거나 모노레포를 더욱 커스터마이징하고 싶다면 직접 플러그인을 만들 수 있다는 것을 의미합니다. 기능은 있었지만 플러그 앤 플레이 방식은 아니었습니다. 또한 모든 Nx 전용 구성으로 인해 학습 곡선도 다소 까다로워서 시간과 리소스 투자를 정당화하기가 어려웠습니다.</p>
+<h2>PNPM 워크스페이스</h2>
+<p>Nx에서 매우 높은 기준을 설정한 후 <a href="https://pnpm.io/workspaces">pnpm 작업 공간을</a> 사용해 보았습니다. 훌륭하게 작동하고, 사용하기 쉬우며, 작동을 위해 아무것도 추가할 필요가 없습니다. 몇 분 안에 설정할 수 있는 것을 찾고 있다면 아마도 최고의 선택 중 하나일 것입니다. 하지만 저희 모노레포의 경우 로컬 컴퓨팅 캐싱이나 로컬 작업 오케스트레이션과 같은 기본적인 기능이 부족했습니다. 따라서 로컬 또는 CI에서 모노레포를 관리하는 데 도움이 되지 않았기 때문에 사용을 정당화하기 어려웠습니다. 저희는 모노레포를 관리하기 위한 맞춤형 툴을 구축하고 싶지 않았습니다. 그리고 이것이 가장 마찰이 없는 접근 방식이었지만 40명 이상의 엔지니어로 구성된 팀에게는 최선의 선택이 아니었습니다.</p>
+<h2>터보레포 + pnpm</h2>
+<p>마지막으로 <a href="https://turbo.build/repo">Turborepo를</a> 사용해 보았습니다. 이 시점에서 우리는 Nx에 우리가 원하는 기능이 있다는 것을 알았지만, 매우 의견이 분분하고 학습 곡선이 가파르다는 것을 알았습니다. 또한 일반 pnpm 작업 공간에는 일상적인 작업에서 시간을 절약할 수 있는 기본 기능이 부족하다는 것도 알고 있었지만, 몇 가지 새로운 개념만 익히면 간단하고 이해하기 쉬웠습니다. 로컬 컴퓨팅 캐싱, 로컬 작업 오케스트레이션, 영향을 받는 프로젝트/패키지를 감지하는 기능 등 Nx에서 마음에 들었던 모든 기능을 Turborepo가 제공하면서도 일반 pnpm 작업 공간보다 약간 더 복잡하다는 사실을 알게 되어 매우 좋았습니다. 가파른 학습 곡선 없이 원하는 모든 것을 이미 갖춘 이 간단한 추가 레이어를 사용하면 서로 윈윈할 수 있는 상황이었습니다.</p>
+<h2>새로 배워야 할 것이 없음</h2>
+<p>POC는 도구를 확정하기 전에 단기간에 많은 것을 시도해 볼 수 있는 좋은 기회였습니다. 결국 저희는 현재 빌드 시스템과 잘 작동하고 사용이 매우 간편하다는 점 때문에 Turborepo를 선택했습니다. 개발자 경험의 관점에서 보면 우리가 이미 하고 있던 작업과 매우 유사합니다. 모노레포를 도입하기 전에는 프론트엔드 개발 서버를 시작하려면 <code translate="no">yarn start</code> 을 실행해야 했습니다. 이제 모노레포에서는 <code translate="no">pnpm start</code> 을 실행하면 됩니다. 모노레포 패키지나 구성을 적극적으로 변경하지 않는 엔지니어라면 다른 것을 몰라도 모노레포를 사용할 수 있습니다. 고급 Turborepo 기능 중 일부를 사용하려면 해당 문서를 확인하고 명령에 플래그를 추가하면 됩니다.</p>
+<p>다시 말하지만, 우리 팀에게는 가능한 한 마찰이 없는 도구를 선택하는 것이 가장 중요했습니다. 저희는 Rails를 좋아합니다. 새로운 기능을 추가할 때는 일반적으로 구성 원칙보다 관례를 따르려고 노력하는데, 이는 모노레포에서도 마찬가지였습니다.</p>
+<p>터보레포는 다음과 같이 간단한 방식으로 모든 파이프라인을 정의하는 <code translate="no">turbo.json</code> 이라는 단일 JSON 파일로 구성됩니다:</p>
+<pre translate="no"><code translate="no">{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "build": {
+      "cache": true,
+      "outputs": ["dist/**"],
+      // "A workspace's `build` command depends on its dependencies'
+      // or devDependencies' `build` command being completed first"
+      "dependsOn": ["^build"]
+    },
+    "start": {
+      // "A workspace's `start` command is a long-running process
+      "persistent": true
+      "dependsOn": ["^build"]
+    },
+    "test": {
+      // "A workspace's `test` command depends on its own `lint` and
+      // `build` commands first being completed"
+      "dependsOn": ["lint", "build"]
+    },
+    "deploy": {
+      // "A workspace's `deploy` command, depends on its own `build`
+      // and `test` commands first being completed"
+      "dependsOn": ["build", "test"]
+    },
+    // A workspace's `lint` command has no dependencies
+    "lint": {}
+  }
+}
+
+</code></pre>
+<p>각 파이프라인의 이름은 각 패키지에서 실행될 <code translate="no">pnpm script</code> 의 이름입니다( <code translate="no">dependency graph</code> 에 정의된 순서를 따름). 이 파일을 구성하는 데는 여러 가지 옵션이 있지만 <code translate="no">dependsOn</code>, <code translate="no">outputs</code>, <code translate="no">cache</code>, <code translate="no">persistent</code> 이 가장 적합합니다.</p>
+<ol>
+<li><code translate="no">dependsOn</code>: 이 작업이 의존하는 작업 목록</li>
+<li><code translate="no">outputs</code>: 작업의 캐시 가능한 파일 시스템 출력에 대한 글로브 패턴 세트</li>
+<li><code translate="no">cache</code>: 태스크를 캐시할지 여부 <code translate="no">outputs</code></li>
+<li><code translate="no">persistent</code>: 개발 서버 또는 --watch 모드와 같이 오래 실행되는 프로세스인 경우 작업을 영구로 레이블 지정할 수 있습니다.</li>
+</ol>
+<p>이제 파일 구성만 신경 쓰면 됩니다. <code translate="no">dependency graph</code> 은 자동 생성되므로 무엇이 무엇에 종속되는지 등을 Turborepo에 알려줄 필요가 없습니다. 간단한 종속성 그래프는 다음과 같이 보일 수 있습니다:</p>
+<p><img src="https://www.aha.io/5dfdcbe50891787d03ae8e3538389901/dependency_graph.png" alt="Dependency graph"></p>
+<p>위의 <code translate="no">turbo.json</code> 파일과 이 <code translate="no">dependency graph</code> 파일을 예로 들면, Turborepo는 <code translate="no">start</code> 파이프라인을 실행할 때마다 다음을 수행합니다:</p>
+<ol>
+<li>웹 컴포넌트 라이브러리 빌드</li>
+<li>텍스트 편집기 패키지 빌드</li>
+<li>화이트보드 패키지 빌드</li>
+<li>드롭다운 패키지 빌드</li>
+<li>이 모든 패키지에 대한 감시 서버를 시작합니다.</li>
+<li>메인 앱의 감시 서버 시작</li>
+</ol>
+<p>Turborepo를 사용하면 무슨 일이 일어나고 있는지 매우 쉽게 이해할 수 있으며, 새로운 개념을 배우거나 복잡한 아이디어를 생각할 필요가 없습니다. 팀원 모두가 이 기능을 사용하기 위해 내부 작동 방식을 이해할 필요는 없습니다. 하지만 터보레포와 터보레포의 개념은 간단하기 때문에 누구든 모노레포를 변경하고 싶어도 복잡한 작업은 아닙니다.</p>
+<h2>그냥 작동합니다!</h2>
+<p>저는 2022년 1월에 Aha! 에 합류했고, 2023년 3분기 초에 모노레포를 출시했습니다. 그 이후로 팀원 모두가 프로덕션 환경과 로컬 환경 모두에서 문제 없이 작동하고 있습니다. CI와 빌드 시스템에 약간의 변경이 필요했지만 그 정도는 미미했습니다. 그리고 대부분의 경우 과거에 실행하던 코드를 단순화하는 것으로 끝났습니다. Turborepo가 제공하는 모든 기능을 사용하지는 않지만 필요한 기능만 사용하고 있습니다. 원하는 방식으로 도구를 사용할 수 있고, 도구가 요구하는 방식으로 사용하지 않아도 된다는 점이 저희의 선택에 정말 만족스러운 부분입니다.</p>
+<p>모노레포를 도입한 이후 약 450개의 풀 리퀘스트에서 패키지 변경 사항을 포함한 2,500개에 가까운 커밋을 푸시했습니다. 이 블로그의 서두에서 저는 비공개 패키지의 변경 사항을 릴리스하는 기존 프로세스가 아주 작은 변경 사항도 느리다고 이야기했습니다. 보수적으로 계산하면, 모든 풀 리퀘스트가 모노레포까지 평균 30분이 더 걸렸다고 할 수 있습니다. 따라서 매달 55시간에 가까운 개발 시간, 더 정확하게는 화면 앞에서 기다리는 시간을 절약할 수 있었습니다.</p>
+<p>결국, 시간 절약뿐만 아니라 일상적인 업무에서 느끼는 좌절감을 없애는 것이 더 중요합니다. 걱정할 일이 하나 줄어들면 정말 중요한 것, 즉 고객을 위한 멋진 기능을 출시하는 데 더 많은 시간을 할애할 수 있습니다.</p></div></div>
+	      </article>
+			</main>
+    </body>
+  </html>
+  
