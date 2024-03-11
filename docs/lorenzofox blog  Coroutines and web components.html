@@ -1,0 +1,262 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>lorenzofox blog | Coroutines and web components</title>
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+      <script src="//unpkg.com/alpinejs" defer></script>
+    </head>
+    <body x-data="{ dark: false }" x-bind:data-theme="dark ? 'dark' : 'light'">
+      <main class="container">
+      	<button x-on:click="dark = !dark" class="contrast outline">Switch Theme</button>
+	      <article>
+	        <div id="readability-page-1" class="page"><div id="main">
+    <p><a rel="previous" href="https://lorenzofox.dev/posts/coroutine">이전 글</a> 에서 코루틴이 무엇인지 알아보고 코루틴이 구현하는 데 도움이 되는 몇 가지 패턴을 살펴보았습니다. 이번 글에서는 코루틴을 사용하여 웹 컴포넌트를 다른 방식으로 모델링하는 방법과 그 이유를 살펴보겠습니다.</p>
+<h2>렌더링 루프</h2>
+<p>무엇보다도 코루틴에는 이 짧은 글에서 사용할 몇 가지 속성이 있습니다:</p>
+<ul>
+<li>코루틴은 주로 <strong>함수이며</strong> 자바스크립트의 모든 기능(구성, 고차 함수, 위임 등)을 활용할 수 있습니다.</li>
+<li><strong>상태</strong> 저장소입니다.</li>
+<li>일시 중지된 상태에서는 거의 모든 종류의 데이터를 삽입할 수 있습니다. 예를 들어 루틴 본문 내의 무한 루프는 공용 API 함수로 간주할 수 있습니다.</li>
+<li>설계상 <code translate="no">next</code> 함수는 동시에 호출할 수 없습니다.</li>
+</ul>
+<h2>소개 예시</h2>
+<p>다음 생성기를 생각해 보세요:</p>
+<pre translate="no"><code translate="no"><span>function</span><span>*</span> <span>someComponent</span><span>(</span><span><span>{</span>$host<span>}</span></span><span>)</span> <span>{</span>
+    <span>while</span> <span>(</span><span>true</span><span>)</span> <span>{</span>
+        <span>const</span> <span>{</span>content <span>=</span> <span>''</span><span>}</span> <span>=</span> <span>yield</span><span>;</span>
+        $host<span>.</span>textContent <span>=</span> content<span>;</span>
+    <span>}</span>
+<span>}</span></code></pre>
+<p><code translate="no">$host</code> DOM 요소를 취하고 렌더링 루프가 있습니다. 이 제너레이터를 <code translate="no">render</code> 함수를 생성하는 함수로 래핑할 수 있습니다:</p>
+<pre translate="no"><code translate="no"><span>const</span> <span>createComponent</span> <span>=</span> <span>(</span><span>generator</span><span>)</span> <span>=&gt;</span> <span>(</span><span><span>{</span>$host<span>}</span></span><span>)</span> <span>=&gt;</span> <span>{</span>
+    <span>const</span> gen <span>=</span> <span>generator</span><span>(</span><span>{</span>$host<span>}</span><span>)</span><span>;</span>
+    gen<span>.</span><span>next</span><span>(</span><span>)</span><span>;</span> <span>// we initiate the component by entering inside the rendering loop</span>
+    <span>return</span> <span>(</span><span>state <span>=</span> <span>{</span><span>}</span></span><span>)</span> <span>=&gt;</span> gen<span>.</span><span>next</span><span>(</span>state<span>)</span><span>;</span>
+<span>}</span><span>;</span>
+
+<span>const</span> HelloWorldComponent <span>=</span> <span>createComponent</span><span>(</span><span>function</span><span>*</span> <span>(</span><span>{</span>$host<span>}</span><span>)</span> <span>{</span>
+    <span>while</span> <span>(</span><span>true</span><span>)</span> <span>{</span>
+        <span>const</span> <span>{</span>name <span>=</span> <span>''</span><span>}</span> <span>=</span> <span>yield</span><span>;</span>
+        $host<span>.</span>textContent <span>=</span> <span><span>`</span><span>hello </span><span><span>${</span>name<span>}</span></span><span>`</span></span><span>;</span>
+    <span>}</span>
+<span>}</span><span>)</span><span>;</span>
+
+<span>// div is some DOM element</span>
+<span>const</span> render <span>=</span> <span>HelloWorldComponent</span><span>(</span><span>{</span>
+    <span>$host</span><span>:</span> div
+<span>}</span><span>)</span><span>;</span>
+
+<span>render</span><span>(</span><span>{</span><span>name</span><span>:</span> <span>'Laurent'</span><span>}</span><span>)</span><span>;</span>
+<span>render</span><span>(</span><span>{</span><span>name</span><span>:</span> <span>'Bernadette'</span><span>}</span><span>)</span><span>;</span></code></pre>
+<h2>함수의 힘</h2>
+<p>현재 렌더링 루프는 명령형 코드이지만 원하는 렌더링 라이브러리(반응 등)를 사용할 수 있습니다. 위의 첫 번째 요점은 함수(따라서 코루틴)가 자바스크립트에서 매우 다재다능하다는 것입니다. 원한다면 쉽게 알려진 패러다임으로 돌아갈 수 있습니다. 예를 들어, 명령형 코드 대신 선언적 뷰를 갖기 위해 <a href="https://lorenzofox.dev/todo">lit-html을</a> 사용합니다:</p>
+<pre translate="no"><code translate="no"><span>import</span> <span>{</span>render<span>,</span> html<span>}</span> <span>from</span> <span>'lit-element'</span><span>;</span>
+
+<span>const</span> HelloWorldComponent <span>=</span> <span>createComponent</span><span>(</span><span>function</span><span>*</span> <span>(</span><span>{</span>$host<span>}</span><span>)</span> <span>{</span>
+    <span>while</span> <span>(</span><span>true</span><span>)</span> <span>{</span>
+        <span>const</span> <span>{</span>name<span>=</span><span>''</span><span>}</span> <span>=</span> <span>yield</span>
+        <span>const</span> template <span>=</span> html<span><span>`</span><span>&lt;p&gt;hello </span><span><span>${</span>name<span>}</span></span><span>&lt;/p&gt;</span><span>`</span></span><span>;</span>
+        <span>render</span><span>(</span>$host<span>,</span> template<span>)</span><span>;</span>
+    <span>}</span>
+<span>}</span><span>)</span><span>;</span></code></pre>
+<p>템플릿을 함수로 그릴 수 있습니다:</p>
+<pre translate="no"><code translate="no"><span>import</span> <span>{</span>html<span>}</span> <span>from</span> <span>'lit-element'</span><span>;</span>
+
+<span>const</span> template <span>=</span> <span>(</span><span>{</span>name <span>=</span> <span>''</span><span>}</span> <span>=</span> <span>{</span><span>}</span><span>)</span> <span>=&gt;</span> html<span><span>`</span><span>&lt;p&gt;hello </span><span><span>${</span>name<span>}</span></span><span>&lt;/p&gt;</span><span>`</span></span><span>;</span></code></pre>
+<p>그리고 새로운 고차 함수로 작성할 수 있습니다:</p>
+<pre translate="no"><code translate="no"><span>import</span> <span>{</span>render<span>}</span> <span>from</span> <span>'lit-element'</span><span>;</span>
+
+<span>const</span> <span>withView</span> <span>=</span> <span>(</span><span>templateFn</span><span>)</span> <span>=&gt;</span> <span>function</span><span>*</span> <span>(</span><span>{</span>$host<span>}</span><span>)</span> <span>{</span>
+    <span>while</span> <span>(</span><span>true</span><span>)</span> <span>{</span>
+        <span>render</span><span>(</span>$host<span>,</span> <span>templateFn</span><span>(</span><span>yield</span><span>)</span><span>)</span><span>;</span>
+    <span>}</span>
+<span>}</span><span>;</span>
+
+<span>const</span> HelloWorldComponent <span>=</span> <span>createComponent</span><span>(</span><span>withView</span><span>(</span>template<span>)</span><span>)</span><span>;</span></code></pre>
+<p>이제 컴포넌트는 state의 간단한 함수입니다.</p>
+<pre translate="no"><code translate="no"><span>(</span><span><span>{</span>name<span>}</span></span><span>)</span> <span>=&gt;</span> html<span><span>`</span><span>&lt;p&gt;hello </span><span><span>${</span>name<span>}</span></span><span>&lt;/p&gt;</span><span>`</span></span><span>;</span> </code></pre>
+<h2>상태 유지</h2>
+<p>컴포넌트를 모델링하기 위해 무한 렌더링 루프를 사용하는 것은 사실 생각보다 더 흥미로울 수 있습니다. 해당 루프의 클로저에 상태를 가질 수 있기 때문입니다.</p>
+<p>먼저 상위 수준인 <code translate="no">createComponent</code> 함수를 약간 수정하여 <code translate="no">render</code> 함수를 호스트 엘리먼트에 바인딩하면 됩니다:</p>
+<pre translate="no"><code translate="no"><span>const</span> <span>createComponent</span> <span>=</span> <span>(</span><span>generator</span><span>)</span> <span>=&gt;</span> <span>(</span><span><span>{</span>$host<span>}</span></span><span>)</span> <span>=&gt;</span> <span>{</span>
+    <span>const</span> gen <span>=</span> <span>generator</span><span>(</span><span>{</span>$host<span>}</span><span>)</span><span>;</span>
+    gen<span>.</span><span>next</span><span>(</span><span>)</span><span>;</span>
+    $host<span>.</span><span>render</span> <span>=</span> <span>(</span><span>state <span>=</span> <span>{</span><span>}</span></span><span>)</span> <span>=&gt;</span> gen<span>.</span><span>next</span><span>(</span>state<span>)</span><span>;</span>
+    <span>return</span> $host<span>;</span>
+<span>}</span><span>;</span></code></pre>
+<p>이제 컴포넌트가 자체 렌더링을 트리거하도록 만들 수 있습니다:</p>
+<pre translate="no"><code translate="no"><span>const</span> CountClick <span>=</span> <span>createComponent</span><span>(</span><span>function</span> <span>*</span><span>(</span><span>{</span>$host<span>}</span><span>)</span><span>{</span>
+   <span>let</span> clickCount <span>=</span> <span>0</span><span>;</span>
+   
+   $host<span>.</span><span>addEventListener</span><span>(</span><span>'click'</span><span>,</span> <span>(</span><span>)</span> <span>=&gt;</span> <span>{</span>
+       clickCount<span>+=</span><span>1</span><span>;</span>
+       $host<span>.</span><span>render</span><span>(</span><span>)</span><span>;</span>
+   <span>}</span><span>)</span><span>;</span>
+   
+   <span>while</span><span>(</span><span>true</span><span>)</span> <span>{</span>
+       $host<span>.</span>textContent <span>=</span> <span><span>`</span><span>I have been clicked </span><span><span>${</span>clickCount<span>}</span></span><span> time(s)</span><span>`</span></span>
+       <span>yield</span><span>;</span>
+   <span>}</span>
+<span>}</span><span>)</span><span>;</span></code></pre>
+<p>루프 내부에 있는 것과 동등한 것만 접근할 수 있는 React와 같은 프레임워크에서는 프레임워크 확장 지점(React의 경우 후크)에 의존하여 이러한 종류의 메커니즘을 구축하며 렌더링 스케줄링에 대한 제어 권한이 거의 없습니다.</p>
+<h2>결합을 줄이기 위한 더 많은 HOF 함수.</h2>
+<p>컴포넌트는 뷰와 일부 로직을 동시에 내장합니다. 다시 말하지만, 뷰나 로직을 재사용할 수 있도록 쉽게 분리할 수 있습니다. 소개에서 언급한 코루틴의 세 번째 속성과 제너레이터에 내재된 간단한 위임 메커니즘을 활용하기만 하면 됩니다: <code translate="no">yield*</code>.</p>
+<pre translate="no"><code translate="no"><span>const</span> <span>countClickable</span> <span>=</span> <span>(</span><span>view</span><span>)</span> <span>=&gt;</span> <span>function</span> <span>*</span><span>(</span><span>{</span>$host<span>}</span><span>)</span> <span>{</span>
+    <span>let</span> clickCount <span>=</span> <span>0</span><span>;</span>
+
+    $host<span>.</span><span>addEventListener</span><span>(</span><span>'click'</span><span>,</span> <span>(</span><span>)</span> <span>=&gt;</span> <span>{</span>
+        clickCount<span>+=</span><span>1</span><span>;</span>
+        $host<span>.</span><span>render</span><span>(</span><span>{</span><span>count</span><span>:</span> clickCount<span>}</span><span>)</span><span>;</span>
+    <span>}</span><span>)</span><span>;</span>
+    
+    <span>yield</span><span>*</span> <span>view</span><span>(</span><span>{</span>$host<span>}</span><span>)</span><span>;</span> 
+<span>}</span></code></pre>
+<p>이러한 유형의 믹스인은 상태를 유지하고 모든 <em>뷰의</em> 렌더링을 트리거하는 역할을 담당합니다. 렌더링은 <strong>위임</strong> 덕분에 뷰에 맡겨지며, 뷰 코루틴이 일시 중지되고 새 렌더링이 필요할 때마다 상태가 전달됩니다:</p>
+<pre translate="no"><code translate="no"><span>const</span> CountClick <span>=</span> <span>createComponent</span><span>(</span><span>countClickable</span><span>(</span><span>function</span><span>*</span> <span>(</span><span>{</span>$host<span>}</span><span>)</span> <span>{</span>
+    <span>while</span> <span>(</span><span>true</span><span>)</span> <span>{</span>
+        <span>const</span> <span>{</span>count <span>=</span> <span>0</span><span>}</span> <span>=</span> <span>yield</span><span>;</span>
+        $host<span>.</span>textContent <span>=</span> <span><span>`</span><span>I have been clicked </span><span><span>${</span>count<span>}</span></span><span> time(s)</span><span>`</span></span><span>;</span>
+    <span>}</span>
+<span>}</span><span>)</span><span>)</span><span>;</span></code></pre>
+<p>깔끔해졌습니다! 이제 '클릭 가능' 동작을 다른 뷰에서 독립적으로 사용할 수 있습니다. 같은 방식으로, 예상 데이터 인터페이스(<code translate="no">{ count: number | string}</code>)를 통과하는 한 뷰를 다른 컨트롤러 로직에 연결할 수 있습니다( <code translate="no">yield</code> 할당에서 데이터가 어떻게 제공되는지 참고하세요).</p>
+<p>향후 글에서 이와 같은 패턴을 더 많이 볼 수 있습니다.</p>
+<h2>웹 컴포넌트와 라이프사이클 매핑</h2>
+<p>지금까지 컴포넌트가 호스트의 함수가 되도록 설계했습니다. 여기서 더 나아가 렌더링 루틴이 실제로 호스트에 비공개가 되도록 하여 렌더링 코드가 잠재적인 동작 개선 사항(예: <code translate="no">countClickable</code> 믹스인)과 함께 내부에 캡슐화되고 둘 다 재사용 가능한 상태로 유지되도록 할 수 있습니다.</p>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements">사용자 정의 요소를</a> 모델링하는 또 다른 방법을 살펴봅시다. HTML 문서를 개선하려면 브라우저의 레지스트리와 <code translate="no">define</code> 메서드를 사용하여 브라우저에 새 문서를 가르칠 수 있습니다.</p>
+<pre translate="no"><code translate="no">customElements<span>.</span><span>define</span><span>(</span><span>'hello-world'</span><span>,</span> <span>class</span> <span>extends</span> HTMLElement <span>{</span>
+    <span>connectedCallback</span><span>(</span><span>)</span> <span>{</span>
+        <span>this</span><span>.</span>textContent <span>=</span> <span><span>`</span><span>hello </span><span><span>${</span><span>this</span><span>.</span><span>getAttribute</span><span>(</span><span>'name'</span><span>)</span><span>}</span></span><span>`</span></span>
+    <span>}</span>
+<span>}</span><span>)</span> <span>// (define takes a third optional argument we won't consider for the moment)</span></code></pre>
+<p>그런 다음 다른 일반 HTML 태그처럼 마크업에 <code translate="no">hello-world</code> 태그를 사용합니다.</p>
+<pre translate="no"><code translate="no"><span><span><span>&lt;</span>hello-world</span> <span>name</span><span><span>=</span><span>"</span>Laurent<span>"</span></span><span>&gt;</span></span><span><span><span>&lt;/</span>hello-world</span><span>&gt;</span></span></code></pre>
+<p><code translate="no">HTMLElement</code> 클래스(또는 다른 유효한 기본 제공 요소 클래스)를 확장하는 클래스를 사용하는 대신 두 번째 인수를 제너레이터 함수로 사용하려고 합니다. 즉, 사용자 정의 <code translate="no">define</code> 에서 제너레이터를 클래스로 전환해야 합니다.</p>
+<pre translate="no"><code translate="no"><span>const</span> <span>define</span> <span>=</span> <span>(</span><span>tag<span>,</span> gen</span><span>)</span> <span>=&gt;</span> <span>{</span>
+    customElements<span>.</span><span>define</span><span>(</span>tag<span>,</span> <span>class</span> <span>extends</span> HTMLElement <span>{</span>
+        #loop<span>;</span>
+
+        <span>constructor</span><span>(</span><span>)</span> <span>{</span>
+            <span>super</span><span>(</span><span>)</span><span>;</span>
+            <span>this</span><span>.</span>#loop <span>=</span> <span>gen</span><span>.</span><span>bind</span><span>(</span><span>this</span><span>)</span><span>(</span><span>{</span>
+                <span>$host</span><span>:</span> <span>this</span>
+            <span>}</span><span>)</span><span>;</span>
+            <span>this</span><span>.</span>render <span>=</span> <span>this</span><span>.</span><span>render</span><span>.</span><span>bind</span><span>(</span><span>this</span><span>)</span><span>;</span>
+            <span>this</span><span>.</span>#loop<span>.</span><span>next</span><span>(</span><span>)</span><span>;</span>
+        <span>}</span>
+
+        <span>connectedCallback</span><span>(</span><span>)</span> <span>{</span>
+            <span>this</span><span>.</span><span>render</span><span>(</span><span>)</span><span>;</span>
+        <span>}</span>
+
+        <span>render</span><span>(</span><span>state <span>=</span> <span>{</span><span>}</span></span><span>)</span> <span>{</span>
+            <span>this</span><span>.</span>#loop<span>.</span><span>next</span><span>(</span>state<span>)</span><span>;</span>
+        <span>}</span>
+
+    <span>}</span><span>)</span><span>;</span>
+<span>}</span><span>;</span>
+
+<span>define</span><span>(</span><span>'hello-world'</span><span>,</span> <span>function</span><span>*</span> <span>(</span><span>{</span>$host<span>}</span><span>)</span> <span>{</span>
+    <span>while</span><span>(</span><span>true</span><span>)</span> <span>{</span>
+        <span>yield</span><span>;</span>
+        $host<span>.</span>textContent <span>=</span> <span><span>`</span><span>hello </span><span><span>${</span>$host<span>.</span><span>getAttribute</span><span>(</span><span>'name'</span><span>)</span><span>}</span></span><span>`</span></span>
+    <span>}</span>
+<span>}</span><span>)</span><span>;</span></code></pre>
+<p>클래스 표현식을 사용하여 사용자 정의 요소 클래스를 즉석에서 생성합니다. <code translate="no">#loop</code> 렌더링 루틴은 생성자 내부에서 인스턴스화되고 첫 번째 <code translate="no">yield</code> 지점으로 진행됩니다. 루틴에 호스트를 매개변수로 전달하지만, 루틴은 특별히 호스트에 바인딩되어 있으므로 제너레이터 내부에서 <code translate="no">this</code> 을 사용하여 호스트를 참조할 수 있습니다. 이는 개인적으로 선호하는 방식인데, 자바스크립트에서 <code translate="no">this</code> 을 사용하면 오류가 발생하기 쉽기 때문입니다.</p>
+<p><code translate="no">connectedCallback</code> 이 호출되면(컴포넌트가 DOM에 마운트될 때 발생합니다). 이전 예제에서 루프의 첫 번째 반복에 해당하는 <code translate="no">next</code> 을 다시 호출합니다. 그런 다음 컴포넌트를 다시 렌더링해야 할 때마다( <code translate="no">render</code> 호출될 때) 루프를 계속 반복합니다.</p>
+<p>이는 매우 흥미로운데, 서로 다른 컴포넌트의 수명 주기를 제너레이터 함수 내의 한 위치에 일치시킬 수 있기 때문입니다:</p>
+<pre translate="no"><code translate="no"><span>function</span><span>*</span> <span>comp</span><span>(</span><span><span>{</span>$host<span>}</span></span><span>)</span> <span>{</span>
+
+    console<span>.</span><span>log</span><span>(</span><span>'I am being instantiated'</span><span>)</span><span>;</span>
+
+    <span>yield</span><span>;</span>
+
+    console<span>.</span><span>log</span><span>(</span><span>'Iam being mounted'</span><span>)</span><span>;</span>
+    $host<span>.</span>textContent <span>=</span> <span>'I have just been mounted'</span><span>;</span>
+
+    <span>yield</span><span>;</span>
+
+    <span>while</span> <span>(</span><span>true</span><span>)</span> <span>{</span>
+        console<span>.</span><span>log</span><span>(</span><span>'I am being rendered'</span><span>)</span><span>;</span>
+        $host<span>.</span>textContent <span>=</span> <span><span>`</span><span>hello </span><span><span>${</span>$host<span>.</span><span>getAttribute</span><span>(</span><span>'name'</span><span>)</span><span>}</span></span><span>`</span></span><span>;</span>
+        <span>yield</span> <span>'I have been rendered'</span><span>;</span>
+    <span>}</span>
+<span>}</span></code></pre>
+<p>하지만 아직 구현해야 할 중요한 라이프사이클이 하나 남아 있습니다. 컴포넌트가 마운트 해제되면 일반적으로 클래스 정의의 <code translate="no">disconnectedCallbak</code> 가 호출되어 정리 코드를 실행하고 메모리 누수 등을 방지할 수 있습니다.</p>
+<p>제너레이터에서는 <code translate="no">finally</code> 절로 루프를 강제로 종료할 수 있습니다. 이는 일반적인 <code translate="no">next</code> 대신 루프의 <code translate="no">return</code> 함수를 호출하는 것만큼 간단합니다.</p>
+<p>완전히:</p>
+<pre translate="no"><code translate="no"><span>const</span> <span>define</span> <span>=</span> <span>(</span><span>tag<span>,</span> gen</span><span>)</span> <span>=&gt;</span> <span>{</span>
+    customElements<span>.</span><span>define</span><span>(</span>tag<span>,</span> <span>class</span> <span>extends</span> HTMLElement <span>{</span>
+        #loop<span>;</span>
+
+        <span>constructor</span><span>(</span><span>)</span> <span>{</span>
+            <span>super</span><span>(</span><span>)</span><span>;</span>
+            <span>this</span><span>.</span>#loop <span>=</span> <span>gen</span><span>.</span><span>bind</span><span>(</span><span>this</span><span>)</span><span>(</span><span>{</span>
+                <span>$host</span><span>:</span> <span>this</span>
+            <span>}</span><span>)</span><span>;</span>
+            <span>this</span><span>.</span>render <span>=</span> <span>this</span><span>.</span><span>render</span><span>.</span><span>bind</span><span>(</span><span>this</span><span>)</span><span>;</span>
+            <span>this</span><span>.</span>#loop<span>.</span><span>next</span><span>(</span><span>)</span><span>;</span>
+        <span>}</span>
+
+        <span>connectedCallback</span><span>(</span><span>)</span> <span>{</span>
+            <span>this</span><span>.</span><span>render</span><span>(</span><span>)</span><span>;</span>
+        <span>}</span>
+        
+        <span>disconnectedCallback</span><span>(</span><span>)</span> <span>{</span>
+            <span>this</span><span>.</span>#loop<span>.</span><span>return</span><span>(</span><span>)</span><span>;</span>
+        <span>}</span>
+
+        <span>render</span><span>(</span><span>state <span>=</span> <span>{</span><span>}</span></span><span>)</span> <span>{</span>
+            <span>this</span><span>.</span>#loop<span>.</span><span>next</span><span>(</span>state<span>)</span><span>;</span>
+        <span>}</span>
+
+    <span>}</span><span>)</span><span>;</span>
+<span>}</span><span>;</span>
+
+<span>function</span><span>*</span> <span>comp</span><span>(</span><span><span>{</span>$host<span>}</span></span><span>)</span> <span>{</span>
+
+    console<span>.</span><span>log</span><span>(</span><span>'I am being instantiated'</span><span>)</span><span>;</span>
+
+    <span>yield</span><span>;</span>
+
+    console<span>.</span><span>log</span><span>(</span><span>'Iam being mounted'</span><span>)</span><span>;</span>
+    $host<span>.</span>textContent <span>=</span> <span>'I have just been mounted'</span>
+
+    <span>yield</span><span>;</span>
+
+    <span>try</span> <span>{</span>
+        <span>while</span> <span>(</span><span>true</span><span>)</span> <span>{</span>
+            console<span>.</span><span>log</span><span>(</span><span>'I am being rendered'</span><span>)</span><span>;</span>
+            $host<span>.</span>textContent <span>=</span> <span><span>`</span><span>hello </span><span><span>${</span>$host<span>.</span><span>getAttribute</span><span>(</span><span>'name'</span><span>)</span><span>}</span></span><span>`</span></span><span>;</span>
+            <span>yield</span><span>;</span>
+        <span>}</span>
+    <span>}</span> <span>finally</span> <span>{</span>
+        console<span>.</span><span>log</span><span>(</span><span>'cleanup here !!!'</span><span>)</span><span>;</span>
+    <span>}</span>
+<span>}</span></code></pre>
+<p>컴포넌트와 그 수명을 이렇게 "선형적으로" 표현하면 콜백이나 후크가 호출될 때 모든 것이 위에서 아래로 읽히기 때문에 추론하기가 더 쉬워집니다!</p>
+<h2>동시 업데이트</h2>
+<p>결론을 내리기 전에 소개에서 언급한 네 번째 요점을 설명해드리겠습니다. 제너레이터 함수가 이미 진행 중인 상태에서 진행을 시도하면 오류가 발생합니다. 컴포넌트 세계에서는 동시 렌더링이 설계상 불가능하다는 뜻입니다!</p>
+<p>이 코드</p>
+<pre translate="no"><code translate="no"><span>function</span><span>*</span> <span>comp</span><span>(</span><span><span>{</span>$host<span>}</span></span><span>)</span> <span>{</span>
+    <span>while</span> <span>(</span><span>true</span><span>)</span> <span>{</span>
+        console<span>.</span><span>log</span><span>(</span><span>'I am being rendered'</span><span>)</span><span>;</span>
+
+        $host<span>.</span><span>render</span><span>(</span><span>)</span><span>;</span> <span>// yet I try to render ...</span>
+
+        $host<span>.</span>textContent <span>=</span> <span><span>`</span><span>hello </span><span><span>${</span>$host<span>.</span><span>getAttribute</span><span>(</span><span>'name'</span><span>)</span><span>}</span></span><span>`</span></span><span>;</span>
+        <span>yield</span><span>;</span>
+    <span>}</span>
+<span>}</span></code></pre>
+<p>는 오류 <code translate="no">Uncaught TypeError: already executing generator</code> 를 트리거합니다.</p>
+<h2>결론</h2>
+<p>이 글을 통해 제너레이터의 기능적 특성과 내재적 속성을 결합하면 동작과 뷰를 재사용 가능한 비트로 분할하고, 내부 상태를 유지하거나 모든 컴포넌트 수명 주기를 한 곳에서 관리할 수 있는 매우 유연하고 간단한 UI 컴포넌트 추상화를 구축하는 데 유용하다는 것을 살펴봤습니다.</p>
+<p>다음 글에서는 제너레이터에서 클래스로의 변환을 더욱 개선하고 최적화하는 방법을 살펴보겠습니다.</p>
+
+</div></div>
+	      </article>
+			</main>
+    </body>
+  </html>
+  
