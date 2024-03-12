@@ -1,0 +1,398 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>HTMX and Web Components: a Perfect Match</title>
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+      <script src="//unpkg.com/alpinejs" defer></script>
+    </head>
+    <body x-data="{ dark: false }" x-bind:data-theme="dark ? 'dark' : 'light'">
+      <main class="container">
+      	<button x-on:click="dark = !dark" class="contrast outline">Switch Theme</button>
+	      <article>
+	        <div id="readability-page-1" class="page"><p><span>2023-12-21;</span><span> 2109단어;</span><span> 읽는 데 17분이</span><span> 걸리지만 숙고하고 이해하는 데 더 많은</span>시간이 소요될 수 있습니다;        </p><div>
+            
+                <h2 id="web-components">
+                  웹 컴포넌트            </h2><p>웹 컴포넌트는 사용자 정의 HTML 요소를 만들 수 있는 브라우저 API 세트입니다. <strong>이는 SPA(단일 페이지 애플리케이션) 프레임워크가 오랫동안 우리에게 제공해온 주요 기능 중 하나입니다.</strong> Vue, React, Angular 또는 Svelte와 같은 프레임워크에는 재사용 가능하고 격리된 UI 컴포넌트를 만들고 사용하기 위한 고유한 접근 방식과 API가 있습니다. 이러한 프레임워크별 철학은 현재 꽤 오랫동안 널리 사용되고 있습니다. 여기에는 몇 가지 안타까운 결과가 있습니다:</p>
+<ul>
+<li>특정 프레임워크에 의존 </li>
+<li>복잡성 - 생산적으로 사용하려면 대부분의 SPA 프레임워크는 복잡한 툴링과 수많은 종속성을 필요로 합니다.</li>
+<li>특정 프레임워크의 컨텍스트에서만 컴포넌트를 재사용할 수 있음</li>
+<li>프레임워크 업데이트로 인해 컴포넌트를 더 이상 사용할 수 없게 되는 경우가 많습니다(최근에 Vue 또는 React의 주요 버전을 변경했거나 변경하려고 시도한 적이 있으신가요?).</li>
+<li>프레임워크를 변경하기로 결정하면 자체 컴포넌트나 사용하던 라이브러리를 버리고 다른 프레임워크로 마이그레이션해야 합니다. 이 새 라이브러리에는 필요한 모든 것이 없거나 완전히 다른 API가 있을 수 있습니다.</li>
+<li>컴포넌트를 사용하고 생성하려면 각 프레임워크의 세부 사항을 배워야 합니다. 이러한 지식은 프레임워크별로 다르며 전혀 보편적이지 않습니다.</li>
+</ul>
+<p><br>다행히도 지금은 꽤 오랫동안 재사용 가능한 사용자 정의 HTML 요소를 만드는 브라우저 고유의 방식인 <em>웹 컴포넌트가</em> 있습니다. 간단히 말해, <strong>특정 자바스크립트 클래스에 원하는 모든 동작을 캡슐화할 수 있습니다. 그런 다음 <em>div</em>, <em>p</em>, <em>입력</em>, <em>버튼</em> 또는 기타 브라우저 네이티브 요소를 사용하는 것과 같은 방식으로 HTML에서 사용할 수 있습니다</strong>.</p>
+<p><em>웹 컴포넌트를</em> 만드는 것은 매우 간단합니다. 예를 들어 다음과 같은 것을 만들고 싶다고 가정해 보겠습니다:</p>
+<pre translate="no"><code translate="no">&lt;custom-message 
+  category="Curiosities" 
+  message="Some interesting message"&gt;
+&lt;/custom-message&gt;
+</code></pre>
+<p>자바스크립트 몇 줄만 있으면 됩니다:</p>
+<pre translate="no"><code translate="no">class CustomMessage extends HTMLElement {
+  constructor() {
+    super();
+    const category = this.getAttribute("category");
+    const message = this.getAttribute("message");
+    this.innerHTML = `
+      &lt;div&gt;You've got an interesting message, from ${category} category:&lt;/div&gt;
+      &lt;div&gt;${message}&lt;/div&gt;`;
+  }
+}
+
+customElements.define('custom-message', CustomMessage);
+</code></pre>
+<p><strong>그게 전부입니다! 추가 도구나 종속성이 전혀 필요하지 않습니다.</strong> 여기에 속성 값 변경과 라이프사이클 콜백을 관찰하는 기능을 추가하면 됩니다:</p>
+<pre translate="no"><code translate="no">...
+
+static observedAttributes = ["category", "message"];
+
+attributeChangedCallback(name, oldValue, newValue) {
+  console.log(`${name} attribute was changed from ${oldValue} to ${newValue}!`);
+}
+
+connectedCallback() {
+  console.log("Element was added to the DOM!");
+}
+
+disconnectedCallback() {
+  console.log("Element was removed from the DOM!");    
+}
+
+...
+</code></pre>
+<p>... <em>웹 컴포넌트로</em> 할 수 있는 일에는 사실상 제한이 없습니다! 또한 <strong>범위 지정 CSS로 섀도(숨겨진) DOM을 만들 가능성도 있지만, 이는 매우 복잡하고 단점이 있으며 솔직히 대부분의 경우 필요하지</strong> 않습니다. 그렇기 때문에 여기서는 기본을 고수하겠습니다:</p>
+<ul>
+<li>HTML <em>요소</em> 클래스를 확장하고 <em>customElements</em> 레지스트리에 등록하여 JavaScript에서 사용자 정의 요소 만들기</li>
+<li>HTML에서 사용자 정의 요소 사용</li>
+<li>일반 DOM(문서 객체 모델) 및 CSS 사용</li>
+<li>라이프사이클 콜백 및 속성 변경 관찰자 사용</li>
+</ul>
+<p>또한 <em>HTMX의</em> 맥락에서 <em>웹 컴포넌트를</em> 어떻게 그리고 왜 활용할 수 있을까요?</p>
+
+                <h2 id="htmx">
+                  HTMX    </h2><p><a href="https://htmx.org/"><em>HTMX에</em></a> 대해서는 <a href="https://binaryigor.com/htmx-simpler-web-based-app-or-system.html">여기에서</a> 확인할 수 있는 상당히 방대한 글을 작성했습니다. 완성도를 높이기 위해 간단히 정의해 보겠습니다: </p>
+<blockquote>
+<p>HTMX는 양식, 링크 또는 동영상뿐만 아니라 모든 HTML 요소에서 임의의 http 요청을 만들 수 있는 JavaScript 라이브러리입니다. 응답으로 HTML을 기대하며, 우리가 지정한 페이지 섹션에서 전체 HTML 페이지 또는 조각을 직접 렌더링합니다. 서버와 JSON 또는 기타 데이터 형식을 교환할 필요 없이 클라이언트 측에서 이를 HTML로 변환하여 렌더링할 수 있습니다. 이 작업은 HTMX에 의해 자동으로 수행되므로 자체적인 사용자 지정 HTML 속성을 사용하기만 하면 됩니다.</p>
+</blockquote>
+<p><br>매우 흥미롭고 유용하며 유망한 기술입니다. 많은 것을 단순화하고 복잡한 도구, 종속성, 프레임워크 없이, 그리고 대부분 애플리케이션별 자바스크립트 코드를 작성하지 않고도 <em>SPA</em> 또는 <em>SPA와 유사한</em> 애플리케이션을 구축할 수 있습니다. 어떤 의미에서는 자바스크립트를 직접 작성할 필요가 없는 자바스크립트 라이브러리라고 할 수 있습니다. 프론트엔드/백엔드 구분 없이 하나의 애플리케이션만 있으면 됩니다(물론 조금 단순화되긴 했지만, <a href="https://www.ufried.com/blog/simplify_1/">많은 것을 단순화해</a> 줍니다). 하지만 한 가지 아쉬운 점이 있습니다. 특정 컴포넌트와 관련된 HTML 템플릿과 자바스크립트(필요한 경우)를 캡슐화할 수 있는 격리되고 재사용 가능한 컴포넌트를 만드는 간단한 방법이 없다는 것입니다. <strong>프레임워크에 구애받지 않고 재사용 가능한 컴포넌트 라이브러리를 만들어 모든 HTML5 기반 애플리케이션에서 사용할 수 있다면 정말 멋지지 않을까요?</strong> 웹 컴포넌트를 사용하면 이 모든 것이 완벽하게 가능하니 자세히 알아보겠습니다!</p>
+
+                <h2 id="assumptions">
+                  가정      </h2><p>이 솔루션에서는 다음과 같은 가정을 합니다:</p>
+<ol>
+<li><em>섀도 DOM을</em> 사용하지 않습니다. HTMX는 작동하지 않으며 일을 복잡하게 만들고 유용하고 격리되어 재사용 가능한 웹 컴포넌트를 만드는 데 대부분 필요하지 않다고 주장합니다.</li>
+<li>우리는 외부에서 컴포넌트를 완전히 구성할 수 있도록 만들 것입니다. 이 일반적인 접근 방식을 사용하면 이러한 컴포넌트를 임의로 외부에서 스타일을 지정할 수 있고, HTMX와 함께 사용하는 것이 매우 간단해지며, 동시에 컴포넌트는 HTMX에 대해 아무것도 알 필요가 없습니다.</li>
+<li>스타일링에는 <a href="https://tailwindcss.com/">Tailwind CSS를</a> 사용합니다. 범위가 지정된 사용자 정의 CSS를 사용할 수도 있지만 Tailwind를 사용하는 것이 훨씬 쉽고 그 자체로도 놀랍고 간단한 도구이므로 사용하지 않는 이유는 무엇일까요? </li>
+<li>이 글은 결국 <em>HTMX의</em> 맥락에서 <em>웹 컴포넌트에</em> 관한 것이므로 함께 사용하기 쉬워야 합니다. 다행히도 여기 <em>2.</em> </li>
+</ol>
+
+                <h2 id="solution-walkthrough">
+                  솔루션 워크스루            </h2><p>참조 코드가 포함된 리포지토리, 더 많은 예제는 <a href="https://github.com/BinaryIgor/code-examples/tree/master/flexible-web-components">여기에서</a> 확인할 수 있습니다.</p>
+<p>저는 가능한 한 일반적이면서 동시에 가능한 한 간단한 API를 원했기 때문에 구성 요소를 (HTML 속성으로) 간단하게 구성하기 위해 다음과 같은 규칙을 생각해 냈습니다:</p>
+<pre translate="no"><code translate="no">{component-element}:{attribute}="{value}"
+</code></pre>
+<p>작동 방식을 설명하기 위해 여기 <em>InfoModal</em> 예제가 있습니다(클래스는 Tailwind CSS에서 가져옴):</p>
+<pre translate="no"><code translate="no">&lt;info-modal 
+  id="info-modal" 
+  container:class="bg-black/80"
+  content:class="bg-amber-300 border-solid border-4 border-black rounded-md m-auto mt-32 px-8 pt-8 pb-32 w-3/5"
+  message:class="text-lg italic"
+  close:class="text-2xl p-4 cursor-pointer"
+  close-icon="&amp;#10006;"&gt;
+&lt;/info-modal&gt;
+</code></pre>
+<p>기본적으로 <em>container:*</em> 속성은 <em>정보 모달</em> 컴포넌트의 <em>컨테이너 요소에</em> <em>container:</em> 접두사 없이 복사됩니다. <em>Content:*</em> 속성은 <em>정보 모달</em> 구성 요소의 지원 및 노출되는 모든 요소에 대해 <em>content:</em> 접두사 없이 <em>콘텐츠 요소</em> 등에 복사됩니다. 결과 HTML은 다음과 같습니다:</p>
+<pre translate="no"><code translate="no">&lt;info-modal 
+  id="info-modal" 
+  container:class="bg-black/80" 
+  content:class="bg-amber-300 border-solid border-4 border-black rounded-md m-auto mt-32 px-8 pt-8 pb-32 w-3/5" 
+  message:class="text-lg italic" 
+  close:class="text-2xl p-4 cursor-pointer"
+  close-icon="&amp;#10006;"&gt;
+
+  &lt;!-- style attributes are set internally by the component --&gt;
+  &lt;div 
+    style="display: none;" 
+    &lt;!-- container has its own non-overridable class, ours is appended --&gt;
+    class="fixed z-10 left-0 top-0 w-full h-full overflow-auto bg-black/80"&gt;
+    &lt;div 
+      style="position: relative;" 
+      class="bg-amber-300 border-solid border-4 border-black rounded-md m-auto mt-32 px-8 pt-8 pb-32 w-3/5"&gt;
+      &lt;span 
+        &lt;!-- close has its own non-overridable class, ours is appended --&gt;
+        class="absolute top-0 right-0 text-2xl p-4 cursor-pointer"&gt;
+          &amp;#10006;
+      &lt;/span&gt;
+      &lt;!-- title has its own default class --&gt;
+      &lt;div class="text-2xl font-bold mb-2"&gt;Default title&lt;/div&gt;
+      &lt;!-- message does not have a default class, ours is set --&gt;
+      &lt;div class="text-lg italic"&gt;Default message&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+&lt;/info-modal&gt;
+</code></pre>
+<p><br>이를 가능하게 하기 위해 다음과 같은 메인 메서드가 있는 <em>컴포넌트 객체를</em> 만들었습니다:</p>
+<pre translate="no"><code translate="no">export const Components = {
+  // element is a custom element reference,
+  // elementId is a name of atrributes element,
+  // like "container", "content", "input" and so on
+  mappedAttributes(element, elementId,
+    { defaultAttributes = {},
+      defaultClass = "",
+      // add (concatenate) attributes/class to the current ones
+      toAddAttributes = {},
+      toAddClass = "",
+      // skip some attributes while copying/transforming
+      toSkipAttributes = [],
+      // change content:class to class, 
+      // while copying attributes, or keep it as it is
+      keepId = false } = {}) {
+
+    let baseAttributes = baseAtrributesFromDefaults(defaultAttributes, defaultClass);
+
+    let mappedAttributes = mappedAttributesWithDefaults(element, elementId, baseAttributes, toSkipAttributes, keepId);
+
+    mappedAttributes = mappedAttributesWithToAddValues(mappedAttributes, toAddAttributes, toAddClass);
+
+    // turn this map of element attributes into a string like:
+    // id="custom-element-id"
+    // class="custom-element-class"
+    // hx-post="/validate"
+    return Object.entries(mappedAttributes)
+      .map(e =&gt; `${e[0]}="${e[1]}"`)
+      .join("\n");
+},
+
+...
+</code></pre>
+<p>기본 속성은 클라이언트가 제공하는 모든 것으로 재정의되고 간단한 문자열 연결을 사용하여 현재 속성에 추가 속성이 추가됩니다. <em>DefaultClass와</em> <em>toAddClass는</em> API 단순화를 위해 별도의 매개변수인 <em>defaultAttributes</em> 및 <em>toAddAttributes와</em> 같은 방식으로 처리됩니다.</p>
+<p>그런 다음 사용자 정의 컴포넌트에서 <em>Components 객체를</em> 사용합니다(다시<em>InfoModal</em> ):</p>
+<pre translate="no"><code translate="no">...
+
+const containerAttributes = Components.mappedAttributes(this, "container", {
+  toAddClass: containerClass,
+  defaultClass: containerClassDefault
+});
+const contentAttributes = Components.mappedAttributes(this, "content", {
+  defaultClass: contentClassDefault
+});
+
+...
+
+this.innerHTML = `
+&lt;div style="display: none;" ${containerAttributes}&gt;
+  &lt;div style="position: relative;" ${contentAttributes}&gt;
+    &lt;span ${closeAttributes}&gt;${closeIcon}&lt;/span&gt;
+    &lt;div ${titleAttributes}&gt;${titleToRender}&lt;/div&gt;
+    &lt;div ${messageAttributes}&gt;${messageToRender}&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;`;
+
+...
+</code></pre>
+<p>보시다시피 <strong>이것은 매우 일반적이며 HTMX와는 아무런 관련이 없습니다. 컴포넌트에 의해 노출되는 모든 요소에 임의의 외부 속성을 삽입할 수 있을 뿐입니다</strong>.</p>
+<p><strong>HTMX를 사용하는 것은 대부분 HTML 요소에 속성을 설정하는 것입니다.</strong> 따라서 일반적인 접근 방식은 흥미로운 결과를 가져옵니다. 이렇게 생성된 컴포넌트를 (HTMX에 대한 지식 없이) 다음과 같은 방식으로 HTMX와 함께 사용할 수 있습니다<em>(InputWithError</em>):</p>
+<pre translate="no"><code translate="no">&lt;input-with-error 
+  input:type="text"
+  input:name="message"
+  input:placeholder="Input something..."
+  &lt;!-- HTMX starts here --&gt;
+  input:hx-post="/validate"
+  input:hx-trigger="input changed delay:500ms"
+  input:hx-swap="outerHTML"
+  input:hx-target="next input-error"&gt;
+&lt;/input-with-error&gt;
+</code></pre>
+
+                <h2 id="htmx-examples">
+                  HTMX 예제      </h2><p><em>HTMX와</em> 함께 사용되는 <em>웹 컴포넌트의</em> 몇 가지 구체적인 예를 살펴봅시다.</p>
+
+                <h3 id="confirmable-modal">
+                  확인 가능 모달      </h3><p>특정 요청을 실제로 실행하기 전에 사용자가 확인해야 하는 경우가 종종 있습니다. 이를 위해 사용할 수 있는 특별한 HTMX 속성이 있는데, 바로 <a href="https://htmx.org/attributes/hx-confirm/">hx-confirm입니다</a>. 이전 예제 중 하나의 <em>정보 모달</em> 과 유사한 <em>확인 가능 모달을</em> 사용하면 다음 HTML을 작성할 수 있습니다:</p>
+<pre translate="no"><code translate="no">&lt;confirmable-modal 
+  title="Delete confirmation"
+  ok-text="Delete"&gt;
+&lt;/confirmable-modal&gt;
+
+&lt;button 
+  hx-delete="/test"
+  hx-confirm="Are you sure to delete this test entity?"
+  hx-target="#delete-result"&gt;
+  Try to confirm
+&lt;/button&gt;
+</code></pre>
+<p>HTMX로 전송된 요청을 캡처하여 <em>확인 가능 모달을</em> 미리 표시하려면 페이지에 다음 JavaScript를 추가해야 합니다:</p>
+<pre translate="no"><code translate="no">const confirmableModal = document.querySelector("confirmable-modal");
+
+document.addEventListener("htmx:confirm", e =&gt; {
+  // do not issue http request
+  e.preventDefault();
+
+  confirmableModal.onOk = () =&gt; {
+    // ok clicked, issue stopped previously http request
+    e.detail.issueRequest(e);
+    // hide modal after sending the request
+    confirmableModal.hide();
+  };
+
+  // show confirmable modal with question configured through htmx attribute
+  confirmableModal.show({ message: e.detail.question });
+});
+</code></pre>
+<p>이렇게 하면 http 요청을 실행하기 전에 다음과 같은 모달이 표시됩니다:</p>
+<figure>
+   <img src="https://binaryigor.com/assets/images/htmx-and-web-components/confirmable-modal_f4305cf48c474398.png">
+   <figcaption>show() 메서드를 호출한 후 ConfirmableModal을</figcaption>표시합니다.</figure>
+
+
+
+                <h3 id="order-form-and-list">
+                  주문 양식 및 목록      </h3><p>앞서 살펴본 <em>입력 오류</em> 및 <em>정보 모달을</em> 기반으로 일반적인 양식 기능을 제공하는 <em>양식 컨테이너를</em> 만들 수 있습니다. 이름에서 알 수 있듯이 이 컨테이너는 컨테이너일 뿐이므로 원하는 수의 입력을 받아들이고 작동할 수 있으며, 그 사양은 전적으로 클라이언트에 맡겨져 있습니다. 일반적인 양식 기능에는 양식 제출 활성화/비활성화, 제출 성공 후 모든 입력 지우기, 제출 실패 후 일반 오류 표시와 같은 기능이 포함됩니다. HTMX의 맥락에서 양식 요소가 있으면 모든 양식 입력 데이터를 간단한 방식으로 전송할 수 있습니다. 예제를 HTMX와 더 연관성 있게 만들기 위해 양식에 새 <em>주문</em> 엔티티를 지정할 수 있습니다. 제출에 실패하면 <em>정보 모달을</em> 사용하여 오류가 표시됩니다. 제출에 성공하면 새 <em>주문이</em> 주문 목록에 추가됩니다. 다음은 단순화된 HTML입니다:</p>
+<pre translate="no"><code translate="no">&lt;info-modal 
+  id="error-modal" 
+  &lt;!-- Add value to default title class attribute --&gt;
+  title:add:class="text-red-500" 
+  title="Something went wrong..."&gt;
+&lt;/info-modal&gt;
+
+&lt;form-container
+  form:id="order-form"
+  form:class="rounded bg-slate-200 p-2 max-w-screen-md"
+  form:hx-post="/orders"
+  form:hx-target="#orders"
+  submit:class="py-2 rounded bg-slate-100 mt-4 w-full"
+  submit:value="Add Order"&gt;
+
+  &lt;input-with-error 
+    container:class="mb-2"
+    &lt;!-- Add value to default input class attribute --&gt;
+    input:add:class="w-full"
+    input:name="id"
+    input:placeholder="Order id"
+    input:hx-post="/orders/validate-id"
+    input:hx-trigger="input changed delay:500ms"
+    input:hx-swap="outerHTML"
+    input:hx-target="next-input-error"
+    &lt;!-- Send also secret input from below (secret-input is its id),
+     id and secret validations are related --&gt;
+    input:hx-include="#secret-input"&gt;
+  &lt;/input-with-error&gt;
+    
+  &lt;!-- Similar to above, definitions of other inputs:
+   name, description, secret --&gt;
+
+&lt;/form-container&gt;
+
+&lt;ul id="orders" class="space-y-2 max-w-screen-md"&gt;
+  ${ordersHtml()}
+&lt;/ul&gt;
+
+...
+
+function ordersHtml() {
+  return orders.map(o =&gt;
+  `&lt;div class="rounded bg-slate-100 p-2"&gt;
+     &lt;div&gt;Id: ${o.id}&lt;/div&gt;
+     &lt;div&gt;Name: ${o.name}&lt;/div&gt;
+     &lt;div&gt;Description: ${o.description}&lt;/div&gt;
+     &lt;div&gt;Secret: ${o.secret}&lt;/div&gt;
+   &lt;/div&gt;`)
+  .join("\n");
+}
+</code></pre>
+<p><br>또한 <em>정보 모달</em> 및 <em>양식 컨테이너</em> 기능 중 일부가 작동할 수 있도록 JavaScript를 추가해야 합니다:</p>
+<pre translate="no"><code translate="no">const errorModal = document.getElementById("error-modal");
+
+const formContainer = document.querySelector("form-container");
+
+formContainer.addEventListener("htmx:afterRequest", e =&gt; {
+  const form = document.getElementById("order-form");
+  // we only care about requests sent by the form,
+  // not other of its many elements (inputs mainly)
+  if (e.srcElement == form) {
+    // error text response from the server
+    const error = e.detail.failed ? e.detail.xhr.response : "";
+    // this will enable form submission again,
+    // and clear inputs only if error is empty/undefined
+    formContainer.afterSubmit({ error: error });
+    // show error only if there is one
+    if (error) {
+      errorModal.show({ message: error });
+    }
+  }
+});
+</code></pre>
+<p><br>입력 오류가 있는 상태는 다음과 같습니다:</p>
+<figure>
+   <img src="https://binaryigor.com/assets/images/htmx-and-web-components/form-container-1_f4305cf48c474398.png">
+   <figcaption>입력 오류가 있는 폼 컨테이너</figcaption></figure>
+
+<p>그리고 제출 오류가 발생한 후의 모습은 다음과 같습니다:</p>
+<figure>
+   <img src="https://binaryigor.com/assets/images/htmx-and-web-components/form-container-2_f4305cf48c474398.png">
+   <figcaption>제출 오류를 표시하는 정보 모달이 있는 폼 컨테이너</figcaption></figure>
+
+
+                <h2 id="flexible-and-copyable-web-components-collection">
+                  유연하고 복사 가능한 웹 컴포넌트 모음      </h2><p>설명한 접근 방식을 사용하면 재사용 가능하고 유연하며 프레임워크에 구애받지 않는 일반 웹 컴포넌트 컬렉션을 만들 수 있습니다. <strong>UI 컴포넌트에 관해서는 화이트박스 철학이 더 우수하다고 생각합니다. 컴포넌트의 간단한 소스 코드에 액세스할 수 있어야 하고, 복사하고 수정할 수 있도록 설계되어야 하며, 블랙박스 종속성으로 사용되지 않아야 합니다.</strong> 왜냐하면 주어진 컴포넌트가 우리의 요구사항과 <em>거의</em> 일치하지만 정확하지는 않은 경우가 종종 있기 때문입니다. 이러한 상황에서는 컴포넌트를 제어하고 변경할 수 있는 능력이야말로 진정한 생명의 은인이기 때문입니다. <a href="https://tailwindui.com/">Tailwind UI도</a> 비슷한 접근 방식을 취하지만 오픈 소스가 아니라 유료 도구이며 프레임워크별 구성 요소에 중점을 둡니다.</p>
+<p>몇 가지 웹 컴포넌트 라이브러리와 컬렉션이 있는데, 가장 대표적인 것이 <a href="https://shoelace.style/">Shoelace입니다</a>. 이는 올바른 방향으로 나아가는 단계이지만 안타깝게도 다른 도구, 종속성 및 추가 추상화를 사용하며 복사, 이해 및 수정할 수 있는 것이 아니라 폐쇄적인 종속성으로 사용해야 하는 다소 블랙박스적인 접근 방식을 취하고 있습니다. 또한 대부분 <em>섀도 DOM을</em> 사용하므로 <em>HTMX와</em> 함께 사용할 수 없습니다. 불필요한 추상화 없이 다른 화이트박스 철학을 염두에 두고 여기에 설명한 것과 유사한 접근 방식으로 만들어진 컴포넌트 모음을 보고 싶습니다. 즉, 이러한 컴포넌트는 종속성이 전혀 없거나 최소화된 이해하기 쉬운 소스 코드를 갖게 될 것입니다. 또한 외부에서 완전히 구성할 수 있으며, 블랙박스 종속성으로 사용되지 않고 오히려 복사 및 수정이 가능하도록 설계되었습니다.</p>
+
+                <h2 id="closing-thoughts">
+                  마무리 생각      </h2><p>지금까지 살펴본 바와 같이 웹 컴포넌트는 HTMX로 매우 쉽게 만들고 사용할 수 있습니다. <strong>HTMX로 작업할 때 중요한 문제, 즉 HTML뿐만 아니라 동작을 향상시키기 위해 JavaScript를 사용해야 할 수도 있는 재사용 가능한 컴포넌트를 어떻게 그리고 어디에 정의해야 하는지를 해결합니다.</strong> 또한 여기에 설명된 속성을 통한 구성에 대한 일반적인 접근 방식으로 작성하면 매우 유연하고 재사용할 수 있습니다:</p>
+<pre translate="no"><code translate="no">&lt;input-with-error 
+  container:class="mb-2"
+  input:add:class="w-full"
+  input:type="password"
+  input:name="secret"
+  input:id="secret-input"
+  input:placeholder="Order secret, compatibility with id is required"     
+  input:hx-post="/orders/validate-secret"
+  input:hx-trigger="input changed delay:500ms"
+  input:hx-swap="outerHTML"
+  input:hx-target="next input-error"
+  input-error:id="secret-error"&gt;
+&lt;/input-with-error&gt;
+</code></pre>
+<p>HTMX에 대해 전혀 모르더라도 이 두 기술을 연결하는 것은 매우 쉽습니다!</p>
+<p>---</p>
+
+
+                <ol>
+<li><a href="https://www.youtube.com/watch?v=M4i-JQVLgfE">비슷한 개념의 라이브 코딩된 비디오</a></li>
+<li><a href="https://www.youtube.com/watch?v=A3UB3tyDWa4">HTMX를 사용한 간단한 index.html</a></li>
+</ol>
+<p>---</p>
+
+
+                <h3 id="notes-and-resources">
+                  참고 사항 및 리소스         </h3><ol>
+<li>웹 컴포넌트 기초:<ol>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components">https://developer.mozilla.org/en-US/docs/Web/API/Web_components</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements">https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements</a></li>
+</ol>
+</li>
+<li>HTMX 흥미로운 에세이: <a href="https://htmx.org/essays/">https://htmx.org/essays/</a></li>
+<li>HTMX 이벤트 참조: <a href="https://htmx.org/events/">https://htmx.org/events/</a></li>
+<li>단순함의 미덕: <a href="https://www.ufried.com/blog/simplify_1/">https://www.ufried.com/blog/simplify_1/</a></li>
+<li>슈레이스, 가장 인기 있는 웹 컴포넌트 컬렉션 중 하나: <a href="https://shoelace.style/">https://shoelace.style</a></li>
+<li>웹 컴포넌트 빌드를 위해 널리 사용되는 라이브러리. 솔직히 말해서 사용 사례를 완전히 이해하지 못하지만 대부분의 웹 컴포넌트 컬렉션에서 사용합니다: <a href="https://lit.dev/">https://lit.dev</a></li>
+<li>어쩌면 섀도 DOM은 약간 복잡하고 많은 경우에 필요하지 않을 수도 있습니다:<ol>
+<li><a href="https://www.hjorthhansen.dev/you-might-not-need-shadow-dom">https://www.hjorthhansen.dev/you-might-not-need-shadow-dom</a></li>
+<li><a href="https://meyerweb.com/eric/thoughts/2023/11/01/blinded-by-the-light-dom">https://meyerweb.com/eric/thoughts/2023/11/01/blinded-by-the-light-dom</a></li>
+<li><a href="https://buttondown.email/cascade/archive/006-shadow-dom-is-not-a-good-default">https://buttondown.email/cascade/archive/006-shadow-dom-is-not-a-good-default</a></li>
+<li><a href="https://aaadaaam.com/notes/step-into-the-light-dom/">https://aaadaaam.com/notes/step-into-the-light-dom/</a></li>
+<li><a href="https://adactio.com/journal/20618">https://adactio.com/journal/20618</a></li>
+</ol>
+</li>
+<li>코드 리포지토리: <a href="https://github.com/BinaryIgor/code-examples/tree/master/flexible-web-components">https://github.com/BinaryIgor/code-examples/tree/master/flexible-web-components</a></li>
+</ol>
+
+        </div></div>
+	      </article>
+			</main>
+    </body>
+  </html>
+  
