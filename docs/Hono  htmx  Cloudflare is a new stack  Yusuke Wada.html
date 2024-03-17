@@ -1,0 +1,193 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>Hono + htmx + Cloudflare is a new stack - Yusuke Wada</title>
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+      <script src="//unpkg.com/alpinejs" defer></script>
+    </head>
+    <body x-data="{ dark: false }" x-bind:data-theme="dark ? 'dark' : 'light'">
+      <main class="container">
+      	<button x-on:click="dark = !dark" class="contrast outline">Switch Theme</button>
+	      <article>
+	        <div id="readability-page-1" class="page"><div>
+			<article>
+				<img src="https://ss.yusukebe.com/08fbd6d88619fd84b7e5b5a49e5fbe08ffdef7c672751fc043c27f76331fa076_1200x659.png" width="1200" height="1200" alt="Screenshot">
+				
+				
+	<time datetime="2023-07-20T15:00:00.000Z">2023년 7월 21일</time><hr><h2>Hono + htmx + Cloudflare는 새로운 스택입니다.</h2>
+	<p>전직 백엔드 엔지니어로서 저는 때때로 React가 복잡하다고 느낍니다. 게다가 프레임워크 개발자로서 수화 메커니즘을 만드는 것은 번거로울 수 있습니다. 하지만 우리는 종종 React를 사용합니다.</p>
+<p>React 사용의 주요 장점 중 하나는 JSX입니다. 처음에는 "왜 자바스크립트에 HTML 태그가 있지!!!"라는 생각이 들었지만, 익숙해지면 JSX가 유연하고 사용하기 편하다는 것을 알게 됩니다.</p>
+<p>오늘은 JSX를 서버 측 템플릿 엔진으로만 사용하는 것이 핵심인 기술 스택을 소개하겠습니다. 즉, <strong>React 없이도 JSX를</strong> 사용할 수 있다는 뜻입니다.</p>
+<h2 id="hono-jsx-middleware">Hono JSX 미들웨어</h2>
+<p>엣지용 자바스크립트 프레임워크인<a href="https://hono.dev/"><strong>Hono에는</strong></a> <a href="https://hono.dev/middleware/builtin/jsx">JSX 미들웨어가</a> 포함되어 있습니다. JSX로 HTML을 작성할 수 있지만 이는 클라이언트가 아닌 서버 측 렌더링을 위한 것입니다. 따라서 핸들바, EJS, 머스타시 등과 마찬가지로 템플릿 엔진의 역할을 합니다.</p>
+<pre translate="no" tabindex="0"><code translate="no"><span><span>const</span><span> </span><span>app</span><span> </span><span>=</span><span> </span><span>new</span><span> </span><span>Hono</span><span>()</span></span>
+<span></span>
+<span><span>app.</span><span>get</span><span>(</span><span>'/'</span><span>, (</span><span>c</span><span>) </span><span>=&gt;</span><span> {</span></span>
+<span><span>  </span><span>return</span><span> c.</span><span>html</span><span>(&lt;</span><span>h1</span><span>&gt;Hello!&lt;/</span><span>h1</span><span>&gt;)</span></span>
+<span><span>})</span></span></code></pre>
+<p>Hono 앱은 <strong>Cloudflare Workers</strong>, <strong>Fastly Compute@Edge</strong> 또는 <strong>Deno Deploy와</strong> 같은 엣지 서버에서 실행할 수 있으므로 매우 빠른 서버 측 렌더링이 가능합니다. 또한 JavaScript에 대한 "하이드레이션"을 수행하지 않으므로 SPA 전환 없이도 사용자 경험을 잃지 않습니다. 엣지 기반 SSR과 하이드레이션이 없는 이 조합은 매우 빠른 설정이 가능하게 합니다.</p>
+<h2 id="htmx">htmx</h2>
+<p><a href="https://htmx.org/"><strong>htmx는</strong></a> 자바스크립트를 작성할 필요 없이 Ajax를 구현하는 라이브러리입니다.</p>
+<pre translate="no" tabindex="0"><code translate="no"><span><span>&lt;!-- have a button POST a click via AJAX --&gt;</span></span>
+<span><span>&lt;</span><span>button</span><span> </span><span>hx-post</span><span>=</span><span>"/clicked"</span><span> </span><span>hx-swap</span><span>=</span><span>"outerHTML"</span><span>&gt;</span></span>
+<span><span>  Click Me</span></span>
+<span><span>&lt;/</span><span>button</span><span>&gt;</span></span></code></pre>
+<p>루비 온 레일즈에서 사용하는 <a href="https://hotwired.dev/">핫와이어와</a> 비슷합니다. 그러나 REST API로 React를 사용하는 것과 달리 htmx는 서버 측 JSX와 쉽게 통합할 수 있으므로 대화형 경험을 더 간단하게 만들 수 있습니다.</p>
+<h2 id="the-stack">스택</h2>
+<p>전체 스택에는 다음과 같은 컴포넌트가 포함됩니다:</p>
+<ul>
+<li>Hono + JSX 미들웨어</li>
+<li>htmx</li>
+<li>Zod</li>
+<li>Tailwind CSS</li>
+<li>Cloudflare 워커</li>
+<li>Cloudflare D1</li>
+</ul>
+<p>Cloudflare<strong>D1은</strong> Cloudflare 에지에서 SQLite를 실행하는 데이터베이스 서비스입니다. 현재 "알파" 상태이며 프로덕션 사용에는 권장되지 않지만, 이미 빠르고 개념 증명(PoC) 프로젝트에 완벽하게 적합합니다.</p>
+<p>아래 예시에서는 <strong>Zod를</strong> 사용하여 입력값의 유효성을 검사합니다. Hono의 Zod 유효성 검사기 미들웨어는 Hono와 통합되어 유효성이 검사된 값의 유형을 쉽게 얻을 수 있기 때문에 매우 유용합니다.</p>
+<img src="https://ss.yusukebe.com/8047313b8a12d43c132194bb8d38173eed6354e3f0a6ca3f9ba8c61a4783e887_1200x516.png" width="1200" height="1200" alt="Screenshot">
+<h2 id="htmljs">html.js</h2>
+<p>이 아이디어는 <a href="https://twitter.com/dctanner/status/1681975611546378241"><strong>@dctanner의</strong>트윗에</a> 기반한 것으로, 그는 이 스택을 "<strong>html.js</strong>" 스택이라고 명명했습니다. 이 리포지토리에서 찾을 수 있습니다:</p>
+<p><a href="https://github.com/dctanner/htmljs-todo-example">https://github.com/dctanner/htmljs-todo-example</a></p>
+<h2 id="100-lines-todo-app">100줄 토도 앱</h2>
+<p>놀랍습니다. 단 <strong>100줄의</strong> 코드로 엣지에서 D1 SQLite에 데이터를 삽입하고 삭제하는 실제 Todo 앱 예제를 만들 수 있었습니다. 빠르고(<strong>~100ms</strong>) 가볍습니다(압축된 작업자 크기: <strong>22KB</strong>)!</p>
+<p>데모는 여기 있습니다:</p>
+<p><img src="https://github.com/yusukebe/hono-htmx/assets/10682/7d2466dc-7802-46d0-93ac-f6dfcfcbdd9f" alt="output"></p>
+<p>빌드 크기:</p>
+<img src="https://ss.yusukebe.com/36b91996f86283a0df485b3afaf5ecfc487e62a53f9876010cd44bb85398aa34_1200x188.png" width="1200" height="1200" alt="Screenshot">
+<h2 id="code">코드</h2>
+<p>일반적으로 예제 코드를 보여드리려면 코드의 특정 부분을 선택하여 몇 줄만 붙여넣어야 하지만, 이 예제는 코드가 100줄에 불과하므로 전체 코드를 보여드리겠습니다.</p>
+<p><code translate="no">comonent.tsx</code>:</p>
+<pre translate="no" tabindex="0"><code translate="no"><span><span>import</span><span> { html } </span><span>from</span><span> </span><span>'hono/html'</span></span>
+<span></span>
+<span><span>export</span><span> </span><span>const</span><span> </span><span>Layout</span><span> </span><span>=</span><span> (</span><span>props</span><span>:</span><span> { </span><span>children</span><span>:</span><span> </span><span>any</span><span> }) </span><span>=&gt;</span><span> </span><span>html</span><span>`</span></span>
+<span><span>  &lt;!DOCTYPE html&gt;</span></span>
+<span><span>  &lt;html&gt;</span></span>
+<span><span>    &lt;head&gt;</span></span>
+<span><span>      &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;</span></span>
+<span><span>      &lt;script src="https://unpkg.com/<a href="https://blog.yusu.ke/cdn-cgi/l/email-protection" data-cfemail="573f233a2f793825301766796e7964">[email&nbsp;protected]</a>"&gt;&lt;/script&gt;</span></span>
+<span><span>      &lt;script src="https://unpkg.com/<a href="https://blog.yusu.ke/cdn-cgi/l/email-protection" data-cfemail="f59d8c8590878696879c8581db9a8792b5c5dbccdbcc">[email&nbsp;protected]</a>"&gt;&lt;/script&gt;</span></span>
+<span><span>      &lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</span></span>
+<span><span>      &lt;title&gt;Hono + htmx&lt;/title&gt;</span></span>
+<span><span>    &lt;/head&gt;</span></span>
+<span><span>    &lt;body&gt;</span></span>
+<span><span>      &lt;div class="p-4"&gt;</span></span>
+<span><span>        &lt;h1 class="text-4xl font-bold mb-4"&gt;&lt;a href="/"&gt;Todo&lt;/a&gt;&lt;/h1&gt;</span></span>
+<span><span>        ${</span><span>props</span><span>.</span><span>children</span><span>}</span></span>
+<span><span>      &lt;/div&gt;</span></span>
+<span><span>    &lt;/body&gt;</span></span>
+<span><span>  &lt;/html&gt;</span></span>
+<span><span>`</span></span>
+<span></span>
+<span><span>export</span><span> </span><span>const</span><span> </span><span>AddTodo</span><span> </span><span>=</span><span> () </span><span>=&gt;</span><span> (</span></span>
+<span><span>  &lt;</span><span>form</span><span> </span><span>hx-post</span><span>=</span><span>"/todo"</span><span> </span><span>hx-target</span><span>=</span><span>"#todo"</span><span> </span><span>hx-swap</span><span>=</span><span>"beforebegin"</span><span> </span><span>_</span><span>=</span><span>"on htmx:afterRequest reset() me"</span><span> </span><span>class</span><span>=</span><span>"mb-4"</span><span>&gt;</span></span>
+<span><span>    &lt;</span><span>div</span><span> </span><span>class</span><span>=</span><span>"mb-2"</span><span>&gt;</span></span>
+<span><span>      &lt;</span><span>input</span><span> </span><span>name</span><span>=</span><span>"title"</span><span> </span><span>type</span><span>=</span><span>"text"</span><span> </span><span>class</span><span>=</span><span>"bg-gray-50 border border-gray-300 text-gray-900 rounded-lg p-2.5"</span><span> /&gt;</span></span>
+<span><span>    &lt;/</span><span>div</span><span>&gt;</span></span>
+<span><span>    &lt;</span><span>button</span><span> </span><span>class</span><span>=</span><span>"text-white bg-blue-700 hover:bg-blue-800 rounded-lg px-5 py-2 text-center"</span><span> </span><span>type</span><span>=</span><span>"submit"</span><span>&gt;</span></span>
+<span><span>      Submit</span></span>
+<span><span>    &lt;/</span><span>button</span><span>&gt;</span></span>
+<span><span>  &lt;/</span><span>form</span><span>&gt;</span></span>
+<span><span>)</span></span>
+<span></span>
+<span><span>export</span><span> </span><span>const</span><span> </span><span>Item</span><span> </span><span>=</span><span> ({ </span><span>title</span><span>, </span><span>id</span><span> }</span><span>:</span><span> { </span><span>title</span><span>:</span><span> </span><span>string</span><span>; </span><span>id</span><span>:</span><span> </span><span>string</span><span> }) </span><span>=&gt;</span><span> (</span></span>
+<span><span>  &lt;</span><span>p</span></span>
+<span><span>    </span><span>hx-delete</span><span>=</span><span>{</span><span>`/todo/${</span><span>id</span><span>}`</span><span>}</span></span>
+<span><span>    </span><span>hx-swap</span><span>=</span><span>"outerHTML"</span></span>
+<span><span>    </span><span>class</span><span>=</span><span>"flex row items-center justify-between py-1 px-4 my-1 rounded-lg text-lg border bg-gray-100 text-gray-600 mb-2"</span></span>
+<span><span>  &gt;</span></span>
+<span><span>    {title}</span></span>
+<span><span>    &lt;</span><span>button</span><span> </span><span>class</span><span>=</span><span>"font-medium"</span><span>&gt;Delete&lt;/</span><span>button</span><span>&gt;</span></span>
+<span><span>  &lt;/</span><span>p</span><span>&gt;</span></span>
+<span><span>)</span></span></code></pre>
+<p><code translate="no">index.tsx</code>:</p>
+<pre translate="no" tabindex="0"><code translate="no"><span><span>import</span><span> { Hono } </span><span>from</span><span> </span><span>'hono/quick'</span></span>
+<span><span>import</span><span> { z } </span><span>from</span><span> </span><span>'zod'</span></span>
+<span><span>import</span><span> { zValidator } </span><span>from</span><span> </span><span>'@hono/zod-validator'</span></span>
+<span></span>
+<span><span>import</span><span> { Layout, AddTodo, Item } </span><span>from</span><span> </span><span>'./components'</span></span>
+<span></span>
+<span><span>type</span><span> </span><span>Bindings</span><span> </span><span>=</span><span> {</span></span>
+<span><span>  </span><span>DB</span><span>:</span><span> </span><span>D1Database</span></span>
+<span><span>}</span></span>
+<span></span>
+<span><span>type</span><span> </span><span>Todo</span><span> </span><span>=</span><span> {</span></span>
+<span><span>  </span><span>title</span><span>:</span><span> </span><span>string</span></span>
+<span><span>  </span><span>id</span><span>:</span><span> </span><span>string</span></span>
+<span><span>}</span></span>
+<span></span>
+<span><span>const</span><span> </span><span>app</span><span> </span><span>=</span><span> </span><span>new</span><span> </span><span>Hono</span><span>&lt;{ </span><span>Bindings</span><span>:</span><span> </span><span>Bindings</span><span> }&gt;()</span></span>
+<span></span>
+<span><span>app.</span><span>get</span><span>(</span><span>'/'</span><span>, </span><span>async</span><span> (</span><span>c</span><span>) </span><span>=&gt;</span><span> {</span></span>
+<span><span>  </span><span>const</span><span> { </span><span>results</span><span> } </span><span>=</span><span> </span><span>await</span><span> c.env.</span><span>DB</span><span>.</span><span>prepare</span><span>(</span><span>`SELECT id, title FROM todo;`</span><span>).</span><span>all</span><span>&lt;</span><span>Todo</span><span>&gt;()</span></span>
+<span><span>  </span><span>const</span><span> </span><span>todos</span><span> </span><span>=</span><span> results </span><span>as</span><span> </span><span>unknown</span><span> </span><span>as</span><span> </span><span>Todo</span><span>[] </span><span>// Currently, should fix a type mismatch.</span></span>
+<span><span>  </span><span>return</span><span> c.</span><span>html</span><span>(</span></span>
+<span><span>    &lt;</span><span>Layout</span><span>&gt;</span></span>
+<span><span>      &lt;</span><span>AddTodo</span><span> /&gt;</span></span>
+<span><span>      {todos.</span><span>map</span><span>((</span><span>todo</span><span>) </span><span>=&gt;</span><span> {</span></span>
+<span><span>        </span><span>return</span><span> &lt;</span><span>Item</span><span> </span><span>title</span><span>=</span><span>{todo.title} </span><span>id</span><span>=</span><span>{todo.id} /&gt;</span></span>
+<span><span>      })}</span></span>
+<span><span>      &lt;</span><span>div</span><span> </span><span>id</span><span>=</span><span>"todo"</span><span>&gt;&lt;/</span><span>div</span><span>&gt;</span></span>
+<span><span>    &lt;/</span><span>Layout</span><span>&gt;</span></span>
+<span><span>  )</span></span>
+<span><span>})</span></span>
+<span></span>
+<span><span>app.</span><span>post</span><span>(</span></span>
+<span><span>  </span><span>'/todo'</span><span>,</span></span>
+<span><span>  </span><span>zValidator</span><span>(</span></span>
+<span><span>    </span><span>'form'</span><span>,</span></span>
+<span><span>    z.</span><span>object</span><span>({</span></span>
+<span><span>      title: z.</span><span>string</span><span>().</span><span>min</span><span>(</span><span>1</span><span>)</span></span>
+<span><span>    })</span></span>
+<span><span>  ),</span></span>
+<span><span>  </span><span>async</span><span> (</span><span>c</span><span>) </span><span>=&gt;</span><span> {</span></span>
+<span><span>    </span><span>const</span><span> { </span><span>title</span><span> } </span><span>=</span><span> c.req.</span><span>valid</span><span>(</span><span>'form'</span><span>)</span></span>
+<span><span>    </span><span>const</span><span> </span><span>id</span><span> </span><span>=</span><span> crypto.</span><span>randomUUID</span><span>()</span></span>
+<span><span>    </span><span>await</span><span> c.env.</span><span>DB</span><span>.</span><span>prepare</span><span>(</span><span>`INSERT INTO todo(id, title) VALUES(?, ?);`</span><span>).</span><span>bind</span><span>(id, title).</span><span>run</span><span>()</span></span>
+<span><span>    </span><span>return</span><span> c.</span><span>html</span><span>(&lt;</span><span>Item</span><span> </span><span>title</span><span>=</span><span>{title} </span><span>id</span><span>=</span><span>{id} /&gt;)</span></span>
+<span><span>  }</span></span>
+<span><span>)</span></span>
+<span></span>
+<span><span>app.</span><span>delete</span><span>(</span><span>'/todo/:id'</span><span>, </span><span>async</span><span> (</span><span>c</span><span>) </span><span>=&gt;</span><span> {</span></span>
+<span><span>  </span><span>const</span><span> </span><span>id</span><span> </span><span>=</span><span> c.req.</span><span>param</span><span>(</span><span>'id'</span><span>)</span></span>
+<span><span>  </span><span>await</span><span> c.env.</span><span>DB</span><span>.</span><span>prepare</span><span>(</span><span>`DELETE FROM todo WHERE id = ?;`</span><span>).</span><span>bind</span><span>(id).</span><span>run</span><span>()</span></span>
+<span><span>  c.</span><span>status</span><span>(</span><span>200</span><span>)</span></span>
+<span><span>  </span><span>return</span><span> c.</span><span>body</span><span>(</span><span>null</span><span>)</span></span>
+<span><span>})</span></span>
+<span></span>
+<span><span>export</span><span> </span><span>default</span><span> app</span></span></code></pre>
+<p>우아하지 않나요?</p>
+<p>전체 프로젝트는 여기에서 확인할 수 있습니다:</p>
+<p><a href="https://github.com/yusukebe/hono-htmx">https://github.com/yusukebe/hono-htmx</a></p>
+<h2 id="am-i-talking-about-php">PHP에 대해 이야기하고 있나요?</h2>
+<p>아마도 궁금하실 겁니다:</p>
+<blockquote>
+<p>PHP에 대해 말씀하시는 건가요?</p>
+</blockquote>
+<p>제가 대답해드리겠습니다:</p>
+<blockquote>
+<p>아니요. 하지만 꽤 비슷합니다!</p>
+</blockquote>
+<p>정말 PHP나 Ruby on Rails와 비슷한 느낌입니다. 하지만 PHP도 나쁘지 않다고 생각합니다. 게다가 이 스택은 저에게 몇 가지 장점이 있습니다:</p>
+<ul>
+<li>엣지에서 실행됩니다.</li>
+<li>JavaScript/JSX를 사용할 수 있습니다.</li>
+<li>코드를 잘 정리하면 스파게티 코드를 피할 수 있습니다.</li>
+</ul>
+<p>처음에 언급했듯이 저는 백엔드 엔지니어였기 때문에 이러한 웹 사이트 제작 방식이 더 익숙하고 편안합니다. 간단하고 깔끔합니다.</p>
+<h2 id="going-forward">앞으로</h2>
+<p>이 스택을 안정화하기 위해 작업해야 할 몇 가지 사항이 있습니다. 하나는 파일 기반 라우팅을 활성화하는 것입니다. 또한 Hono의 JSX 미들웨어를 사용하는 것이 최선의 접근 방식인지 확실하지 않은데, Preact가 더 나은 선택이 될 수도 있습니다.</p>
+<p>어쨌든 이 스택은 향수를 불러일으키면서도 새로운 느낌을 줍니다. 아, 한 가지 잊은 게 있습니다. 이 스택에 이름을 붙여야 합니다!</p>
+<h2 id="thanks">고마워요</h2>
+<p>다시 한 번 영감을 주신 <a href="https://twitter.com/dctanner">@dctanner님께</a> 감사드립니다. 그의 리포지토리도 확인해 보시기 바랍니다:</p>
+<p><a href="https://github.com/dctanner/htmljs-todo-example">https://github.com/dctanner/htmljs-todo-example</a></p>
+
+			</article>
+		</div></div>
+	      </article>
+			</main>
+    </body>
+  </html>
+  
