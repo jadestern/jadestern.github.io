@@ -1,0 +1,339 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>htmx: Simplicity in an Age of Complicated Solutions</title>
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+      <script src="//unpkg.com/alpinejs" defer></script>
+    </head>
+    <body x-data="{ dark: false }" x-bind:data-theme="dark ? 'dark' : 'light'">
+      <main class="container">
+      	<button x-on:click="dark = !dark" class="contrast outline">Switch Theme</button>
+	      <article>
+	        <div id="readability-page-1" class="page"><section>
+<p>거의 40년 전, 소프트웨어 엔지니어이자 ' <em>신화적 인간-월간</em>'의 작가인 프레드 브룩스는 이렇게 <a href="http://www.cs.unc.edu/techreports/86-020.pdf">썼습니다</a>:</p>
+<blockquote>
+<p>본질적으로 은총은 없습니다.</p>
+</blockquote>
+<p>그는 소프트웨어 구축의 복잡성과 그 과정을 훨씬 더 빠르게 진행할 수 있는 방법이 없다는 점에 대해 글을 썼습니다. 또한 그는 소프트웨어를 구축할 때 발생하는 복잡성을 소프트웨어가 해결하려는 문제에 내재된 <em>본질적</em> 복잡성과 개발 과정에서 우리가 내리는 선택에 의해 발생하는 <em>우발적</em> 복잡성의 두 가지 유형으로 분류했습니다. 우발적 복잡성의 예로 재사용성을 들 수 있는데, 코드를 변경해야 할 때 두 곳(또는 그 이상)에서 변경해야 하는 것을 원하지 않기 때문에 같은 코드를 두 번 작성하고 싶지 않을 수 있습니다.</p>
+<p>'실버 불릿'이라는 용어는 모든 상황에 보편적으로 적용할 수 있는 단일 기술이나 소프트웨어는 존재하지 않거나 소수에 불과하다는 사실을 경멸적으로 표현할 때 사용되기도 합니다. 모든 문제를 마법처럼 해결해 주는 단 하나의 기술을 우연히 발견하고 싶지 않은 개발자가 어디 있을까요? 하지만 프레드 브룩스가 설득력 있게 말했듯이 그런 것은 존재하지 않습니다. 업계는 이 사실을 깨닫는 데 어려움을 겪고 있는 것 같습니다.</p>
+<p>'은총'의 후보들은 종종 우발적인 복잡성에 초점을 맞춰 개발자의 삶을 더 쉽게 만들려고 노력하지만, <em>공짜 점심 같은 것은 없다는</em> 말이 있듯이 모든 것에는 비용이나 트레이드오프가 따릅니다. 제 생각에는 오늘날 종종 지불하는 비용은 <em>단순성에</em> 대한 비용이며, 특정 솔루션이 코드를 더 쉽게 재사용할 수 있게 해주지만 코드를 더 복잡하게 만들 수도 있습니다.</p>
+<h2 id="front-end-complexity">프론트엔드 복잡성</h2>
+<p>프런트엔드 개발은 이러한 사례로 가득 차 있습니다. 많은 프런트엔드 개발자들 사이에서 엔지니어링 문화는 <em>단순성이라는</em> 단어가 더러운 단어인 것처럼 보입니다. 높은 수준의 추상화, 엄청나게 복잡하고 긴 빌드 프로세스, 형편없는 성능, 끔찍한 툴링, 버그가 많은 애플리케이션이 존재하지만 모두들 이를 괜찮아하는 것처럼 보입니다.</p>
+<p><img src="https://www.erikheemskerk.nl/content/images/2024/this_is_fine.gif" alt="Animated version of the ‘This is fine’&nbsp;meme"></p>
+<p>예를 들어 보겠습니다. 사이트에 검색 기능을 추가하려고 합니다. HTML 5만 있으면 텍스트 필드가 있는 양식을 만들 수 있습니다.</p>
+<pre translate="no"><code translate="no">&lt;form method="GET" action="/search"&gt;
+  &lt;input type="search" name="query" placeholder="Search" /&gt;
+  &lt;input type="submit" value="Search" /&gt;
+&lt;/form&gt;
+</code></pre>
+<p><img src="https://www.erikheemskerk.nl/content/images/2024/search_form.png" alt="Search form in HTML5"></p>
+<p>이것은 매우 기본적이지만 작업을 완료합니다. 필드에 무언가를 입력하고 Enter 키를 누르거나 검색 버튼을 클릭하면 쿼리가 서버로 전송되고 일부 검색 결과가 포함된 응답이 전체 페이지를 대체합니다. 전체 페이지를 대체한다는 사실에 당황할 수 있습니다. 연결 속도가 느리거나 연결 상태가 좋지 않은 경우(호텔이나 기차 와이파이를 사용해 본 사람이라면 누구나 알 수 있는 문제) 차단 리소스가 로드되는 동안 페이지의 대화형 기능이 일시적으로 중단됩니다. 로딩이 완료되면 스크롤 위치, 양식 필드에 입력한 데이터, 축소 또는 확장된 요소 등 페이지의 모든 상태가 손실됩니다.</p>
+<p>페이지의 일부만 변경하여 검색 결과를 표시하면 훨씬 더 나은 사용자 경험을 제공할 수 있습니다. 안타깝게도 이것은 HTML의 일부가 아닙니다. 자바스크립트가 도움이 될 수 있습니다.</p>
+<h2 id="vanilla-javascript">바닐라 자바스크립트</h2>
+<p>'바닐라' 자바스크립트 코드가 포함된 <code translate="no">&lt;script&gt;</code> 태그를 추가하여 프로세스를 비동기식으로 만들겠습니다. 당연히 'REST 엔드포인트'에서 JSON을 요청할 것입니다. GraphQL이 아닙니다. 지나친 엔지니어링이 될 수 있습니다.</p>
+<pre translate="no"><code translate="no">&lt;input type="search" id="searchInput" placeholder="Search..."&gt;
+&lt;button id="searchButton"&gt;Search&lt;/button&gt;
+&lt;ul id="resultsList"&gt;&lt;/ul&gt;
+
+&lt;script&gt;
+  const resultsList = document.getElementById('resultsList');
+  const searchInput = document.getElementById('searchInput');
+  const searchButton = document.getElementById('searchButton');
+
+  searchButton.addEventListener('click', handleSearch);
+  searchInput.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
+  });
+
+  async function handleSearch() {
+    const searchTerm = searchInput.value.trim();
+    const encodedSearchTerm = encodeURIComponent(searchTerm);
+    const apiUrl = `/search?query=${encodedSearchTerm}`;
+    resultsList.innerHTML = ''; // Clear previous results
+
+    const response = await fetch(apiUrl);
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+
+    if (data.length === 0) {
+      resultsList.innerHTML = 'No results found.';
+    } else {
+      data.forEach(result =&gt; {
+        const listItem = document.createElement('li');
+        listItem.textContent = result.title;
+        resultsList.appendChild(listItem);
+      });
+    }
+}
+&lt;/script&gt;
+</code></pre>
+<p>그렇죠. 여기에는 HTML 버전보다 훨씬 더 많은 것이 있습니다. 많은 코드가 <em>번역에</em> 초점을 맞추고 있습니다. 원시 검색 쿼리와 URL 간의 번역. (가정된) JSON 응답과 DOM 요소 간의 번역. DOM 요소 가져오기 및 생성, 이벤트 핸들러 추가, 키 입력 처리... 얼마나 많은 작업이 필요한지 살펴보십시오.</p>
+<p>이것은 많은 문제가 있는 매우 제한적인 예시입니다:</p>
+<ul>
+<li>검색 결과의 표현이 너무 기본적이어서 링크도 아닙니다;</li>
+<li>네트워크 상태가 좋은 경우(예: 브라우저와 로컬 호스트 사이)에는 꽤 잘 작동하지만 호텔 와이파이를 사용할 때는 일종의 로딩 표시기가 있으면 좋을 것 같습니다;</li>
+<li>다른 요청이 아직 진행 중인 상태에서 새 요청을 시작하면 이전 요청이 취소되거나 최소한 삭제되면 좋을 것 같습니다.</li>
+</ul>
+<p>브라우저에서 실행되는 이 코드와 서버의 코드 사이에는 암묵적인 계약, 즉 응답의 형태가 있다는 점에 유의하세요. 이 코드에서는 응답이 객체 배열을 포함하는 JSON이며 각 객체에는 <code translate="no">title</code> 이라는 속성이 있다고 가정합니다. 그렇지 않은 경우 오류 처리가 없으므로 사용자에게 아무 일도 일어나지 않은 것처럼 표시됩니다.</p>
+<p>로딩 표시기를 처리하고 기내 요청을 중단하려면 약간의 추가 코드가 필요하지만 결과 레이아웃을 위한 <em>가독성</em> 있는 코드를 작성하는 것은 그리 어렵지 않습니다. 이제 모든 작업을 중단하고 React를 사용해 봅시다!</p>
+<h2 id="react">React</h2>
+<pre translate="no"><code translate="no">import React, { useState, useEffect } from 'react';
+
+function Search() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [abortController, setAbortController] = useState(null);
+
+  const handleSearch = async () =&gt; {
+    if (abortController) {
+      // Abort the previous request if there is one
+      abortController.abort();
+    }
+
+    if (searchTerm.trim() === '') {
+      setResults([]);
+      return;
+    }
+
+    const encodedSearchTerm = encodeURIComponent(searchTerm.trim());
+    const apiUrl = `/search?q=${encodedSearchTerm}`;
+
+    setResults([]);
+    setLoading(true);
+
+    const controller = new AbortController();
+    setAbortController(controller);
+
+    try {
+      const response = await fetch(apiUrl, { signal: controller.signal });
+
+      if (controller.signal.aborted) {
+        // Request was aborted, so no further action is needed
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      setResults(data);
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        // Display an error message only if it's not an abort
+        console.error('Fetch error:', error);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleKeyPress = (event) =&gt; {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
+  useEffect(() =&gt; {
+    return () =&gt; {
+      // Cleanup function to abort the request if the component unmounts
+      if (abortController) {
+        abortController.abort();
+      }
+    };
+  }, [abortController]);
+
+  return (
+    &lt;input
+      type="search"
+      onChange={(e) =&gt; setSearchTerm(e.target.value)}
+      onKeyPress={handleKeyPress}
+    /&gt;
+    &lt;button onClick={handleSearch}&gt;Search&lt;/button&gt;
+    {loading &amp;&amp; &lt;div&gt;Loading...&lt;/div&gt;}
+    &lt;ul&gt;
+      {results.map((result, index) =&gt; (
+          &lt;li key={`result-${index}`}&gt;&lt;a href={result.href}&gt;{result.title}&lt;/a&gt;&lt;/li&gt;
+      ))}
+    &lt;/ul&gt;
+  );
+}
+
+export default Search;
+</code></pre>
+<p>이것이 얼마나 방대해지고 있는지 보세요. 솔직히 말해서, 이것은 순수 자바스크립트 버전보다 <em>훨씬</em> 크지도 않습니다. 상태 선언과 처리, 오류 처리, 그리고 요청을 중단하는 로직과 관련된 몇 줄의 추가 로직이 있습니다. 하지만 두 가지를 지적하고 싶습니다.</p>
+<p>첫째, 이제 컴포넌트가 DOM에서 제거될 때(또는 React 용어로 '마운트 해제') 정리해야 하는 일부 상태를 포함해 관리해야 할 상태가 훨씬 더 많아졌습니다(마지막에 있는 <code translate="no">useEffect</code> 호출이 바로 그것입니다).</p>
+<p>둘째, 앞의 두 가지 솔루션과 달리, 이것을 파일에 넣고 <code translate="no">&lt;script&gt;</code> 태그를 사용하여 액세스한 다음 작동하기를 기대할 수는 없습니다. 기본적으로 이런 <em>종류의</em> 자바스크립트 파일을 <em>실제</em> 자바스크립트 파일로 트랜스파일해야 합니다. 이를 위해서는 React 애플리케이션을 설정해야 합니다. 즉, 복잡한 디렉토리 구조를 설정하는 NPM 스크립트를 실행하여 명령줄 애플리케이션을 실행하여 웹 서버를 시작할 수 있도록 구성한 다음 React 애플리케이션을 제공할 수 있도록 설정해야 합니다. 소위 프로덕션 빌드를 수행한 후에도 플레이스홀더와 스크립트 태그가 포함된 HTML 파일과 청크라고 하는 자바스크립트 파일이 남게 되는데, 여기에는 애플리케이션의 작은 부분과 애플리케이션에 필요한 필수 서드파티 라이브러리가 포함되어 있습니다. 모든 부분은 런타임에만 의미가 있으며, 이 때 모두 결합되어 작동해야 합니다.</p>
+<p>그리고 이 버전의 검색창은 그 복잡성에도 불구하고 <em>여전히</em> 한계가 있습니다. 사용자가 입력하는 동안 초점을 잃거나 버튼을 클릭할 필요 없이 검색이 계속 수행되는 증분 검색을 지원하지 않습니다. 웹 애플리케이션에서는 일반적으로 키를 누를 때마다 검색이 수행되는 것이 아니라 사용자가 잠시 타이핑을 멈출 때만 검색이 수행됩니다. 또 다른 문제는 검색을 완료하면 페이지의 URL이 업데이트되지 않는다는 것입니다. 즉, 검색어를 공유하거나 북마크에 추가하거나 새 브라우저 탭에서 열 수 없습니다. 이 결함은 순수 자바스크립트 버전에서는 공유되지만, 단순 HTML 버전에서는 단순히 다른 URL로 이동하기 때문에 공유되지 않습니다.</p>
+<p>순수 자바스크립트나 리액트 버전의 코드에서 이러한 문제를 모두 극복할 수는 있지만, 코드가 훨씬 더 복잡해질 수 있다는 것을 모두 알고 있습니다. 대신 JavaScript를 점점 더 많이 추가하지 않고 HTML 측면에 집중하는 접근 방식을 살펴봅시다.</p>
+<h2 id="htmx">Htmx</h2>
+<p><a href="https://htmx.org/">Htmx는</a> HTML 속성만 사용하여 HTML 요소에 가져오기 기능을 추가할 수 있는 작은 자바스크립트 라이브러리입니다. 표준 <code translate="no">&lt;button&gt;</code> 요소가 클릭될 때 HTTP 요청을 하고 몇 가지 속성만으로 응답을 처리하도록 할 수 있습니다.</p>
+<pre translate="no"><code translate="no">&lt;button hx-post="/transfer/all?to=randomCharity" 
+        hx-target="#thanks"&gt;
+  Empty my bank account
+&lt;/button&gt;
+&lt;div id="thanks"&gt;&lt;/div&gt;
+</code></pre>
+<p>여기서 <code translate="no">hx-post</code> 속성은 해당 버튼을 클릭하면 해당 URL로 <code translate="no">POST</code> 요청이 이루어지도록 정의합니다. <code translate="no">hx-target</code> 속성은 <a href="https://drafts.csswg.org/selectors/">CSS 선택기로</a> 응답을 표시할 위치(이 경우 <code translate="no">id</code> 속성이 <code translate="no">thanks</code> 와 같은 요소)를 정의합니다. 그렇다면 htmx는 응답에서 어떤 HTML 요소를 생성할지 어떻게 알 수 있을까요? 간단한 답이 있는 좋은 질문입니다. 응답은 <strong>HTML입니다</strong>. 따라서 브라우저는 백엔드 시스템에서 수신한 데이터를 DOM 요소로 변환하기 위해 코드를 실행할 필요가 없으며, 이미 처리 방법을 알고 있는 HTML만 수신합니다.</p>
+
+<p>대부분의 SPA 프레임워크와 달리 htmx는 브라우저에서 전체 애플리케이션을 실행하는 것이 아니라 브라우저를 '덤'으로 유지하려고 합니다. 이를 위해 <em>하이퍼미디어라는</em> 수십 년 된 개념을 활용합니다. 하이퍼미디어란 무엇인가요? htmx의 저자가 쓴 <a href="https://hypermedia.systems/">하이퍼미디어 시스템이라는</a> 책에 따르면:</p>
+<blockquote>
+<p>하이퍼미디어는 예를 들어 텍스트와 같은 미디어로, 미디어에 삽입된 하이퍼링크를 통해 미디어의 한 위치에서 다른 위치로 <em>비선형적으로 분기되는</em> 것을 포함합니다.</p>
+</blockquote>
+<p>여기서 중요한 부분은 <em>미디어에 임베드되어</em> 있다는 점입니다. 하이퍼텍스트(HTML과 같은 하이퍼미디어인 텍스트)에는 텍스트 내에 인코딩된 가능한 상호작용에 대한 모든 정보가 포함되어 있습니다. 몇 년 전 Google의 검색 결과 페이지에 '다음 페이지' 링크가 있어 더 많은 페이지가 있다는 것을 알 수 있었습니다. 다음 페이지의 URL이 무엇인지 사용자나 브라우저가 이해할 필요는 없습니다. 브라우저에서 Google로부터 받은 HTML에 포함되어 있기 때문입니다. URL 구조를 변경하는 경우 하나의 애플리케이션에서만 변경하면 됩니다. 예를 들어 다음 페이지가 아닌 5페이지 위에 있는 페이지로 이동하는 새로운 기능을 추가하는 경우 하이퍼링크를 하나 더 추가하는 것만큼 간단합니다.</p>
+<h2 id="rest-done-poorly">휴식, 제대로 수행되지 않음</h2>
+<p>웹 API를 한동안 개발해 온 분이라면 경종을 울릴 수 있는 내용입니다. 웹 API에 대해 이야기할 때 여전히 자주 들리는 개념은 HATEOAS: 애플리케이션 상태의 엔진으로서의 하이퍼텍스트입니다. 이는 표현 상태 전송에 관한 Roy Fielding의 논문에 나오는 몇 가지 이질적인 개념에서 파생된 RESTful API의 제약 조건입니다. 이러한 개념은 <em>상태 없는 통신과</em> <em>자기 설명적 메시지이며</em>, 클라이언트가 하드코딩된 지식이나 대역 외 정보 없이도 서버가 제공하는 정보만을 사용하여 애플리케이션을 탐색하고 상호 작용할 수 있어야 한다는 개념입니다. 이것이 바로 하이퍼미디어가 해결하는 문제입니다.</p>
+<p>REST, 즉 대표 상태 전송은 원래 분산 애플리케이션을 위한 아키텍처 스타일로 고안된 개념입니다. 오늘날 'REST'는 일반적으로 URL 구성 방식에 대한 의견을 가지고 있으며 <code translate="no">GET</code> 및 <code translate="no">POST</code> 보다 더 많은 동사를 사용하는 JSON API를 의미합니다. 문제는: JSON은 그 자체로 <em>하이퍼미디어 제어</em> (이러한 비선형 분기를 허용하는 요소)를 용이하게 하지 않기 때문에 대부분의 JSON API는 실제로 RESTful이 아닙니다.</p>
+<p>문서에 링크를 추가하여 JSON API를 보다 RESTful하게 만들기 위한 노력이 계속되고 있습니다. 가장 친숙한 것 중 하나는 HAL, 즉 하이퍼텍스트 애플리케이션 언어입니다. 이는 모든 JSON 문서에, 심지어 문서의 요소 내에도 잘 알려진 속성을 추가합니다. 검색 작업에 대한 응답이 다음과 같다고 상상해 보세요:</p>
+<pre translate="no"><code translate="no">{
+  "_links": {
+    "self": "https://example.org/api/search?q=complexity&amp;p=4",
+    "first": "https://example.org/api/search?q=complexity",
+    "prev": "https://example.org/api/search?q=complexity&amp;p=3",
+    "next": "https://example.org/api/search?q=complexity&amp;p=5"
+    "last": "https://example.org/api/search?q=complexity&amp;p=42"
+  },
+  "_embedded": {
+    "results": [
+      {
+        "_links": {
+          "self": "http://www.cs.unc.edu/techreports/86-020.pdf"
+        },
+        "title": "No Silver Bullet: Essence and Accidents of Software Engineering" 
+      },
+      // ...
+    ]
+  }
+}
+</code></pre>
+<p>첫 페이지로 이동하는 방법, 다음 페이지로 이동하는 방법, 각 검색 결과로 이동하는 방법을 설명합니다. 예를 들어 현재 어느 페이지에 있는지, 총 몇 페이지가 있는지, 17번째 페이지로 이동하는 방법은 설명하지 않습니다. 예, 모든 페이지에 대한 URL을 추가할 수는 있지만 이제 이러한 링크를 처리하려면 클라이언트에서 <em>하드코딩된 지식이</em> 필요합니다. 최소한 <code translate="no">first</code>, <code translate="no">prev</code>, <code translate="no">next</code>, <code translate="no">last</code> 은 일종의 표준화된 링크 이름이지만 임의의 페이지에 대한 링크를 제공하려면 <code translate="no">page:17</code> 과 같은 사용자 정의 체계를 만들어야 합니다. 이를 사용하려면 더 많은 하드코딩 지식이 필요합니다.</p>
+<p>또 다른 해결책은 특정 페이지의 URL이 어떻게 구성되는지 설명하는 링크 '템플릿'을 추가하는 것입니다. 이런 식으로요:</p>
+<pre translate="no"><code translate="no">{
+  "_links": {
+    "template:page": "https://example.org/api/search?q=complexity&amp;p=%d"
+  }
+}
+</code></pre>
+<p>이제 클라이언트에서 이 링크를 찾고 플레이스홀더 <code translate="no">%d</code> 를 원하는 페이지 번호로 바꾸라는 <em>하드코딩된 지식이</em> 필요합니다.</p>
+<p>검색 양식과 같은 <em>사소한</em> 것을 이런 방식으로 설명한다고 상상해 보세요. 클라이언트 애플리케이션에 어떤 식으로든 의미가 있어야 하는 모든 종류의 자리 표시자와 마법 같은 값이 필요할 것입니다. 진정한 RESTful JSON API가 간혹 가능하지만 매우 제한적이고 취약합니다.</p>
+<h2 id="rest-done-proper">제대로 된 REST</h2>
+<p>반면 HTML은 진정한 하이퍼미디어이므로 HTML만 사용하여 RESTful 애플리케이션을 만드는 것은 거의 불가능에 가깝습니다. 앞서 설명한 것처럼 HTML에는 한계가 있으며, htmx와 같은 라이브러리를 사용하면 대부분의 한계를 극복할 수 있습니다. HTML로 검색 결과가 어떻게 표시될지 쉽게 상상할 수 있습니다.</p>
+<pre translate="no"><code translate="no">&lt;ul&gt;
+  &lt;li&gt;&lt;a href="http://www.cs.unc.edu/techreports/86-020.pdf"&gt;No Silver Bullet: Essence and Accidents of Software Engineering&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;nav&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;a href="/search?q=complexity"&gt;&amp;laquo; First&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="/search?q=complexity&amp;amp;p=3"&gt;3&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;4&lt;/li&gt;
+    &lt;li&gt;&lt;a href="/search?q=complexity&amp;amp;p=5"&gt;5&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="/search?q=complexity&amp;amp;p=42"&gt;Last &amp;raquo;&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;
+</code></pre>
+<p>이것이 브라우저에서 렌더링되면 스타일링 없이도 완벽하게 작동합니다. 하이퍼링크는 자체 설명이 가능하기 때문에 작동합니다. 페이지 번호를 수동으로 입력할 수 있는 검색 상자를 추가하고 싶으면 복잡한 과정을 거치지 않고도 그렇게 할 수 있습니다. <code translate="no">&lt;nav&gt;</code> 요소에 다음 조각을 추가하기만 하면 됩니다:</p>
+<pre translate="no"><code translate="no">&lt;form method="get" action="/search"&gt;
+  &lt;input type="hidden" name="q" value="complexity" /&gt;
+  &lt;input type="number" name="p" min="1" max="42" /&gt;
+&lt;/form&gt;
+</code></pre>
+<p>정말 간단합니다! HTML의 강력한 <em>기능</em> 덕분에 이렇게 하면 됩니다. 숫자를 입력하고 Enter 키를 누르기만 하면 됩니다. 숨겨진 필드는 애플리케이션의 모든 상태를 전송하는 데 사용되며, 올바른 사용자 인터페이스 요소를 렌더링하고 적절하게 작동하도록 하는 것은 브라우저의 몫입니다. 인증은 <em>페이지이므로</em> 모든 페이지를 볼 때와 동일한 방식으로 수행됩니다. 응답 헤더를 올바르게 설정했다는 가정 하에 캐싱은 즉시 작동합니다.</p>
+<p>남은 문제는 여전히 전체 페이지를 새로 고쳐서 상태가 손실된다는 것입니다. htmx를 사용하여 이 문제를 해결해 보겠습니다.</p>
+<h2 id="the-power-of-attributes">속성의 힘</h2>
+<p>앞서 살펴본 것처럼 htmx는 각 요소에 Fetch 요청을 트리거하여 요소를 교체할 수 있는 새로운 속성을 정의함으로써 HTML을 <em>향상시킵니다</em>. 이러한 속성을 통해 다음과 같은 사항을 정의할 수 있습니다:</p>
+<ul>
+<li>요청 방법 및 위치; <code translate="no">hx-get</code>, <code translate="no">hx-post</code>, <code translate="no">hx-put</code>, <code translate="no">hx-delete</code> 등과 같은 속성으로 수행됩니다.</li>
+<li>페이지에서 무엇을 <em>바꿀지</em>; 주로 <code translate="no">hx-target</code>. <code translate="no">hx-swap</code> 을 사용하면 콘텐츠 교체 <em>방법</em> (대상의 내부 HTML을 바꿀지, <em>외부</em> HTML을 바꿀지(즉, 전체 요소 교체), 대상의 내부 또는 뒤에 추가할지)을 정의할 수 있습니다.</li>
+<li>언제 요청할지. 기본 트리거는 요소에 따라 다릅니다. 예를 들어 텍스트 상자와 드롭다운 목록은 값이 변경될 때 트리거되고, 양식은 제출되는 양식에 의해 트리거되며, 그 외 모든 요소는 클릭에 의해 트리거됩니다. <code translate="no">hx-trigger</code> 을 사용하여 트리거할 다른 이벤트를 하나 또는 여러 개 지정하고 지연 또는 값이 변경되었을 때만 트리거하는 등의 수정자를 추가할 수 있습니다.</li>
+<li>응답의 어느 부분을 사용할지. 기본적으로 모든 부분이 사용되지만 응답의 특정 부분만 사용하려는 경우 <code translate="no">hx-select</code> 을 사용하면 됩니다.</li>
+<li>URL을 브라우저의 기록에 푸시하여 주소 표시줄의 URL을 대체할지 여부. <code translate="no">hx-push-url</code> 을 사용하면 요청 URL 또는 사용자 지정 URL을 브라우저 기록에 푸시할 수 있습니다.</li>
+</ul>
+<p>이 외에도 많은 <a href="https://htmx.org/reference/">속성이</a> 있지만 대부분의 문제를 해결할 수 있는 핵심 <a href="https://htmx.org/reference/">속성이</a> 있습니다. 그렇다면 이를 페이지 매김 링크에 어떻게 적용할 수 있을까요?</p>
+<p>애플리케이션이 페이지를 렌더링하는 방식에 대해 아무것도 변경하지 않는다고 가정해 봅시다. 즉, <code translate="no">/search?q=complexity</code> 은 첫 번째 결과 페이지가 포함된 전체 HTML 페이지를 반환하고 <code translate="no">/search?q=complexity&amp;p=2</code> 은 두 번째 결과 페이지가 포함된 전체 HTML 페이지를 반환합니다. 검색 결과를 <code translate="no">&lt;section id="results"&gt;</code> 요소에 넣는 이유는 타깃을 쉽게 찾을 수 있기 때문입니다. 이것이 개별 페이지 링크의 모습입니다:</p>
+<pre translate="no"><code translate="no">&lt;li&gt;
+  &lt;a hx-get="/search?q=complexity&amp;amp;p=3" 
+     hx-select="section#results"
+     hx-target="section#results"
+     hx-swap="outerHTML"
+     hx-push-url="true"&gt;3&lt;/a&gt;
+&lt;/li&gt;
+</code></pre>
+<p>이 다섯 가지 속성은 다음과 같은 동작을 정의합니다:</p>
+<ul>
+<li><code translate="no">hx-get</code>: 이 링크를 클릭(또는 활성화)하면 <code translate="no">/search?q=complexity&amp;p=3</code> 으로 <code translate="no">GET</code> 요청을 보냅니다.</li>
+<li><code translate="no">hx-select</code>: 이에 대한 응답에서 ID가 <code translate="no">results</code> 인 <code translate="no">&lt;section&gt;</code> 요소를 선택합니다.</li>
+<li><code translate="no">hx-target</code>: 이를 현재 페이지에 있는 <code translate="no">results</code> ID를 가진 <code translate="no">&lt;section&gt;</code> 요소로 바꿉니다.</li>
+<li><code translate="no">hx-swap</code>: 대상의 외부 HTML을 바꿉니다. 즉, 전체 요소를 교체합니다.</li>
+<li><code translate="no">hx-push-url</code>: URL <code translate="no">/search?q=complexity&amp;p=3</code> 을 브라우저 기록과 주소창에 밀어넣습니다.</li>
+</ul>
+<p>그게 다입니다! 이제 페이지 매김 링크가 영향을 미치는 페이지의 일부만 바뀝니다. 이를 위해 자바스크립트를 전혀 작성하지 않았으며 애플리케이션은 여전히 RESTful입니다.</p>
+<p>하지만 잠깐만요, 더 좋아집니다. Htmx는 점진적 <em>향상을</em> 지원합니다. 즉, 기본적인 HTML 전용 기능으로 시작할 수 있으며 브라우저에서 JavaScript를 허용하고 htmx 라이브러리가 로드된 경우에만 전체 기능을 사용할 수 있습니다. 이렇게 하면 검색 엔진이 페이지 구조를 더 쉽게 이해할 수 있습니다. 다음과 같이 보입니다:</p>
+<pre translate="no"><code translate="no">&lt;li&gt;
+  &lt;a href="/search?q=complexity&amp;amp;p=3" 
+     hx-boost="true"
+     hx-select="section#results"
+     hx-target="section#results"
+     hx-swap="outerHTML"&gt;3&lt;/a&gt;
+&lt;/li&gt;
+</code></pre>
+<p><code translate="no">hx-get</code> 대신 일반적인 <code translate="no">href</code> 속성이 있고, 앵커 태그에 <code translate="no">hx-boost=true</code> 을 정의했기 때문에 htmx는 <code translate="no">href</code> 속성의 URL에 <code translate="no">GET</code> 요청을 하고 브라우저 기록에 해당 URL을 푸시하는 것을 알고 있습니다.</p>
+<h2 id="search-in-htmx">htmx에서 검색</h2>
+<p>아직 여기까지 읽으셨다면 수고하셨습니다. 이제 앞서 살펴본 검색 예제로 돌아가서 htmx를 사용하면 어떻게 되는지 살펴보겠습니다.</p>
+<pre translate="no"><code translate="no">&lt;input type="search"
+       name="q"
+       placeholder="Search"
+       hx-get="/search"
+       hx-target="section#searchResults"
+       hx-select="section#searchResults"
+       hx-trigger="search, click from:#searchButton"
+       hx-indicator="#searchLoading"
+       hx-sync="this:replace" /&gt;
+&lt;button id="searchButton"&gt;Search&lt;/button&gt;
+&lt;div id="searchLoading" class="htmx-indicator"&gt;Loading...&lt;/div&gt;
+&lt;section id="searchResults"&gt;
+  &lt;!-- put search results here --&gt;
+&lt;/section&gt;
+</code></pre>
+<p>여기서 <code translate="no">hx-get</code>, <code translate="no">hx-target</code>, <code translate="no">hx-select</code> 요소가 무엇을 하는지 이해하셨기를 바랍니다.</p>
+<p><code translate="no">hx-trigger</code> 는 요청이 트리거되는 시점을 정의합니다. 이 경우에는 <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/search_event"><code translate="no">search</code> 이벤트</a> 또는 <code translate="no">click</code> 이벤트가 ID가 <code translate="no">searchButton</code> 인 요소에 의해 실행될 때입니다. 다음으로 <code translate="no">hx-indicator</code> 은 이 요소에 요청이 발생할 때마다 표시되어야 하는 요소를 설정합니다. 마지막으로 <code translate="no">hx-sync</code> 은 전송 중인 요청이 있는 동안 새 요청이 트리거되면 전송 중인 요청이 새 요청으로 대체되도록 정의합니다.</p>
+<p>이것은 기능적으로 React 버전과 동일합니다. 하지만 htmx를 사용하면 앞서 언급한 증분 검색과 주소 표시줄의 URL 업데이트와 같은 제한 사항을 제거할 수 있습니다.</p>
+<pre translate="no"><code translate="no">&lt;input type="search"
+       name="q"
+       placeholder="Search"
+       hx-get="/search"
+       hx-target="section#results"
+       hx-select="section#results"
+       hx-trigger="search, click from:#searchButton, keyup changed delay:300ms"
+       hx-indicator="#searchLoading"
+       hx-sync="this:replace"
+       hx-push-url="true" /&gt;
+</code></pre>
+<p>새로운 것은 추가 트리거와 <code translate="no">hx-push-url</code> 어트리뷰트뿐입니다. 새로운 트리거인 <code translate="no">keyup changed delay:300ms</code> 은 '키 업' 이벤트에서 요청을 트리거하되, 필드 값이 변경된 경우에만, 그리고 300밀리초 동안 새로운 키 업 요청이 수신되지 않은 경우에만 트리거해야 한다는 것을 의미합니다. 이는 증분 검색이지만 모든 키 입력에 대해 요청을 보낼 때와 같이 애플리케이션에 요청을 대량으로 보내지 않습니다. 마지막으로 <code translate="no">hx-push-url</code> 은 <code translate="no">true</code> 으로 설정되므로 요청의 최종 URL이 주소창의 새 위치로 설정되고 이전 주소는 브라우저 기록에 추가됩니다. 브라우저 기록 푸시 및 팝핑을 구현해 본 적이 있다면 htmx의 솔루션이 얼마나 간단한지 알 수 있을 것입니다.</p>
+<h2 id="howl">HOWL</h2>
+<p>대부분 자바스크립트로 구현된 프런트엔드가 있다면 다음과 같은 주장이 떠오를 것입니다:</p>
+<blockquote>
+<p>백엔드에서도 JavaScript를 사용하여 코드를 재사용하고 프론트엔드 개발자가 백엔드에서도 작업할 수 있도록 하자.</p>
+</blockquote>
+<p>저는 몇 가지 이유로 이 주장을 싫어합니다.</p>
+<p>우선, 자바스크립트입니다. 자바스크립트는 브라우저 내부를 제외하고는 그 어떤 용도로도 훌륭한 언어가 아닙니다. 제대로 된 표준 라이브러리를 확보하고 타입 강제성 및 기타 여러 가지 깨진 언어 기능을 버리지 않는 한 앞으로도 그럴 가능성이 높습니다. 아무리 개발자가 규율을 지키고 보푸라기를 제거해도 이런 문제를 <em>진정으로</em> 완화할 수는 없습니다. 안타깝게도 브라우저에서 자바스크립트를 사용할 수밖에 없지만, 할 수만 있다면 다른 곳에서는 자바스크립트를 사용하지 말자고요.</p>
+<p>둘째, 프론트엔드와 백엔드 사이에서 코드를 재사용하는 것입니다. 좋은 생각처럼 들리지만 요청에 응답하는 웹 서버는 사용자 상호 작용에 응답하는 브라우저에서 실행되는 코드와는 매우 다른 애플리케이션 모델을 사용합니다. 코드를 재사용한다는 것은 거의 확실하게 둘 중 하나를 의미가 없는 추상화로 강제하는 것을 의미합니다. 게다가 애플리케이션 모델과 더 많은 차이점이 있기 때문에 프론트엔드 개발과 백엔드 개발 사이에는 상당한 학습 곡선이 존재합니다.</p>
+<p>프론트엔드에서 자바스크립트에 더 많이 투자할수록 이 논쟁의 압박은 더 커질 것입니다.</p>
+<p>다행히도 htmx를 사용하면 프런트엔드에서 JavaScript를 거의 작성하지 않기 때문에 이 논쟁에 휘말릴 필요가 없습니다. 원하는 서버 측 언어와 프레임워크를 사용할 수 있습니다. 자바스크립트를 선호하지 않는다고 해서 반드시 자바스크립트를 사용해야 한다는 <em>부담은</em> 없습니다. 기존 코드 기반이 대부분 Python으로 되어 있나요? 장고나 플라스크는 모두 htmx와 매우 잘 통합됩니다. Java 또는 .NET을 좋아하시나요? 루비나 러스트는 어떨까요? 이 모든 언어에는 HTML 기반 애플리케이션을 만들 수 있는 훌륭한 옵션이 있으며, 여기에 htmx를 추가하는 것은 간단합니다. htmx 커뮤니티에서는 이를 HOWL: Hypermedia On Whatever you Like라고 부릅니다.</p>
+<h2 id="silver-bullet">간단하죠?</h2>
+<p>htmx가 SPA 프레임워크보다 <em>더</em> 간단한 솔루션이라는 점에 동의해 주셨으면 좋겠습니다. 카슨 그로스(htmx의 개발자)는 <a href="https://htmx.org/essays/complexity-budget/">복잡성 예산</a>, 다시 말해 애플리케이션에서 복잡성을 허용하는 위치에 대해 이야기합니다. 대부분의 애플리케이션에서 프론트엔드는 바로 그 프론트엔드여야 합니다. 애플리케이션을 다른 애플리케이션과 차별화하는 것은 일반적으로 백엔드 기능입니다. 복잡성 예산을 프론트엔드에 사용하지 않고 백엔드에 투자하는 것은 매우 합리적입니다.</p>
+<p>하지만 이 글의 시작과 같이 만병통치약 같은 것은 없습니다. Htmx가 모든 상황에서 작동하는 것은 아닙니다. 매핑이나 그리기 앱처럼 애플리케이션의 대부분이 그래픽이거나 스프레드시트나 워드 프로세서처럼 사용자 입력에 따라 UI의 많은 부분을 다시 그려야 하는 경우에는 자바스크립트 기반 솔루션이 필요합니다. 사용자가 오프라인 상태에서도 앱을 사용할 수 있어야 하는 경우에도 자바스크립트 기반 솔루션이 필요합니다. 다행히도 대부분의 애플리케이션은 텍스트와 이미지로만 구성되어 있어 이러한 제약이 없습니다. 이러한 대다수의 경우 htmx가 좋은 솔루션일 가능성이 높으며, 현재 널리 사용되는 SPA 프레임워크보다 더 나은 솔루션일 수도 있습니다.</p>
+<p>이 간단한 글보다 훨씬 더 잘 설명하는 <a href="https://htmx.org/essays/">에세이</a> 모음과 좋은 <a href="https://htmx.org/docs/">문서가</a> 많이 있는 <a href="https://htmx.org/">htmx 사이트를</a> 살펴보세요.</p>
+</section></div>
+	      </article>
+			</main>
+    </body>
+  </html>
+  
