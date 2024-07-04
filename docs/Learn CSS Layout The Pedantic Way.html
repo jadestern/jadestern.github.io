@@ -1,0 +1,70 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>Learn CSS Layout The Pedantic Way</title>
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+      <script src="//unpkg.com/alpinejs" defer></script>
+    </head>
+    <body x-data="{ dark: false }" x-bind:data-theme="dark ? 'dark' : 'light'">
+      <main class="container">
+      	<button x-on:click="dark = !dark" class="contrast outline">Switch Theme</button>
+	      <article>
+	        <div id="readability-page-1" class="page"><div id="wrapper"><blockquote>
+<p>관료 콘래드, 자네는 엄밀히 말하면 정답이야, 최고로 정답이지. 자네를 37등급으로 승진시키겠네. - 넘버 1.0 (퓨처라마, <a href="https://en.wikipedia.org/wiki/How_Hermes_Requisitioned_His_Groove_Back">S2E15</a>)</p>
+<p>거짓말은 하지 않겠네, 네오. 요원과 싸웠던 모든 남자와 여자가 죽었어. 하지만 그들이 실패한 곳에서 자네는 성공할 거야.</p>
+<p>왜요?</p>
+<p>콘크리트 벽을 뚫는 요원도 봤고, 클립을 모두 비우고 공기만 맞힌 요원도 봤지만, 그들의 힘과 속도는 여전히 규칙에 기반한 세상에 기반을 두고 있습니다. 그렇기 때문에 그들은 결코 <em>당신만큼</em> 강하거나 빠를 수 없습니다.</p>
+<p>무슨 말을 하려는 건가요? 제가 총알을 피할 수 있다고요?</p>
+<p>아니, 네오 네가 준비되면... 그럴 필요가 없다는 걸 말하려는 거야.</p>
+<ul>
+<li>모피어스 (매트릭스, 1999)</li>
+</ul>
+</blockquote>
+<p>CSS는 매트릭스처럼 규칙에 기반한 시스템입니다.</p>
+<p>저는 그 규칙을 설명하기 위해 이 챕터들을 썼습니다. 책 한 권 분량은 아니지만 긴 형식의 글입니다. CSS에 관한 책 한 권을 쓰고 싶지는 않지만 CSS 레이아웃에 관한 글을 쓰는 것은 유용했습니다. 제 접근 방식은 현학적입니다:</p>
+<blockquote>
+<p><em>현학적</em>: 형용사. (2): 특히 가르칠 때 사소한 세부 사항이나 형식주의에 지나치게 신경을 쓰는 것.</p>
+</blockquote>
+<p>분명히 이 단어는 부정적인 의미를 내포하고 있지만 저는 좋은 의미로 사용하고 있습니다. 기술적으로 정확한 것이 최고의 정답인가요? 아니요, 그렇지 않습니다. 하지만 이 주제에 대해서는 기술적으로 정확하지 않은 리소스도 충분히 있습니다.</p>
+<p>CSS 일반 흐름에 <code translate="no">inline</code> 및 <code translate="no">block</code> 요소가 있다는 것을 들어 보셨을 것입니다. 하지만 CSS에서 블록 및 인라인 요소의 상대적 위치는 실제로 요소의 <code translate="no">display</code> 속성에 의해 결정되지 않는다는 사실을 알고 계셨나요? 실제로는 요소의 형제 요소의 영향을 받는 서식 컨텍스트에 의해 결정됩니다.</p>
+<p>콘텐츠의 상대적 스택 순서를 "고정"하기 위해 <code translate="no">z-index</code> 을 사용했을 수 있습니다. 하지만 <code translate="no">z-index</code> 은 문서 전체에서 절대적인 것이 아니라 스태킹 컨텍스트에 따라 상대적이라는 사실을 알고 계셨나요?</p>
+<p>상자 모델에 대해 들어보셨을 것입니다. 하지만 실제로 콘텐츠 차원과 <code translate="no">margin: auto</code> 처리 방식에 미묘한 차이가 있는 최소 5가지의 다른 상자 모델이 있다는 것을 알고 계셨나요? 이 글을 읽으면 알게 될 것입니다.</p>
+<p>이 글은 CSS를 이미 알고 있는 분들을 위한 CSS 레이아웃에 관한 챕터입니다. 작은 시장처럼 보이지만 인정합니다. CSS 레이아웃을 배우기 위한 좋은 자료를 찾아보았지만 대부분 현학적이지 않다는 것을 알았습니다.</p>
+<p>웹사이트는 보통 점진적으로 발전하기 때문에 CSS 레이아웃은 배우기 어려울 수 있습니다. 즉, 여기저기서 작은 팁과 요령을 배우게 되고 결국 기본 레이아웃 알고리즘을 배우지 못하게 됩니다.</p>
+<p>이 챕터에서는 CSS 레이아웃의 모든 주요 개념을 안내하고 다양한 개념을 설명하는 수십 개의 응용 예제를 포함합니다.</p>
+<p><a href="https://book.mixu.net/css/1-positioning.html">1장: CSS의 상자 위치</a> 지정에서는 HTML 요소가 생성하는 상자를 서로 상대적으로 배치하는 방법을 다룹니다:</p>
+<ul>
+<li>CSS의 세 가지 주요 위치 지정 체계: 일반 흐름, 플로트, 절대 위치 지정</li>
+<li>익명 상자 생성, 서식 컨텍스트, 줄 상자 및 줄 상자 내 정렬과 같은 일반 흐름 개념</li>
+<li>플로트 순서, 클리어픽스 및 부모 높이와의 플로트 상호 작용과 같은 플로트 개념</li>
+</ul>
+<p><a href="https://book.mixu.net/css/2-box-model.html">2장: CSS의 상자 크기</a> 조정에서는 상자 모델에 대해 설명하지만, 더 중요한 것은 CSS의 다양한 위치 지정 체계에 따라 상자 모델이 어떻게 달라지는지에 대해 설명합니다. 구체적으로 높이, 너비 및 여백은 완전히 다른 메커니즘을 사용하여 계산되며, 사용 중인 위치 지정 체계와 계산 메커니즘을 알아야만 이러한 계산을 이해할 수 있습니다.</p>
+<p><a href="https://book.mixu.net/css/3-additional.html">3장: 위치에 영향을 주는 추가 속성에서는</a> 다음과 같이 상자 위치에 영향을 주는 추가 메커니즘을 다룹니다:</p>
+<ul>
+<li>여백 축소</li>
+<li>마이너스 여백</li>
+<li>오버플로</li>
+<li>최대 너비, 최대 높이, 최소 너비, 최소 높이</li>
+<li>스태킹 컨텍스트와 Z-인덱스 속성</li>
+<li>의사 요소가 레이아웃에 미치는 영향</li>
+<li>CSS3 상자 크기 속성</li>
+</ul>
+<p><a href="https://book.mixu.net/css/4-flexbox.html">4장: 플렉스박스에서는</a> CSS 3 플렉스박스 레이아웃 모드에 대해 설명합니다.</p>
+<p><a href="https://book.mixu.net/css/5-tricks.html">5장: CSS 레이아웃 - 트릭과 레이아웃 기법에서는</a> 배운 내용을 몇 가지 실제 문제에 적용합니다. 또한 다음과 같은 맥락에서 레이아웃에 대한 이해를 테스트하는 퀴즈 형식의 작은 질문도 포함되어 있습니다:</p>
+<ul>
+<li>가로 및 세로 중앙 배치</li>
+<li>CSS 그리드 프레임워크의 작동 방식</li>
+<li>다중 열 레이아웃</li>
+<li>일반적인 문제와 레이아웃 요령.</li>
+</ul>
+<p><a href="https://book.mixu.net/css/reference.html">특정 개념이나 속성을 찾아야 하는 경우 참조 색인을</a> 통해 여러 챕터에서 원하는 챕터와 섹션을 쉽게 찾을 수 있습니다.</p>
+
+         
+        </div></div>
+	      </article>
+			</main>
+    </body>
+  </html>
+  
