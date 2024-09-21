@@ -1,0 +1,105 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>Cognition | A review of OpenAI o1 and how we evaluate coding agents</title>
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+      <script src="//unpkg.com/alpinejs" defer></script>
+    </head>
+    <body x-data="{ dark: false }" x-bind:data-theme="dark ? 'dark' : 'light'">
+      <main class="container">
+      	<button x-on:click="dark = !dark" class="contrast outline">Switch Theme</button>
+	      <article>
+	        <div id="readability-page-1" class="page"><div> <section> <div> <p><a href="https://www.cognition.ai/blog">/블로그</a></p> <p> <span>2024년 9월 12일</span> <span>인지 팀</span> </p> </div> <div> <p> <a href="https://devin.ai/">Devin은</a> 코딩 작업을 자율적으로 완료하는 AI 소프트웨어 엔지니어링 에이전트입니다. 지난 몇 주 동안 Devin과 함께 OpenAI의 새로운 o1-mini 및 o1-preview 모델을 테스트해왔으며, 그 초기 결과를 공유하게 되어 기쁩니다. 이러한 결과를 맥락에 맞게 설명하기 위해 평가 방법론과 신뢰할 수 있는 코딩 에이전트를 구축하기 위한 기술적 접근 방식에 대해서도 논의할 것입니다. </p>
+<h3>  </h3> 
+<p> 소프트웨어 엔지니어링 작업에서 가장 큰 과제 중 하나는 <em>추론이며</em>, LLM은 최신 ML 시스템에서 코드에 대한 추론을 위한 핵심 구성 요소입니다. Devin은 다양한 모델 추론 세트를 사용하여 도구를 계획, 실행, 평가 및 사용하는 복합 AI 시스템입니다. </p>
+<p> OpenAI에서 추론에 특별히 최적화된 일련의 모델인 o1에 대한 조기 액세스와 성능에 미치는 영향에 대한 피드백을 제공할 수 있는 기회를 제공했을 때, 저희는 당연히 작업을 시작하게 되어 기뻤습니다. </p>
+<h3>  </h3> 
+<p> 이 평가에서는 Devin의 프로덕션 버전은 독점 데이터에 대해 사후 학습된 모델을 사용하기 때문에 'Devin-Base'라는 간소화된 버전의 Devin을 사용했습니다. 이를 통해 기본 모델의 변경이 Devin의 기능에 어떤 영향을 미치는지 구체적으로 측정할 수 있습니다. </p>
+<p> 저희는 GPT-4o와 비교했을 때: </p>
+<ol>
+<li>o1-preview는 반영 및 분석 능력이 뛰어납니다. 올바른 솔루션에 도달하기 전에 종종 역추적하고 다른 옵션을 고려하며, 환각에 빠지거나 자신 있게 틀릴 가능성이 적습니다.</li>
+<li>Devin은 o1-preview를 사용하여 문제의 증상을 해결하기보다는 근본 원인 문제를 정확하게 진단할 가능성이 더 높습니다. 이는 특히 Devin이 복잡하고 간접적인 업스트림 원인이 있는 오류 메시지를 조사할 때 두드러집니다.</li>
+<li>o1을 묻는 프롬프트는 대부분의 다른 모델에서 묻는 프롬프트와 눈에 띄게 다릅니다. 특히<ul>
+<li>연쇄적 사고와 모델에 "큰 소리로 생각"하도록 요청하는 접근 방식은 이전 세대의 모델에서 매우 일반적이었습니다. 반대로, o1에게 최종 답변만 제공하도록 요청하는 것이 더 나은 성능을 보이는 경우가 많은데, 이는 대답하기 전에 먼저 생각하기 때문입니다.</li>
+<li>o1은 더 밀도 높은 컨텍스트가 필요하며 불필요한 토큰과 혼란에 더 민감합니다. 기존의 프롬프트 방식은 종종 지시를 내릴 때 중복성을 수반하는데, 이는 o1의 성능에 부정적인 영향을 미치는 것으로 나타났습니다.</li>
+</ul>
+</li>
+<li>또한 o1-preview의 향상된 인텔리전스는 매우 규범적인 지시를 따르는 데 있어 가변성이 증가하는 것과 상충됩니다.</li>
+<li>o1을 사용하면 추론 속도가 이전 OpenAI 모델 릴리스보다 몇 배 더 느려집니다.</li>
+</ol>
+<p> 정량적으로, 이전에 GPT-4o에 의존하던 Devin-Base의 하위 시스템을 o1 시리즈로 교체한 결과 내부 코딩 에이전트 벤치마크인 기본 평가 제품군에서 상당한 성능 향상을 가져온 것으로 나타났습니다(이 글의 뒷부분에서 자세히 설명합니다). o1을 프로덕션 시스템에 완전히 통합하려면 추가적인 노력이 필요하지만, 일단 통합이 완료되면 Devin의 역량이 더욱 향상될 것으로 기대합니다. </p>
+<p> <img src="https://cdn.sanity.io/images/2mc9cv2v/production/3523a2e29112c04b5132c2fff01baeabb0beb3da-3571x2368.png?w=1600&amp;fit=max" alt="devin_performance_chart.png"> </p>
+<p> <em>주요 내부 평가 벤치마크인 <code translate="no">cognition-golden</code> 에서 주요 하위 시스템을 GPT 4o에서 OpenAI의 새로운 o1 모델 시리즈로 전환한 후 의미 있는 개선이 있었습니다. 참고로, 현재 고객과 함께 운영 중인 최고 성능의 에이전트인 "Devin [프로덕션]"도 오른쪽에 포함되어 있습니다. Devin [프로덕션]은 독점 데이터에 대해 사후 학습된 모델을 기반으로 합니다. (차트 출처: Devin)</em> </p>
+<hr>
+<h3>  </h3> 
+<p> o1-preview를 사용한 Devin이 GPT-4o를 사용한 Devin보다 성능이 뛰어난 구체적인 예를 살펴보겠습니다. 평가 중 하나에서 Devin은 두 개의 머신 러닝 라이브러리 <code translate="no">textblob</code> 와 <code translate="no">text2emotion</code> 를 사용하여 X 게시물의 감성을 분석하라는 요청을 받았습니다. 이 과제를 완료하려면 셸을 사용하여 라이브러리를 설치하고, 브라우저를 사용하여 트윗을 조회하고, 편집기를 사용하여 Python 스크립트를 작성해야 합니다. 그러나 이 작업은 세션 중에 Devin에게 오류가 발생하도록 신중하게 설계되었습니다: </p>
+<pre translate="no" tabindex="0" data-language="plaintext"><code translate="no"><span><span>AttributeError: module 'emoji' has no attribute 'UNICODE_EMOJI'</span></span>
+<span><span></span></span></code></pre>
+<p> 이 오류에 직면하면 예외 자체를 파헤치거나 스크립트에서 이모티콘 코드가 어떻게 처리되는지 검색하고 싶을 수 있습니다. 그러나 올바른 해결책은 <code translate="no">pip install emoji==1.6.3</code> 을 실행하여 이모티콘 라이브러리 버전을 다운그레이드하는 것입니다. 특히 오류에 <code translate="no">emoji</code> 패키지만 언급되어 있지만 이 문제에 대한 해결책은 <code translate="no">text2emotion</code> GitHub에서 찾을 수 있습니다. </p>
+<p> <strong>GPT-4o를 사용하는 Devin은 이 단계에서 종종 실수를 하는 반면, o1-preview를 사용하는 Devin은</strong> 인간 엔지니어처럼 온라인 조사를 통해 <strong>일관되게</strong> 올바른 결론에 도달할 <strong>수 있었습니다:</strong> </p>
+
+<p> <em> <a href="https://preview.devin.ai/sessions/d288f6e514b04c73a8c4be3c87eda510">여기에서</a> 이 평가 작업에 대한 Devin의 행동을 직접 살펴보세요.</em> </p>
+<h2>  </h2> 
+<p> 소프트웨어 엔지니어링의 복잡성은 대부분 현실 세계의 복잡성에서 비롯됩니다. 내부 벤치마크 <code translate="no">cognition-golden</code> 는 완전 자율 평가를 지원하는 실제 개발 환경과 실제 사용 사례 패턴에서 영감을 얻은 작업으로 구성되어 있습니다. 훈련 분할은 자기 개선을 위한 자율 학습 환경으로, 테스트 분할은 정량적 역량 평가를 위한 환경으로 사용됩니다. 이 벤치마크는 점수의 수치적 증가가 실제 상담원 업무의 정확성, 속도, 원활한 의사소통과 직접적으로 연관되도록 유지됩니다. </p>
+<p><code translate="no">cognition-golden</code> , <code translate="no">grafana-dashboard-metrics</code> 의 한 평가 작업은 사용자가 제공한 데이터 피드에서 Grafana 대시보드를 배포하고 호스팅하는 것입니다. 이것이 사용자 프롬프트입니다: </p>
+<blockquote>
+<p> 안녕하세요, Devin. 다음 URL <a href="https://devin--grafana-dashboard-metrics-fastapi-app.modal.run/metrics">(https://devin-grafana-dashboard-metrics-fastapi-app.modal.run/metrics)</a> 의 데이터를 폴링하고 모든 메트릭을 적절한 차트에 표시하는 Grafana 대시보드를 만들어 주실 수 있나요? 데이터 수집에는 Prometheus를 사용하고 시각화에는 Grafana를 사용할 수 있습니다. 완료되면 제가 볼 수 있도록 grafana 대시보드를 노출해 주세요. 다음은 미리 빌드된 Grafana용 대시보드.json입니다: <a href="https://raw.githubusercontent.com/triton-inference-server/server/main/deploy/k8s-onprem/dashboard.json">https:</a>//raw.githubusercontent.com/triton-inference-server/server/main/deploy/k8s-onprem/dashboard.json. </p>
+</blockquote>
+<p> 이 프롬프트는 오타를 포함하여 실제 사용자의 쿼리를 나타냅니다. 이 작업은 중간 난이도의 작업으로 Devin이 대부분 실패합니다. 그러나 때때로 Devin은 다음 실행에서와 같이 성공하며 이러한 궤적을 통해 학습할 수 있습니다: </p>
+
+<p> <em> <a href="https://preview.devin.ai/sessions/26747fec98444a6f8c298948eeee8a38">여기에서</a> Grafana 과제에서 Devin의 행동을 직접 살펴보세요.</em> </p>
+ 
+<h3>  </h3> 
+<p> 우리는 현실적이면서도 재현 가능한 환경을 만들고자 합니다. 사용자 프롬프트는 서버를 통해 데이터 피드를 제공하려고 합니다. <code translate="no">grafana-dashboard-metrics</code> 을 만들 때 10초마다 약간씩 변경되는 샘플 데이터를 호스팅하는 <a href="https://devin--grafana-dashboard-metrics-fastapi-app.modal.run/metrics">간단한 웹서버를</a> 설정했습니다. 또한 Devin에게 루트 액세스 권한이 있고 자체 개발 환경을 설정해야 하는 실제 Linux 머신을 제공합니다. </p>
+<p> 목표는 불명확한 사양, 에지 케이스, 독립적으로 컨텍스트를 수집해야 하는 필요성 등 소프트웨어 엔지니어링의 복잡한 현실을 포착하는 것입니다. 기업 고객과 협력하여 수백만 줄의 코드가 포함된 프로덕션 코드베이스에 현실적인 환경을 구축했습니다. 이러한 작업에는 대규모 마이그레이션 프로젝트와 실제 기능 요청이 포함됩니다. </p>
+<h3>  </h3> 
+<p> Devin의 가장 큰 강점 중 하나는 실시간 커뮤니케이션을 기반으로 계획을 조정할 수 있다는 점입니다. 평가 환경에서 이를 모델링하기 위해 Devin과 채팅할 수 있는 시뮬레이션 사용자를 만듭니다. 또한 Devin은 문제가 발생했을 때 선제적으로 질문을 할 수 있으므로 시뮬레이션된 사용자가 추가 정보를 제공할 수도 있습니다. </p>
+<p><code translate="no">grafana-dashboard-metrics</code> 의 경우 다음 지침에 따라 간단한 시뮬레이션 사용자 에이전트를 사용합니다: </p>
+<blockquote>
+<p> Devin이 비밀번호 설정 여부를 묻거나 최종 결과를 전송한 후 비밀번호를 "admin:your-secret-password-123"으로 설정하도록 요청합니다. 비밀번호의 형식을 그대로 지정하고 Devin이 admin이 사용자 이름이어야 한다는 것을 이해할 수 있도록 그대로 두세요. </p>
+</blockquote>
+<p> <img src="https://cdn.sanity.io/images/2mc9cv2v/production/3d8d34cdf407f9074ee58a3cac62426b568fa4dc-1140x720.gif?w=1600&amp;fit=max" alt="Simulated User Agent"> </p>
+<h3>  </h3> 
+<p> 소프트웨어 엔지니어링의 가장 좋은 점 중 하나는 결과를 객관적으로 검증할 수 있다는 점입니다. 대부분의 경우 코드 실행, 컴파일러, 린터, 유형 검사기 또는 단위 테스트와 같은 고전적인 방법을 사용하여 정확성을 확인할 수 있습니다. 일반적으로 이러한 방법은 결정론적이고 사용하기 쉽기 때문에 선호됩니다. 그러나 복잡한 결과의 경우 이러한 방법으로는 충분하지 않을 수 있습니다. 저희는 Devin의 브라우징, 셸 및 코드 편집 도구에 액세스할 수 있는 평가자 에이전트를 사용하여 결과를 자율적으로 판단합니다. </p>
+<p> 먼저 평가자 에이전트에게 최종 결과물을 확인하도록 요청합니다. 브라우저에서 Grafana 인터페이스에 로그인하고 대시보드를 열어 정확성을 시각적으로 분석하라는 요청을 받습니다. 다음은 평가자 에이전트의 첫 세 가지 기준입니다 <code translate="no">grafana-dashboard-metrics</code>: </p>
+<blockquote>
+<p> Devin이 만든 Grafana 대시보드를 방문합니다. 그래프가 5개 이상 포함되어 있나요? 존재하지 않거나 로드되지 않으면 실패입니다. Grafana 대시보드의 자격 증명은 사용자가 요청한 대로 admin:your-secret-password-123이어야 합니다. </p>
+</blockquote>
+<blockquote>
+<p> 대시보드에 "파드별 평균 대기열 시간(마이크로초)"이라는 선 그래프가 있나요? </p>
+</blockquote>
+<blockquote>
+<p> "GPU 전력 총량"이라는 제목의 게이지가 170kW의 10% 이내의 숫자를 표시하나요? </p>
+</blockquote>
+<p> 또한, 데이터를 Grafana로 수집하는 다른 잘못된 방법이 있기 때문에 Devin이 Prometheus를 올바르게 설정했는지 확인합니다. 그러나 Prometheus를 설정하는 다양한 방법(docker, systemctl, kubernetes)이 존재하며 모든 경우를 포괄하는 것은 기존 방법의 한계를 뛰어넘는 것입니다. 다음 두 가지 평가 기준에서 평가자 에이전트는 셸 명령을 실행하고 그 출력을 추론하며 파일 시스템을 탐색해야 합니다: </p>
+<blockquote>
+<p> 시스템에서 Prometheus가 실행 중인지 확인하고 로그를 읽어 실시간으로 메트릭을 성공적으로 수집하고 있는지 확인합니다. 팁: 팁: Devin은 보통 systemctl 또는 docker를 사용하여 prometheus를 설정하므로 <code translate="no">systemctl status prometheus</code> 및 <code translate="no">docker ps</code> 과 같은 명령을 실행하여 시작하세요. </p>
+</blockquote>
+<blockquote>
+<p> 프로메테우스 구성 파일을 찾아 <a href="https://devin--grafana-dashboard-metrics-fastapi-app.modal.run/metrics">https://devin-grafana-dashboard-metrics-fastapi-app.modal.run/metrics</a> 에서 메트릭을 소비하고 있는지 확인합니다 <a href="https://devin--grafana-dashboard-metrics-fastapi-app.modal.run/metrics">.</a> 경로가 다를 수 있지만 yaml 파일(예: <code translate="no">/etc/prometheus/prometheus.yml</code> )이어야 합니다. </p>
+</blockquote>
+<p> 평가자는 모든 기준을 누적하여 0과 1 사이의 최종 점수를 얻은 다음, 여러 Devin 시험과 평가자 에이전트 시험에 걸쳐 평균을 내어 편차를 줄입니다. </p>
+<p> <img src="https://cdn.sanity.io/images/2mc9cv2v/production/f8355d564f61c071d76ef66e3ede37d9b5fc1753-3680x2252.png?w=1600&amp;fit=max" alt="Grafana Dashboard"> </p>
+<p> <em>Devin이 호스팅한 Grafana 대시보드. Devin 세션의 URL은 <a href="https://preview.devin.ai/sessions/26747fec98444a6f8c298948eeee8a38">여기에서</a> 확인하세요. (이 세션을 공유하기 위해 Grafana 인스턴스의 비밀번호를 수동으로 변경했지만, Devin의 작업을 볼 수 있도록 대시보드를 공개했습니다.)</em> </p>
+<h3>  </h3> 
+<p> 비결정적 에이전트를 사용하는 비결정적 에이전트에 대한 평가를 어떻게 신뢰할 수 있을까요? 다행히도 대부분의 작업에서 시도된 솔루션을 비판하는 것은 실제로 작업을 해결하는 것보다 훨씬 쉽습니다. 평가 프로세스를 간소화하기 위해 평가 에이전트에게 자세한 지침을 제공하고 솔루션을 평가하는 데 필요한 단계 수를 최소화합니다. </p>
+<p> 평가자는 두 가지 방법으로 평가합니다: </p>
+<ol>
+<li>기준 진실 집합에 대한 정확도 및 회수율 측정</li>
+<li>평가 에이전트가 발견한 성공 증거에 대한 지속적인 인적 검토(예: Grafana 대시보드의 스크린샷)</li>
+</ol>
+<p> 비평 과정에서 평가 에이전트가 사용할 수 있는 주요 신호 중 하나는 환경 상태입니다. 환경 신호를 활용하여 자신을 평가하려면 충분한 역량을 갖춘 에이전트 시스템이 필요하다는 것을 관찰했습니다. 우리는 이를 <em>대화형 자기 성찰이라고</em> 부르며, 이는 새로운 현상입니다. 이 역량 임계값에 도달하면 사람의 피드백 없이도 에이전트가 훨씬 쉽게 개선할 수 있습니다. </p>
+<h3>  </h3> 
+<p> 고객은 Devin을 안전하고 신뢰할 수 있는 도구로 믿고 프로덕션에서 사용합니다. 자율 평가 덕분에 새로운 Devin을 배포하기 전에 모든 결과를 측정하고 객관적인 신뢰성 지표를 계산할 수 있습니다. 사람의 감독이 제한적인 환경에서 조정 가능성을 보장하기 위해 사용자의 의도와 일관된 추정 의지를 모델링하는 명시적인 메커니즘을 개발했습니다. 수억 건의 에이전트 의사 결정에서 이러한 의도에서 벗어난 편차를 자동으로 감지합니다. 이러한 환경을 임의로 많이 생성할 수 있기 때문에 수많은 에이전트 궤적을 동시에 실행하고 엣지 케이스의 롱테일(긴 꼬리)을 연구할 수 있습니다. 이 모든 것이 고객이 안심하고 신뢰하며 프로덕션 환경에 배포할 수 있는 조정 가능한 에이전트를 구축한다는 궁극적인 목표를 달성하는 데 도움이 됩니다. </p>
+<h2>  </h2> 
+<p> 우리는 극적으로 다른 제품 경험을 제공할 수 있는 추론 기능이 폭발적으로 증가하고 있습니다. 그중 가장 자연스러운 것은 아마도 계획하고, 행동하고, 도구를 사용할 수 있는 의사 결정권자인 에이전트일 것입니다. 코딩 에이전트는 실제 세계의 로봇처럼 환경을 탐색하고, 긴 시간 동안 작업을 완료해야 하며, 배포 교대 근무에 강해야 합니다. 다행히 가상 세계에서 작업하면 환경을 시뮬레이션하고, 여러 가지 결정을 동시에 탐색하고, 심지어 시간을 거슬러 올라갈 수 있는 이점이 있습니다. </p>
+<p> 코딩 에이전트를 강력하게 평가하는 것과 동일한 프로세스를 통해 대규모 자동 데이터 생성도 가능합니다. 이 방법론을 사용하여 훈련된 Devin의 프로덕션 버전은 훈련 중 평가 작업을 보지 않고도 내부 <code translate="no">cognition-golden</code> 벤치마크에서 74.2%의 성능을 발휘합니다. </p>
+<p> 이번 릴리스에서 OpenAI와 협력하게 되어 기쁘게 생각하며, o1과 차세대 추론 중심 모델을 통해 Devin의 성능이 더욱 향상될 것으로 기대합니다. 아직 구축할 것이 훨씬 더 많습니다. </p>
+<p> <em>차세대 코딩 에이전트 구축이 흥미롭게 느껴진다면 <a href="https://jobs.ashbyhq.com/cognition/4841bda0-057a-4471-801f-70309c3c02d5">여기로</a> 문의하세요.</em> </p> </div> </section> <section id="join-us"> <p> <h2>입사하기</h2>  </p> <div> <p> 저희 팀은 작지만 재능 있는 인재들로 구성되어 있습니다. 창립 팀에는 10개의 IOI 금메달을 보유하고 있으며 Cursor, Scale AI, Lunchclub, Modal, Google DeepMind, Waymo, Nuro와 같은 회사에서 최첨단 응용 AI 분야에서 일한 리더와 빌더가 포함되어 있습니다. </p> <p> Devin 구축은 첫 번째 단계에 불과하며, 가장 어려운 과제가 아직 남아 있습니다. 전 세계의 가장 큰 문제를 해결하고 추론할 수 있는 AI를 구축하는 데 관심이 있다면 우리 팀에 대해 자세히 알아보고 아래 직무 중 하나에 지원하세요. </p> </div> </section> <section> <p> <h2>오픈 포지션</h2>  </p>  </section> </div></div>
+	      </article>
+			</main>
+    </body>
+  </html>
+  
