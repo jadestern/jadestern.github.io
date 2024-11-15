@@ -1,0 +1,342 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>Deno 2.0 Is Here, and It’s Scaly</title>
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+      <script src="//unpkg.com/alpinejs" defer></script>
+    </head>
+    <body x-data="{ dark: false }" x-bind:data-theme="dark ? 'dark' : 'light'">
+      <main class="container">
+      	<button x-on:click="dark = !dark" class="contrast outline">Switch Theme</button>
+	      <article>
+	        <div id="readability-page-1" class="page"><div>
+<p><span aria-owns="rmiz-modal-" data-rmiz=""><span data-rmiz-content="not-found"><img alt="Post image" fetchpriority="high" width="1024" height="576" decoding="async" data-nimg="1" sizes="(max-width: 767px) 100vw" srcset="https://neon.tech/_next/image?url=https%3A%2F%2Fneondatabase.wpengine.com%2Fwp-content%2Fuploads%2F2024%2F10%2Fneon-deno-1.jpg&amp;w=640&amp;q=85&amp;dpl=dpl_7ybEajQ46oA93HrRDHg5Y7HYvCdP 640w, https://neon.tech/_next/image?url=https%3A%2F%2Fneondatabase.wpengine.com%2Fwp-content%2Fuploads%2F2024%2F10%2Fneon-deno-1.jpg&amp;w=750&amp;q=85&amp;dpl=dpl_7ybEajQ46oA93HrRDHg5Y7HYvCdP 750w, https://neon.tech/_next/image?url=https%3A%2F%2Fneondatabase.wpengine.com%2Fwp-content%2Fuploads%2F2024%2F10%2Fneon-deno-1.jpg&amp;w=828&amp;q=85&amp;dpl=dpl_7ybEajQ46oA93HrRDHg5Y7HYvCdP 828w, https://neon.tech/_next/image?url=https%3A%2F%2Fneondatabase.wpengine.com%2Fwp-content%2Fuploads%2F2024%2F10%2Fneon-deno-1.jpg&amp;w=1080&amp;q=85&amp;dpl=dpl_7ybEajQ46oA93HrRDHg5Y7HYvCdP 1080w, https://neon.tech/_next/image?url=https%3A%2F%2Fneondatabase.wpengine.com%2Fwp-content%2Fuploads%2F2024%2F10%2Fneon-deno-1.jpg&amp;w=1200&amp;q=85&amp;dpl=dpl_7ybEajQ46oA93HrRDHg5Y7HYvCdP 1200w, https://neon.tech/_next/image?url=https%3A%2F%2Fneondatabase.wpengine.com%2Fwp-content%2Fuploads%2F2024%2F10%2Fneon-deno-1.jpg&amp;w=1920&amp;q=85&amp;dpl=dpl_7ybEajQ46oA93HrRDHg5Y7HYvCdP 1920w, https://neon.tech/_next/image?url=https%3A%2F%2Fneondatabase.wpengine.com%2Fwp-content%2Fuploads%2F2024%2F10%2Fneon-deno-1.jpg&amp;w=2048&amp;q=85&amp;dpl=dpl_7ybEajQ46oA93HrRDHg5Y7HYvCdP 2048w, https://neon.tech/_next/image?url=https%3A%2F%2Fneondatabase.wpengine.com%2Fwp-content%2Fuploads%2F2024%2F10%2Fneon-deno-1.jpg&amp;w=3840&amp;q=85&amp;dpl=dpl_7ybEajQ46oA93HrRDHg5Y7HYvCdP 3840w" src="https://neon.tech/_next/image?url=https%3A%2F%2Fneondatabase.wpengine.com%2Fwp-content%2Fuploads%2F2024%2F10%2Fneon-deno-1.jpg&amp;w=3840&amp;q=85&amp;dpl=dpl_7ybEajQ46oA93HrRDHg5Y7HYvCdP"></span></span></p><p>Deno는 이제 6살이 되었습니다. Node.js의 창시자 Ryan Dahl이 Node의 문제점을 해결하기 위해 만든 Deno의 개발 동기는 간단했습니다. Node.js는 너무 복잡하고, 너무 불안정하며, 작동 방식이 자바스크립트에서 멀어져 있었기 때문입니다. Deno는 ECMAScript와 일치하며 기본적으로 안전하고 단순합니다.</p>
+
+
+
+<p>이 정의에 따르면 Deno는 엄청난 성공을 거두었습니다. 하지만 자바스크립트 생태계에서 널리 채택되는 데는 어려움을 겪었습니다. 보안과 단순성 측면에서 Node.js보다 개선되었음에도 불구하고 개발자와 기업은 전체 코드가 존재하는 잘 정립된 Node.js 환경에서 전환하기를 주저해 왔으며, 특히 두 에코시스템 간의 호환성이 없는 상황에서 더욱 그러했습니다.</p>
+
+
+
+<p>하지만 <a href="https://deno.com/blog/v2.0-release-candidate">Deno 2.0을</a> 통해 이러한 상황이 바뀌고 있습니다. Deno 2.0은 Node.js와 npm 호환성을 Deno에 직접 도입하여 개발자가 지난 15년 동안 사용해온 라이브러리와 프레임워크를 그대로 사용하면서 JS 내에서 Deno가 이룬 발전을 활용할 수 있도록 지원합니다.</p>
+
+
+
+
+
+
+
+<p>Node.js를 사용하여 Neon에 연결하는 경우 다음과 같이 작성할 수 있습니다:</p>
+
+
+<figure><pre translate="no" tabindex="0" data-language="javascript"><code translate="no"><span data-line="1"><span>const</span><span> { </span><span>Client</span><span> } </span><span>=</span><span> require</span><span>(</span><span>"pg"</span><span>);</span></span>
+<span data-line="2"></span>
+<span data-line="3"><span>const</span><span> databaseUrl</span><span> =</span><span> process</span><span>.</span><span>env</span><span>.</span><span>DATABASE_URL</span><span>;</span></span>
+<span data-line="4"><span>if</span><span> (</span><span>!</span><span>databaseUrl) {</span></span>
+<span data-line="5"><span> console</span><span>.error</span><span>(</span><span>"DATABASE_URL environment variable is not set"</span><span>);</span></span>
+<span data-line="6"><span> process</span><span>.exit</span><span>(</span><span>1</span><span>);</span></span>
+<span data-line="7"><span>}</span></span>
+<span data-line="8"></span>
+<span data-line="9"><span>const</span><span> client</span><span> =</span><span> new</span><span> Client</span><span>({</span></span>
+<span data-line="10"><span> connectionString</span><span>:</span><span> databaseUrl</span><span>,</span></span>
+<span data-line="11"><span>});</span></span>
+<span data-line="12"></span>
+<span data-line="13"><span>async</span><span> function</span><span> main</span><span>() {</span></span>
+<span data-line="14"><span> try</span><span> {</span></span>
+<span data-line="15"><span>   await</span><span> client</span><span>.connect</span><span>();</span></span>
+<span data-line="16"></span>
+<span data-line="17"><span>   const</span><span> result</span><span> =</span><span> await</span><span> client</span><span>.query</span><span>(</span></span>
+<span data-line="18"><span>     "SELECT name, value FROM playing_with_neon LIMIT 5"</span></span>
+<span data-line="19"><span>   );</span></span>
+<span data-line="20"></span>
+<span data-line="21"><span>   console</span><span>.log</span><span>(</span><span>"result:"</span><span>,</span><span> result</span><span>.rows);</span></span>
+<span data-line="22"><span> } </span><span>catch</span><span> (error) {</span></span>
+<span data-line="23"><span>   console</span><span>.error</span><span>(</span><span>"An error occurred:"</span><span>,</span><span> error);</span></span>
+<span data-line="24"><span> } </span><span>finally</span><span> {</span></span>
+<span data-line="25"><span>   await</span><span> client</span><span>.end</span><span>();</span></span>
+<span data-line="26"><span> }</span></span>
+<span data-line="27"><span>}</span></span>
+<span data-line="28"></span>
+<span data-line="29"><span>main</span><span>();</span></span></code></pre></figure>
+
+
+<p>그런 다음 다음과 같이 실행합니다:</p>
+
+
+<figure><pre translate="no" tabindex="0" data-language="bash"><code translate="no"><span data-line="1"><span>node</span><span> index.js</span></span></code></pre></figure>
+
+
+<p>Node.js는 종속성 관리를 위해 npm과 package.json에 의존하므로 패키지를 npm으로 설치하자마자 이 모든 것이 디렉터리에 들어옵니다:</p>
+
+
+
+<p><img loading="lazy" decoding="async" src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXc3vKoBZCyMlGt_Mlt2gsFs29Hi1D9Z42SCw73Bl1_OvHzbF8S36KoTYAm19bc6WEYbVeMmQlv34U2Yq_084A-o5cBanJRXU1M2QnBD4XV14-2u618LlCwZ3UJRCCchAWErvmflDpUwB9VTonNtvFTeIemQ?key=2lJRdqRKAH7RuqtRc6QvGQ" width="191" height="474"></p>
+
+
+
+<p>여기서는 pg 패키지만 설치했다는 점을 기억하세요. Node와 Deno의 핵심적인 차이점은 바로 이러한 임포트입니다. Deno 1.x에서는 여전히 자바스크립트/타입스크립트이기 때문에 코드가 비슷했을 테지만, 임포트는 완전히 달랐습니다:</p>
+
+
+<figure><pre translate="no" tabindex="0" data-language="javascript"><code translate="no"><span data-line="1"><span>import</span><span> { Client } </span><span>from</span><span> "https://deno.land/x/postgres@v0.17.0/mod.ts"</span><span>;</span></span>
+<span data-line="2"></span>
+<span data-line="3"><span>const</span><span> databaseUrl</span><span> =</span><span> Deno</span><span>.</span><span>env</span><span>.get</span><span>(</span><span>"DATABASE_URL"</span><span>);</span></span>
+<span data-line="4"><span>if</span><span> (</span><span>!</span><span>databaseUrl) {</span></span>
+<span data-line="5"><span> console</span><span>.error</span><span>(</span><span>"DATABASE_URL environment variable is not set"</span><span>);</span></span>
+<span data-line="6"><span> Deno</span><span>.exit</span><span>(</span><span>1</span><span>);</span></span>
+<span data-line="7"><span>}</span></span>
+<span data-line="8"></span>
+<span data-line="9"><span>const</span><span> client</span><span> =</span><span> new</span><span> Client</span><span>(databaseUrl);</span></span>
+<span data-line="10"></span>
+<span data-line="11"><span>async</span><span> function</span><span> main</span><span>() {</span></span>
+<span data-line="12"><span> try</span><span> {</span></span>
+<span data-line="13"><span>   await</span><span> client</span><span>.connect</span><span>();</span></span>
+<span data-line="14"></span>
+<span data-line="15"><span>   const</span><span> result</span><span> =</span><span> await</span><span> client</span><span>.queryObject</span><span>&lt;{ id</span><span>:</span><span> number</span><span>; name</span><span>:</span><span> string</span><span> }&gt;(</span></span>
+<span data-line="16"><span>     "SELECT name, value FROM playing_with_neon LIMIT 5"</span></span>
+<span data-line="17"><span>   );</span></span>
+<span data-line="18"></span>
+<span data-line="19"><span>   console</span><span>.log</span><span>(</span><span>"result:"</span><span>,</span><span> result</span><span>.rows);</span></span>
+<span data-line="20"><span> } </span><span>catch</span><span> (error) {</span></span>
+<span data-line="21"><span>   console</span><span>.error</span><span>(</span><span>"An error occurred:"</span><span>,</span><span> error);</span></span>
+<span data-line="22"><span> } </span><span>finally</span><span> {</span></span>
+<span data-line="23"><span>   await</span><span> client</span><span>.end</span><span>();</span></span>
+<span data-line="24"><span> }</span></span>
+<span data-line="25"><span>}</span></span>
+<span data-line="26"></span>
+<span data-line="27"><span>main</span><span>();</span></span></code></pre></figure>
+
+
+<p>Deno 1.x는 직접 URL 가져오기를 사용하므로 패키지 관리자가 필요하지 않습니다. 디렉토리에 있는 것은 코드뿐입니다. 종속성 관리에 대한 이러한 접근 방식은 프로세스를 크게 간소화합니다. 설치도 없고, package.json도 없고, node_modules 폴더도 없습니다. 종속성은 처음 실행할 때 가져오고 캐시되므로 프로젝트가 가볍고 이식성을 유지할 수 있습니다.</p>
+
+
+
+<p>이 간소화된 접근 방식은 여러 가지 이점을 제공합니다:</p>
+
+
+
+<ol>
+<li><strong>프로젝트 복잡성 감소</strong>: package.json 파일이나 node_modules 폴더가 없어도 프로젝트 구조가 깔끔하고 단순하게 유지됩니다.</li>
+
+
+
+<li><strong>이식성 향상</strong>: 종속성이 코드에 직접 지정되므로 프로젝트 공유가 더 쉬워집니다. 누구나 종속 요소를 먼저 설치하지 않고도 코드를 실행할 수 있습니다.</li>
+
+
+
+<li><strong>버전 잠금</strong>: URL 가져오기에 특정 버전(예: 위 코드는 0.17 버전으로 잠김)을 포함할 수 있어 여러 환경에서 일관성을 유지할 수 있습니다.</li>
+
+
+
+<li><strong>보안 강화</strong>: Deno는 첫 번째 실행 시 종속성을 다운로드하고 캐시한 다음 후속 실행 시 무결성을 확인하여 공급망 공격의 위험을 줄입니다.</li>
+
+
+
+<li><strong>더 빠른 시작</strong>: 설치 단계 없이 프로젝트를 즉시 실행할 수 있어 개발 및 배포 프로세스의 속도가 빨라집니다.</li>
+
+
+
+<li><strong>명시적인 종속성</strong>: 각 파일은 자체 종속성을 나열하여 무엇이 어디에서 사용되고 있는지 명확하게 보여줍니다.</li>
+</ol>
+
+
+
+<p>파일을 실행하는 방법도 달라집니다:</p>
+
+
+<figure><pre translate="no" tabindex="0" data-language="bash"><code translate="no"><span data-line="1"><span>deno</span><span> run</span><span> --allow-net</span><span> --allow-env</span><span> index.ts</span></span></code></pre></figure>
+
+
+<p>이는 Deno의 보안 모델의 한 요소입니다. Node.js는 기본적으로 전체 시스템 액세스 권한을 부여합니다. 즉, 실행하는 모든 파일은 파일 시스템에 대한 완전한 액세스 권한과 네트워크에 대한 완전한 액세스 권한을 갖습니다. 실행하는 파일에 악성 코드가 포함되어 있거나 취약점이 악용되기 전까지는 대부분 괜찮습니다.</p>
+
+
+
+<p>기본적으로 Deno 스크립트에는 시스템 액세스 권한이 없습니다. 스크립트를 실행할 때 네트워크 요청이나 파일 시스템 액세스 등의 작업을 수행하려면 명시적으로 권한을 부여해야 합니다. 예제 명령에서 -allow-net 및 -allow-env 플래그가 하는 일이 바로 이것입니다. 네트워크를 통해 Neon에 액세스하고 DATABASE_URL 환경 변수에 액세스해야 하므로 이 두 플래그를 설정했습니다. 그러나 출력을 CSV에 쓰려면 위의 명령으로는 불가능하며 -allow-write도 필요합니다.</p>
+
+
+
+<p>이 세분화된 권한 시스템은 몇 가지 이점을 제공합니다:</p>
+
+
+
+<ol>
+<li><strong>보안 강화</strong>: 악성 코드나 손상된 종속성으로 인한 잠재적 피해를 제한합니다.</li>
+
+
+
+<li><strong>투명성</strong>: 개발자와 사용자는 스크립트에 필요한 권한을 쉽게 확인할 수 있습니다.</li>
+
+
+
+<li><strong>최소 권한 원칙</strong>: 스크립트가 작동하는 데 필요한 권한만 부여합니다.</li>
+
+
+
+<li><strong>더 쉬운 감사</strong>: 필요한 권한은 스크립트의 동작을 빠르게 파악할 수 있는 지표가 될 수 있습니다.</li>
+</ol>
+
+
+
+<p>이는 Deno의 몇 가지 차이점 중 일부에 불과합니다. Deno는 또한 브라우저 API와 더욱 밀접하게 연계된 다양한 API(예: Deno.env.get(), Deno.exit())를 제공하며, TypeScript를 즉시 지원합니다(예: queryObject&lt;{ id: 숫자; name: 문자열 }&gt;). 또한 Deno는 테스트, 서식 지정, 번들링을 위한 기본 제공 도구를 제공하므로 외부 도구와 구성의 필요성을 줄여줍니다.</p>
+
+
+
+<p>이 모든 것이 JS/TS/ECMAS 생태계를 발전시키기 위한 훌륭한 선택입니다. 하지만 디자인, 성능, 단순성이 뛰어난 Deno만큼이나 개발자들은 코드와 사용하는 라이브러리 프레임워크인 Node.js를 계속 사용하고 있습니다. Node.js는 강력한 생태계를 구축하는 데 두 배의 시간이 걸렸으며, 결함에도 불구하고 개발자들은 이를 사용하기를 원합니다. 따라서 산이 오지 않을 때는 산으로 가야 합니다.</p>
+
+
+
+
+
+
+
+<p>이것이 바로 <a href="https://docs.deno.com/runtime/reference/migration_guide/">Deno 1.x에서 2.x로의 마이그레이션 가이드에</a> 나와 있는 내용입니다:</p>
+
+
+
+<blockquote>
+<p><em>Deno 1.x에서 많은 성과를 거두었지만, 다음 주요 버전은 </em><strong><em>대규모</em></strong><em>Deno 사용에 초점을 맞추고 있습니다 </em><em>. 즉, 개발자들이 선호하는 단순성, 보안성, '배터리 포함' 특성을 유지하면서 Node.js 및 npm JavaScript 인프라와 원활하게 상호 운용하고 더 광범위한 프로젝트 및 개발 팀을 지원할 수 있게 됩니다.</em></p>
+</blockquote>
+
+
+
+<p><br>이것이 바로 Deno 2.0의 핵심입니다. 기존 기능은 유지하면서 개발자가 Deno를 더 효과적으로 확장하여 사용할 수 있도록 하는 것입니다. 그 핵심은 두 가지를 의미합니다.</p>
+
+
+
+<h3 id="nodejs-and-npm-compatibility">Node.js 및 npm 호환성</h3>
+
+
+
+<p>Deno는 <a href="https://deno.com/blog/v1.28">Deno 1.28에서</a> npm: 지정자를 통해 npm 지원을 안정화했습니다. 그 이후로 런타임 전반에 걸쳐 Node.js 및 npm 지원을 점진적으로 개선해 왔습니다. Deno 2.0은 <a href="https://docs.deno.com/runtime/fundamentals/node/">Node.js 및 npm과의</a> 하위 <a href="https://docs.deno.com/runtime/fundamentals/node/">호환성을</a> 제공합니다:</p>
+
+
+
+<ol>
+<li><strong>Node.js 내장 모듈</strong>: Deno는 이제 대부분의 Node.js 내장 모듈을 지원하며, <code translate="no">node: prefix</code> 을 사용하여 가져올 수 있습니다(예: <code translate="no">import * as os from "node:os";</code>.</li>
+
+
+
+<li><strong>CommonJS 지원</strong>: Deno 2.0은 CommonJS 지원을 개선하여 개발자가 <code translate="no">.cjs</code> 확장자를 사용하여 CommonJS 파일을 직접 실행할 수 있습니다. 개발자는 <code translate="no">import</code> 문을 사용하여 ES 모듈에서 CommonJS 모듈을 가져오거나 <code translate="no">require()</code> 을 사용하여 ES 모듈을 가져올 수 있습니다(최상위 await을 사용하지 않는 한).</li>
+
+
+
+<li><strong>npm 패키지</strong>: 개발자는 <code translate="no">npm: specifier</code> 을 사용하여 Deno에서 직접 npm 패키지를 사용할 수 있으므로 방대한 npm 에코시스템을 더 쉽게 활용할 수 있습니다.</li>
+
+
+
+<li><strong>package.json 및 node_modules</strong>: Deno 2.0은 <code translate="no">package.json</code> 파일을 이해하고 <code translate="no">node_modules</code> 디렉터리에서 작업할 수 있으므로 기존 Node.js 프로젝트를 쉽게 마이그레이션할 수 있습니다.</li>
+
+
+
+<li><strong>전역 변수</strong>: Deno 2.0은 Node.js 애플리케이션과 프레임워크에서 널리 사용되는 프로세스 전역 변수를 도입했습니다.</li>
+</ol>
+
+
+
+<p>위의 예제를 다시 살펴보면, Node.js 예제를 Deno로 포팅할 수 있습니다. 실제로 이를 위해 우리가 해야 할 일은 다음과 같습니다:</p>
+
+
+
+<ol>
+<li>디렉터리에서 <code translate="no">deno install</code> 을 실행하여 package.json을 읽습니다.</li>
+
+
+
+<li>코드에 CommonJS 모듈이 포함되어 있으므로 파일 확장자를 <code translate="no">.cjs</code> 로 변경합니다.</li>
+
+
+
+<li><code translate="no">--allow-read</code> 플래그를 추가하여 <code translate="no">deno run&nbsp; --allow-net --allow-env --allow-read node_index.cjs</code> 을 실행하여 Deno가 패키지 파일을 읽을 수 있도록 합니다. <code translate="no">node_modules</code></li>
+</ol>
+
+
+
+<p>또는 npm 버전의 Postgres 라이브러리를 사용하도록 Deno 코드를 변경할 수도 있습니다. 가져오기를 다음으로 변경합니다:</p>
+
+
+<figure><pre translate="no" tabindex="0" data-language="javascript"><code translate="no"><span data-line="1"><span>import</span><span> pg </span><span>from</span><span> "npm:pg"</span><span>;</span></span>
+<span data-line="2"><span>const</span><span> { </span><span>Client</span><span> } </span><span>=</span><span> pg;</span></span></code></pre></figure>
+
+
+<p>그런 다음 pg 라이브러리가 <code translate="no">queryObject</code> 을 지원하지 않으므로 쿼리 호출 자체도 변경해야 합니다:</p>
+
+
+<figure><pre translate="no" tabindex="0" data-language="javascript"><code translate="no"><span data-line="1"><span>const</span><span> result</span><span> =</span><span> await</span><span> client</span><span>.query</span><span>(</span></span>
+<span data-line="2"><span>     "SELECT name, value FROM playing_with_neon LIMIT 5"</span></span>
+<span data-line="3"><span>   );</span></span></code></pre></figure>
+
+
+<p>이러한 사소한 예제를 통해 Deno와 Node의 호환성을 이미 확인할 수 있습니다. 그러나 이것은 실제로 프로젝트를 확장해야 하는 진지한 개발자를 위한 더 나은 개발자 경험에 관한 것입니다. 이러한 Node.js 호환성 개선을 통해 Deno 2.0은 현재 거의 모든 개발자가 사용하는 Next.js, SvelteKit, Remix 및 Nuxt와 같은 Node.js 프레임워크를 지원하기 시작합니다. 동일한 결과를 얻기 위해 npm run dev 대신 deno task dev를 실행할 수 있어야 합니다.</p>
+
+
+
+<p>이를 통해 기존 Node.js 프로젝트를 Deno로 점진적으로 마이그레이션하는 동시에 개발자는 Deno 프로젝트 내에서 익숙한 Node.js 도구와 라이브러리를 사용할 수 있습니다. 또한 중요한 점은 노드 개발자는 npm 에코시스템에 대한 액세스를 유지하면서 Deno의 보안 기능, 툴링, DX 및 최신 JavaScript 지원을 활용할 수 있다는 점입니다.</p>
+
+
+
+<h3 id="deno-lts">Deno LTS</h3>
+
+
+
+<p>Deno 2.0의 또 다른 중요한 부분은 대규모 빌드를 위한 실행 가능한 솔루션이라는 측면에서 중요한 <a href="https://docs.deno.com/runtime/fundamentals/stability_and_releases/">장기 지원입니다</a>. Deno는 v2.1.0부터 버그 수정 및 중요한 성능 개선을 위해 6개월 동안 LTS 채널을 제공할 예정입니다.</p>
+
+
+
+<p><img loading="lazy" decoding="async" src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXec_nvpX-qizdhrjzo2Pgs37xr-iQQKzkSpefLBccugE20NZSOCmwfKen_2ea0wSokHh3HdUe3pwMTgCfhA9xV-NKwkxL2rwBl58u5c_9rDj4lY-2LYL1-KVG99vWw0kc4601KLNefVi-5Y3-ugr3r0K1s?key=2lJRdqRKAH7RuqtRc6QvGQ" width="545" height="259"></p>
+
+
+
+<p>LTS 채널은 대규모 프로젝트와 기업에게 안정성과 예측 가능성을 제공하기 때문에 중요합니다. 조직은 이러한 버전을 사용하여 장기간에 걸쳐 일관성을 유지할 수 있으므로 애플리케이션을 중단시킬 수 있는 예기치 않은 동작 변경의 위험을 줄일 수 있습니다. 조직은 지원 기간을 정의하여 업그레이드 주기를 보다 효과적으로 계획할 수 있습니다. 이는 업그레이드를 신중하게 예약하고 테스트해야 하는 대규모 프로젝트에 특히 중요합니다.</p>
+
+
+
+<p>내부 정책 또는 규정 준수 요구 사항으로 인해 많은 기업에서 프로덕션 환경에 LTS 버전이 필요합니다. LTS를 제공하면 이러한 조직에 Deno가 더욱 실용적인 옵션이 될 수 있습니다.</p>
+
+
+
+<p>Deno 에코시스템의 경우 이는 다음을 의미합니다:</p>
+
+
+
+<ol>
+<li>프로덕션 환경에서의 채택 증가</li>
+
+
+
+<li>기업이 Deno 기반 프로젝트에 더욱 자신 있게 투자할 수 있음</li>
+
+
+
+<li>Node.js에서 Deno로 전환하는 조직을 위한 보다 명확한 경로 제공</li>
+
+
+
+<li>더 많은 써드파티 도구 및 서비스가 공식적으로 Deno를 지원할 수 있는 가능성</li>
+</ol>
+
+
+
+<p>전반적으로 Deno 2.0에 LTS가 도입된 것은 Deno를 성숙하고 확장 가능한 JavaScript 런타임으로 만들기 위한 중요한 단계입니다. 이는 대규모 조직과 프로젝트가 Deno를 채택할 때 우려했던 주요 우려 사항 중 하나를 해결하여 프로덕션 환경에서 Node.js와 함께 또는 그 대안으로 채택을 가속화할 수 있습니다.</p>
+
+
+
+
+
+
+
+<p>공룡에게도 비늘이 있었나요? 깃털이 비늘인지 비늘이 현재 생각인지는 잘 모르겠지만, Deno에는 확실히 비늘 기능이 있습니다.</p>
+
+
+
+<p>이 모든 것이 노드 세계에 대한 항복처럼 보일 수 있으며, 표면적으로 Deno 프로젝트에 package.json과 node_modules가 등장하면 Deno 애호가들은 <a href="https://equatorialminnesota.blogspot.com/p/blog-page_14.html#:~:text=Lacrimals%20(also%20lachrymals)%3A%20Known,of%20the%20orbits%20in%20dinosaurs.">공룡의 눈물을 흘릴</a> 지도 모릅니다. 그러나 이것은 현실에 관한 것이며, 더 중요한 것은 개발자가 원하거나 필요로 하는 것을 구축하는 것입니다. </p>
+
+
+
+<p>Deno 팀은 커뮤니티의 의견을 경청한 결과, Deno의 단순성, 보안, 성능을 좋아하지만 여전히 Node와 함께 살아 숨 쉬고 있기 때문에 크로스오버가 필요하다는 의견을 들었습니다. Deno 2는 바로 그런 기능을 제공하므로 모든 개발자가 Node에서 계속 빌드하면서 Deno의 세계를 최대한 활용하고 천천히 전환할 수 있습니다.</p>
+</div></div>
+	      </article>
+			</main>
+    </body>
+  </html>
+  
