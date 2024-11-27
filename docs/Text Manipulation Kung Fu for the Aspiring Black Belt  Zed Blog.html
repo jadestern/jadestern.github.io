@@ -1,0 +1,237 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>Text Manipulation Kung Fu for the Aspiring Black Belt - Zed Blog</title>
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+      <script src="//unpkg.com/alpinejs" defer></script>
+    </head>
+    <body x-data="{ dark: false }" x-bind:data-theme="dark ? 'dark' : 'light'">
+      <main class="container">
+      	<button x-on:click="dark = !dark" class="contrast outline">Switch Theme</button>
+	      <article>
+	        <div id="readability-page-1" class="page"><div><section><article><p>소프트웨어 개발 영역에서 텍스트 편집기는 단순한 도구가 아니라 프로그래머의 연장선상에 있습니다. 검을 정확하고 우아하게 다루는 무술가처럼 프로그래머는 텍스트 편집기를 휘두르며 의도적인 의도를 가지고 텍스트 줄을 자릅니다. 이 가이드는 텍스트 조작의 기술을 연마할 수 있는 도장이라고 생각하세요.</p>
+<p>일련의 실습을 시작하기 전에 탐색 및 선택의 기본부터 시작하겠습니다. 텍스트와 해당 텍스트를 변형하기 위한 목표, 그리고 해당 작업에 필요한 텍스트 조작 명령을 어디에서 찾을 수 있는지에 대한 안내가 제공됩니다. 연습에 대한 해결책은 화면 캡처 동영상의 형태로 제공되며, 사용된 명령에 대한 자세한 분석과 함께 제공되므로 따라하면서 더 깊이 이해할 수 있습니다.</p>
+<p>탐색과 선택의 기본에 대해 알아봅시다.</p>
+
+<p>명령 팔레트는 새로운 명령을 발견하고 관련 키보드 단축키를 익힐 수 있는 최고의 리소스 중 하나입니다. <code translate="no">cmd-shift-p</code> 으로 명령 팔레트를 엽니다. 명령 팔레트에서는 퍼지 검색이 가능하므로 원하는 명령의 몇 글자만 입력하면 빠르게 찾을 수 있습니다.</p>
+<div><figure><img src="https://zed.dev/img/post/text-manipulation/command-palette.png" alt="Command palette"><figcaption>명령 팔레트</figcaption></figure></div>
+<p>명령 팔레트에서 <code translate="no">editor: move</code> 또는 <code translate="no">editor: select</code> 을 검색하면 파일의 시작 부분, 줄의 끝, 단어의 시작 부분 등으로 이동하는 명령 등 여러 가지 명령이 표시됩니다. 다음 단어, 다음 줄, 다음 단락 등을 선택하는 명령도 볼 수 있습니다. 이 모든 명령을 직접 배우는 것은 어렵고 불필요한 일입니다. 대신 커서 탐색 및 선택의 기본 구성 요소를 학습하는 데 집중할 것이며, 이러한 구성 요소를 직관적으로 결합하여 더 복잡한 이동이나 선택을 수행할 수 있습니다.</p>
+<h3 id="directional-keys">방향키</h3>
+<ul>
+<li><code translate="no">left</code>: 커서 왼쪽으로 이동</li>
+<li><code translate="no">right</code>: 커서 오른쪽으로 이동</li>
+<li><code translate="no">up</code>: 커서 위로 이동</li>
+<li><code translate="no">down</code>: 커서 아래로 이동</li>
+</ul>
+<h3 id="modifiers">수정자</h3>
+<ul>
+<li><code translate="no">cmd</code>편집기에서 "가장자리" 경계로 이동을 지정하는 데 사용됩니다. 예: <code translate="no">cmd-left</code> 은 현재 줄의 시작 부분으로 이동하고 <code translate="no">cmd-up</code> 은 파일의 시작 부분으로 이동합니다. <code translate="no">cmd-right</code> 과 <code translate="no">cmd-down</code> 이 무엇을 하는지 짐작할 수 있나요?</li>
+<li><code translate="no">alt</code>"단어 경계"로 구분된 텍스트 사이를 점프하도록 지정하는 데 사용됩니다. 단어 경계는 공백이나 구두점과 같이 영숫자가 아닌 문자를 만날 때 종종 발생합니다. 예: <code translate="no">alt-left</code> 은 현재 단어의 시작 부분으로 점프하고 <code translate="no">alt-right</code> 은 단어의 끝 부분으로 점프합니다. <code translate="no">alt</code> 를 <code translate="no">ctrl</code> 와 결합하면 하위 단어 사이를 이동하며, 이는 camelCase 및 snake_case 변수의 하위 단어 사이를 이동하는 데 유용합니다.</li>
+<li><code translate="no">shift</code>는 대신 이동을 선택으로 수정합니다. 예: <code translate="no">shift-left</code> 은 단순히 이동하는 것이 아니라 왼쪽으로 선택하고 <code translate="no">shift-right</code> 은 오른쪽으로 선택합니다. Shift는 <code translate="no">cmd-shift-left</code> 처럼 다른 수정자와 결합하여 줄의 시작 부분으로 선택할 수 있습니다.</li>
+</ul>
+<p>이제 커서 탐색 및 선택 명령의 기본 구성 요소를 배웠으니 이제 연습을 시작하겠습니다. 문제를 풀 때는 앞서 설명한 구성 요소를 바탕으로 명령 팔레트와 직관을 함께 활용하세요! 마우스를 사용하지 않도록 최선을 다하세요!</p>
+<h2 id="white-belt-challenge">화이트 벨트 챌린지</h2>
+<p>목표:</p>
+<p>팀원의 풀 리퀘스트를 꼼꼼하게 검토하다가 JSON 파일에서 다른 키에 사용된 명명 규칙과 다른 키를 발견했습니다. 동일한 명명 규칙을 사용하도록 키를 통합하는 것이 과제입니다!</p>
+<p>여정을 위한 팁</p>
+<ul>
+<li>커서 탐색 및 선택 명령을 검토하세요.</li>
+<li>명령 팔레트에서 <code translate="no">convert case</code> 을 검색합니다.</li>
+</ul>
+<figure data-rehype-pretty-code-figure=""><div><pre translate="no"><code translate="no" data-language="json" data-theme="dark-plus light-plus"><span data-line=""><span>{</span></span>
+<span data-line=""><span>  "warrior_name"</span><span>: </span><span>"Takamura Hajime"</span><span>,</span></span>
+<span data-line=""><span>  "preferred_weapon"</span><span>: </span><span>"Yari"</span><span>,</span></span>
+<span data-line=""><span>  "martial_art_form"</span><span>: </span><span>"Jujitsu"</span><span>,</span></span>
+<span data-line=""><span>  "years_of_training"</span><span>: </span><span>5</span><span>,</span></span>
+<span data-line=""><span>  "isMasterLevelCertified"</span><span>: </span><span>false</span><span>,</span></span>
+<span data-line=""><span>  "dojo_affiliated_region"</span><span>: </span><span>"Echigo"</span></span>
+<span data-line=""><span>}</span></span></code></pre></div></figure>
+<h3 id="technique">기술</h3>
+<p><figure><video loop="" muted="" autoplay="" preload="metadata" controls="" playsinline=""><source src="https://customer-snccc0j9v3kfzkif.cloudflarestream.com/ed5343d34f61d91f6e61c292d5dbea69/downloads/default.mp4" type="video/webm; codecs=&quot;vp8.0, vorbis&quot;"><source src="https://customer-snccc0j9v3kfzkif.cloudflarestream.com/ed5343d34f61d91f6e61c292d5dbea69/downloads/default.mp4" type="video/mp4; codecs=&quot;avc1.4D401E, mp4a.40.2&quot;"></video><figcaption>화이트 벨트 챌린지 솔루션</figcaption></figure></p>
+<h3 id="dissection">해부</h3>
+<ol>
+<li><code translate="no">isMasterLevelCertified</code> 의 시작 부분으로 이동합니다.</li>
+<li><code translate="no">editor: select to next word end</code> 을 통해 <code translate="no">isMasterLevelCertified</code> 을 선택합니다.</li>
+<li><code translate="no">editor: convert to snake case</code> 을 실행합니다.</li>
+</ol>
+<h3 id="honing-your-grip">그립 연마하기</h3>
+<p>Zed에는 매우 유용한 텍스트 조작 명령이 몇 가지 포함되어 있는데, 여러 프로그래밍 언어의 명명 규칙을 번역할 때 유용한 명령이 많습니다:</p>
+<ul>
+<li><code translate="no">editor: convert to lower camel case</code></li>
+<li><code translate="no">editor: convert to upper camel case</code></li>
+<li><code translate="no">editor: convert to lower case</code></li>
+<li><code translate="no">editor: convert to upper case</code></li>
+<li><code translate="no">editor: convert to kebab case</code></li>
+<li><code translate="no">editor: convert to snake case</code></li>
+<li><code translate="no">editor: convert to title case</code></li>
+<li><code translate="no">editor: transpose</code></li>
+</ul>
+<h2 id="green-belt-challenge">그린 벨트 챌린지</h2>
+<p>목표:</p>
+<p>여러분은 멋진 Python 프로그램을 개발하고 있습니다. <code translate="no">train_fighter</code> 함수에 읽기 전용이며 전역 상수로 만들 수 있는 <code translate="no">power_increase_factor</code> 이라는 로컬 변수가 있다는 것을 알 수 있습니다. 전역 상수에 대한 파이썬 규칙에 따라 <code translate="no">power_increase_factor</code> 변수를 전역 범위로 올리고 모든 인스턴스의 이름을 <code translate="no">POWER_INCREASE_FACTOR</code> 으로 바꿉니다.</p>
+<p>여정을 위한 팁</p>
+<ul>
+<li>커서 탐색 및 선택 명령을 검토하세요.</li>
+<li>명령 팔레트에서 <code translate="no">move line</code> 을 검색합니다.</li>
+<li>명령 팔레트에서 <code translate="no">select all matches</code> 을 검색합니다.</li>
+<li>명령 팔레트에서 <code translate="no">convert case</code> 을 검색합니다.</li>
+</ul>
+<figure data-rehype-pretty-code-figure=""><div><pre translate="no"><code translate="no" data-language="py" data-theme="dark-plus light-plus"><span data-line=""><span>def</span><span> train_fighter</span><span>(</span><span>fighter_name</span><span>, </span><span>current_power</span><span>):</span></span>
+<span data-line=""><span>    power_increase_factor = </span><span>1.15</span></span>
+<span data-line=""><span>    new_power = current_power * power_increase_factor</span></span>
+<span data-line=""><span>    print</span><span>(</span><span>f</span><span>"After arduous training, </span><span>{</span><span>fighter_name</span><span>}</span><span> has increased their power to </span><span>{</span><span>new_power</span><span>:.2f}</span><span>!"</span><span>)</span></span>
+<span data-line=""><span>    return</span><span> new_power</span></span>
+<span data-line=""> </span>
+<span data-line=""> </span>
+<span data-line=""><span>def</span><span> display_fighter_stats</span><span>(</span><span>fighter_name</span><span>, </span><span>fighter_power</span><span>):</span></span>
+<span data-line=""><span>    print</span><span>(</span><span>f</span><span>"</span><span>{</span><span>fighter_name</span><span>}</span><span>'s Current Power: </span><span>{</span><span>fighter_power</span><span>}</span><span>"</span><span>)</span></span>
+<span data-line=""> </span>
+<span data-line=""> </span>
+<span data-line=""><span>if</span><span> __name__</span><span> == </span><span>"__main__"</span><span>:</span></span>
+<span data-line=""><span>    fighter_name = </span><span>"Iron Fist"</span></span>
+<span data-line=""><span>    initial_power = </span><span>100</span></span>
+<span data-line=""> </span>
+<span data-line=""><span>    display_fighter_stats(fighter_name, initial_power)</span></span>
+<span data-line=""><span>    new_power_level = train_fighter(fighter_name, initial_power)</span></span>
+<span data-line=""><span>    display_fighter_stats(fighter_name, new_power_level)</span></span></code></pre></div></figure>
+<h3 id="technique-1">기술</h3>
+<p><figure><video loop="" muted="" autoplay="" preload="metadata" controls="" playsinline=""><source src="https://customer-snccc0j9v3kfzkif.cloudflarestream.com/7f75c1255fc784ab09311648294e7ba9/downloads/default.mp4" type="video/webm; codecs=&quot;vp8.0, vorbis&quot;"><source src="https://customer-snccc0j9v3kfzkif.cloudflarestream.com/7f75c1255fc784ab09311648294e7ba9/downloads/default.mp4" type="video/mp4; codecs=&quot;avc1.4D401E, mp4a.40.2&quot;"></video><figcaption>그린 벨트 챌린지 솔루션</figcaption></figure></p>
+<h3 id="dissection-1">해부</h3>
+<ol>
+<li>파일 시작 부분에 개행 2개를 추가합니다.</li>
+<li>커서를 <code translate="no">power_increase_factor...</code> 줄의 시작 부분으로 이동합니다.</li>
+<li><code translate="no">editor: move line up</code> 을 통해 줄을 파일 시작 부분으로 이동합니다.</li>
+<li><code translate="no">editor: tab prev</code> 을 통해 줄의 들여쓰기를 제거합니다.</li>
+<li><code translate="no">editor: select to next word end</code> 을 통해 <code translate="no">power_increase_factor</code> 을 선택합니다.</li>
+<li><code translate="no">editor: select all matches</code> 을 통해 <code translate="no">power_increase_factor</code> 의 모든 인스턴스를 선택합니다.</li>
+<li><code translate="no">editor: convert to upper snake case</code> 을 실행합니다.</li>
+</ol>
+<h3 id="honing-your-grip-1">그립 연마하기</h3>
+<p>Zed에는 다양한 줄 조작 명령이 있습니다. 목록이 있을 때 항목을 정렬하고 중복을 제거하는 것은 몇 번의 키 입력으로 수행할 수 있는 일반적인 작업입니다:</p>
+<ul>
+<li><code translate="no">editor: delete line</code></li>
+<li><code translate="no">editor: duplicate line up</code></li>
+<li><code translate="no">editor: duplicate line down</code></li>
+<li><code translate="no">editor: join lines</code></li>
+<li><code translate="no">editor: move line up</code></li>
+<li><code translate="no">editor: move line down</code></li>
+<li><code translate="no">editor: reverse lines</code></li>
+<li><code translate="no">editor: shuffle lines</code></li>
+<li><code translate="no">editor: sort lines case insensitive</code></li>
+<li><code translate="no">editor: sort lines case sensitive</code></li>
+<li><code translate="no">editor: unique lines case insensitive</code></li>
+<li><code translate="no">editor: unique lines case sensitive</code></li>
+</ul>
+<p>Zed에서 편집기에 여러 커서를 배치하는 방법에는 여러 가지가 있습니다. 다음 명령은 모두 다양한 시나리오에서 유용하게 사용할 수 있습니다:</p>
+<ul>
+<li><code translate="no">editor: select all matches</code></li>
+<li><code translate="no">editor: select next</code></li>
+<li><code translate="no">editor: split selection into lines</code></li>
+<li><code translate="no">editor: add selection above</code></li>
+<li><code translate="no">editor: add selection below</code></li>
+<li><code translate="no">editor: undo selection</code></li>
+<li>열 기반 선택 - <code translate="no">alt-shift-mouse-drag</code></li>
+</ul>
+<h2 id="brown-belt-challenge">브라운 벨트 챌린지</h2>
+<p>목표:</p>
+<p>여러분은 역사적인 무술 고수에 대한 정보가 나열된 고대 두루마리(CSV 파일)를 발견했습니다. CSV 파일에 수정해야 할 몇 가지 불일치 사항이 있습니다. CSV 파일을 정리해야 합니다. 따옴표를 제거하고 모든 문자열을 대문자로 표기하세요.</p>
+<p>여정을 위한 팁:</p>
+<ul>
+<li>커서 탐색 및 선택 명령을 검토합니다.</li>
+<li>줄 조작 명령을 검토합니다.</li>
+<li>다중 커서 명령을 검토합니다.</li>
+</ul>
+<figure data-rehype-pretty-code-figure=""><div><pre translate="no"><code translate="no" data-language="csv" data-theme="dark-plus light-plus"><span data-line=""><span>id,</span><span>first_name,</span><span>last_name,</span><span>style,</span><span>birth,</span><span>death,</span><span>country</span></span>
+<span data-line=""><span>1,</span><span>"Miyamoto",</span><span>"Musashi",</span><span>"Swordsmanship",</span><span>1584,</span><span>1645,</span><span>"japan"</span></span>
+<span data-line=""><span>2,</span><span>yamamoto,</span><span>tsunetomo,</span><span>"Hagakure",</span><span>1659,</span><span>1719,</span><span>"Japan"</span></span>
+<span data-line=""><span>3,</span><span>"Ip",</span><span>"Man",</span><span>"wing Chun",</span><span>1893,</span><span>1972,</span><span>"china"</span></span>
+<span data-line=""><span>4,</span><span>morihei,</span><span>ueshiba,</span><span>Aikido,</span><span>1883,</span><span>1969,</span><span>"Japan"</span></span>
+<span data-line=""><span>5,</span><span>"Gichin",</span><span>"funakoshi",</span><span>"karate",</span><span>1868,</span><span>1957,</span><span>"Japan"</span></span></code></pre></div></figure>
+<h3 id="technique-2">기술</h3>
+<p><figure><video loop="" muted="" autoplay="" preload="metadata" controls="" playsinline=""><source src="https://customer-snccc0j9v3kfzkif.cloudflarestream.com/47a8887e5d0b9399817dd1f1607038e7/downloads/default.mp4" type="video/webm; codecs=&quot;vp8.0, vorbis&quot;"><source src="https://customer-snccc0j9v3kfzkif.cloudflarestream.com/47a8887e5d0b9399817dd1f1607038e7/downloads/default.mp4" type="video/mp4; codecs=&quot;avc1.4D401E, mp4a.40.2&quot;"></video><figcaption>브라운 벨트 챌린지 솔루션</figcaption></figure></p>
+<h3 id="dissection-2">해부</h3>
+<ol>
+<li>첫 번째 <code translate="no">"</code> 로 이동합니다.</li>
+<li><code translate="no">editor: select right</code> 을 통해 <code translate="no">"</code> 을 선택합니다.</li>
+<li><code translate="no">editor: select all matches</code> 을 통해 <code translate="no">"</code> 의 모든 인스턴스를 선택합니다.</li>
+<li><code translate="no">editor: delete</code> 을 통해 <code translate="no">"</code>을 삭제합니다.</li>
+<li><code translate="no">editor: cancel</code> 을 통해 멀티 커서 모드를 종료합니다.</li>
+<li><code translate="no">editor: select left</code> 을 통해 앞의 <code translate="no">,</code> 을 선택합니다.</li>
+<li><code translate="no">,</code> 의 모든 인스턴스를 선택합니다. 여기서는 열 이름을 구분하는 쉼표를 선택하지 않으므로 <code translate="no">editor: select all matches</code> 을 사용하지 않습니다. 대신 <code translate="no">editor: select next</code> 바인딩을 누른 채로 다음 일치 항목을 반복해서 선택합니다. 쉼표를 너무 많이 선택하면 <code translate="no">editor: undo selection</code> 을 통해 선택을 취소할 수 있습니다.</li>
+<li><code translate="no">editor: move right</code> 을 통해 선택을 취소합니다.</li>
+<li><code translate="no">editor: select to next word end</code> 을 통해 각 쉼표 바로 앞에 오는 단어를 모두 선택합니다. 일부 정수도 선택하게 되지만 이 경우에는 문제가 되지 않습니다.</li>
+<li><code translate="no">editor: convert to title case</code> 을 통해 선택한 텍스트를 제목 대소문자로 변환합니다.</li>
+</ol>
+<h2 id="black-belt-challenge">블랙 벨트 챌린지</h2>
+<p>목표:</p>
+<p>아래 텍스트에서 무술 배우의 이름을 추출하여 마크다운 목록으로 만들고, 각 이름을 대문자로 대입하고 <code translate="no">&lt;last&gt;, &lt;first&gt;</code> 형식으로 입력한 다음 알파벳순으로 정렬합니다.</p>
+<p>여정을 위한 팁:</p>
+<ul>
+<li>커서 이동 및 선택 명령을 검토하세요.</li>
+<li>줄 조작 명령을 검토합니다.</li>
+<li>다중 커서 명령을 검토합니다.</li>
+</ul>
+<figure data-rehype-pretty-code-figure=""><div><pre translate="no"><code translate="no" data-language="md" data-theme="dark-plus light-plus"><span data-line=""><span># Iconic Kung Fu Actors</span></span>
+<span data-line=""> </span>
+<span data-line=""><span>## bruce lee</span></span>
+<span data-line=""> </span>
+<span data-line=""><span>Bruce Lee's portrayal of "Lee" in the 1973 martial arts film </span><span>_Enter the Dragon_</span><span> is legendary. This character showcased Lee's exceptional martial arts skills, his philosophy of Jeet Kune Do, and his incredible physical prowess. The film cemented Bruce Lee's status as a global icon and greatly influenced the perception of Asian and martial arts culture in the Western world.</span></span>
+<span data-line=""> </span>
+<span data-line=""><span>## jackie chan</span></span>
+<span data-line=""> </span>
+<span data-line=""><span>Jackie Chan brought a new dimension to the martial arts film genre with his role as Wong Fei-hung in the 1978 film </span><span>_Drunken Master_</span><span>. Chan's unique blend of impressive martial arts and comedic timing created a refreshing and influential approach to the genre, highlighting the traditional drunken fist fighting style and establishing Chan as a major star in both Asia and the West.</span></span>
+<span data-line=""> </span>
+<span data-line=""><span>## jet li</span></span>
+<span data-line=""> </span>
+<span data-line=""><span>In the 1991 film </span><span>_Once Upon a Time in China_</span><span>, Jet Li portrays Huo Yuanjia, a revered martial arts master and founder of the Chin Woo Athletic Association. Li's performance was widely praised for its combination of grace, agility, and martial arts expertise, offering a narrative that explored Chinese nationalism and the importance of martial arts in cultural identity.</span></span>
+<span data-line=""> </span>
+<span data-line=""><span>## donnie yen</span></span>
+<span data-line=""> </span>
+<span data-line=""><span>Donnie Yen's role as Ip Man, the Wing Chun grandmaster, and teacher of Bruce Lee, in the 2008 film </span><span>_Ip Man_</span><span>, is considered one of his best performances. Through this role, Yen was able to showcase the skill, philosophy, and humanity of Ip Man, portraying significant events in his life against the backdrop of the Sino-Japanese War. The film series has become a classic, highlighting the spirit of Wing Chun and its significance in martial arts history.</span></span>
+<span data-line=""> </span>
+<span data-line=""><span>## michelle yeoh</span></span>
+<span data-line=""> </span>
+<span data-line=""><span>Michelle Yeoh's portrayal of Yu Shu Lien in the 2000 film </span><span>_Crouching Tiger, Hidden Dragon_</span><span> brought her international acclaim. Her character is a skilled warrior who navigates a complex plot of love, honor, and betrayal. Yeoh's performance, alongside her martial arts skill, played a significant role in the film's success, demonstrating the power and depth of female characters in the martial arts genre.</span></span></code></pre></div></figure>
+<h3 id="technique-3">기술</h3>
+<p><figure><video loop="" muted="" autoplay="" preload="metadata" controls="" playsinline=""><source src="https://customer-snccc0j9v3kfzkif.cloudflarestream.com/e1f6f13b0121300e7d0fcf808c7d21df/downloads/default.mp4" type="video/webm; codecs=&quot;vp8.0, vorbis&quot;"><source src="https://customer-snccc0j9v3kfzkif.cloudflarestream.com/e1f6f13b0121300e7d0fcf808c7d21df/downloads/default.mp4" type="video/mp4; codecs=&quot;avc1.4D401E, mp4a.40.2&quot;"></video><figcaption>블랙 벨트 챌린지 솔루션</figcaption></figure></p>
+<h3 id="dissection-3">해부</h3>
+<ol>
+<li>첫 번째 <code translate="no">##</code> 헤더로 이동합니다.</li>
+<li><code translate="no">editor: select right</code> 을 통해 <code translate="no">## </code> 을 선택합니다.</li>
+<li><code translate="no">editor: select all matches</code> 을 통해 <code translate="no">## </code> 의 모든 인스턴스를 선택합니다.</li>
+<li><code translate="no">editor: move right</code> 을 통해 선택 항목을 해제합니다.</li>
+<li><code translate="no">editor: select to end of line</code> 을 통해 각 줄의 끝을 선택합니다.</li>
+<li><code translate="no">editor: copy</code> 을 통해 각 선택 내용을 복사합니다.</li>
+<li><code translate="no">editor: move to end</code> 을 통해 문서 끝으로 이동합니다.</li>
+<li><code translate="no">editor: newline</code> 을 통해 몇 줄을 새로 삽입합니다.</li>
+<li><code translate="no">editor: paste</code> 을 통해 복사한 텍스트를 붙여넣습니다.</li>
+<li><code translate="no">editor: select to beginning of line</code> 을 통해 마지막 줄을 선택합니다.</li>
+<li>멀티플 <code translate="no">editor: select up</code> 을 통해 이름까지 선택 영역을 위쪽으로 확장합니다.</li>
+<li><code translate="no">editor: split selection into lines</code> 을 실행하여 각 줄 끝에 커서를 추가합니다.</li>
+<li><code translate="no">editor: move to previous word start</code> 을 통해 각 이름과 성 사이의 공백으로 이동합니다.</li>
+<li><code translate="no">editor: delete</code> 을 통해 공백을 삭제합니다.</li>
+<li><code translate="no">editor: select to next word end</code> 을 통해 모든 성을 선택합니다.</li>
+<li><code translate="no">editor: copy</code> 을 통해 성을 복사합니다.</li>
+<li><code translate="no">editor: delete</code> 을 통해 성을 삭제합니다.</li>
+<li><code translate="no">editor: move to beginning of line</code> 을 통해 각 줄의 시작 부분으로 돌아갑니다.</li>
+<li><code translate="no">editor: paste</code> 을 통해 성을 붙여넣습니다.</li>
+<li>각 이름 뒤에 <code translate="no">, </code> 을 추가합니다.</li>
+<li><code translate="no">editor: move to beginning of line</code> 을 통해 각 줄의 시작 부분으로 이동합니다.</li>
+<li><code translate="no">editor: select to end of line</code> 을 통해 각 줄의 끝으로 이동합니다.</li>
+<li><code translate="no">editor: convert to title case</code> 을 통해 선택한 텍스트를 제목 대소문자로 변환합니다.</li>
+<li><code translate="no">editor: move to beginning of line</code> 을 통해 각 줄의 시작 부분으로 다시 이동합니다.</li>
+<li>각 이름 앞에 <code translate="no">- [ ] </code> 을 삽입합니다.</li>
+<li><code translate="no">editor: move to end of line</code> 을 통해 각 줄의 끝으로 이동합니다.</li>
+<li><code translate="no">editor: select to beginning of line</code> 을 통해 각 줄을 선택합니다.</li>
+<li><code translate="no">editor: sort lines case sensitive</code> 을 통해 줄을 정렬합니다.</li>
+</ol>
+<h2 id="conclusion">결론</h2>
+<p>텍스트 변환은 유용하면서도 재미있을 수 있습니다. 가능한 한 가장 적은 단계를 필요로 하는 솔루션을 찾음으로써 이 과정을 '게임화'할 수 있습니다(연습 문제에서 제안된 것보다 더 간단한 솔루션을 발견했을 수도 있습니다). 하지만 모든 변형이 연습 문제에서처럼 명확한 것은 아닙니다. 예를 들어, 반복적인 편집 작업의 경우 커서를 여러 번 움직여도 한 번에 완전히 해결할 수 없는 경우가 많아서 나중에 약간의 수작업을 해야 하는 경우가 많습니다. 이러한 경우, 수동 후속 작업을 최소화하는 가장 효율적인 텍스트 상태를 찾는 것이 목표가 됩니다.</p>
+<p>텍스트 조작의 무기고에 추가할 수 있는 새로운 요령과 기술을 익힐 수 있었기를 바랍니다. 연습을 많이 할수록 더 능숙해질 수 있다는 것을 기억하세요. 그러니 계속 손맛을 연마하세요! 여러분이 적용한 흥미로운 조작이 있다면 언제든지 <a href="https://twitter.com/zeddotdev">공유해</a> 주세요!</p><hr></article></section></div></div>
+	      </article>
+			</main>
+    </body>
+  </html>
+  
