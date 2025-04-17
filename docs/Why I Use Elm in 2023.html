@@ -1,0 +1,138 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>Why I Use Elm in 2023</title>
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+      <script src="//unpkg.com/alpinejs" defer></script>
+      <style>
+        video {
+          width: 100%;
+        }
+      </style>
+    </head>
+    <body x-data="{ dark: false }" x-bind:data-theme="dark ? 'dark' : 'light'">
+      <main class="container">
+      	<button x-on:click="dark = !dark" class="contrast outline">Switch Theme</button>
+	      <article>
+	        <div id="readability-page-1" class="page"><div><p><img src="https://taylor.town/elm-mario.png" alt="elm mario example code"></p>
+<p><img src="https://taylor.town/elm-debug.png" alt="elm debugger"></p>
+
+<p>제가 <a href="https://taylor.town/about#projects">최근 진행한 프로젝트를</a> 보면 순수 HTML+CSS로 간결한 웹사이트를 구축하는 것을 좋아한다는 것을 알 수 있습니다.</p>
+<p>하지만 HTML+CSS로 UI를 구축하는 것은 쉽지 않을 수 있습니다. 복잡한 프론트엔드 경험을 만들 때 저는 <a href="https://elm-lang.org/">Elm을</a> 사용합니다. 그 이유는 다음과 같습니다:</p>
+<ol reversed="">
+    <li><a href="#design">놀라운 API 디자인</a></li>
+    <li><a href="#types">두려움 없는 리팩토링</a></li>
+    <li><a href="#predictability">극도의 예측 가능성</a></li>
+    <li><a href="#simplicity">최소한의 인지적 오버헤드</a></li>
+    <li><a href="#tooling">견고한 툴링</a></li>
+    <li><a href="#performance">뛰어난 성능</a></li>
+    <li><a href="#packages">작동하는 커뮤니티 패키지</a></li>
+</ol>
+<h2 id="packages">7. 효과적인 커뮤니티 패키지</h2>
+<p>최신 웹 개발은 일부 조직에게 지옥과도 같습니다.</p>
+<p>지난 10년 동안 저는 NPM 패키지로 인해 어려움을 겪는 팀들을 지켜보았습니다. 저는 <a href="https://momentjs.com/">순간.js</a>,<a href="https://moment.github.io/luxon/#/">Luxon</a>,<a href="https://github.com/iamkun/dayjs">day.js</a> 사이의 마이그레이션에 여러 번 참여했습니다. React 애플리케이션은<a href="https://fe-tool.com/awesome-react-state-management">상태 관리 라이브러리에</a>빠져서 중요한 무언가를 끊임없이 망가뜨립니다. 그리고<a href="https://fe-tool.com/awesome-react-hook">React 훅에</a> 대한 이야기는 시작도 하지 마세요.</p>
+<p>NPM의 모든 패키지는 (1) 깨지는 변경 사항으로 넘쳐나거나 (2) 완전히 버려진 것처럼 보입니다. 코드베이스 업그레이드는 팀에서 모든 사람에게 적합한 완벽한<code translate="no">package.lock</code> 을 찾은 후에도 끔찍한 일입니다.</p>
+<p>NPM의 열악한 품질은 프론트엔드의 개발 측면에도 영향을 미칩니다. 모든 웹팩/바벨/바이트/에스빌드/파르셀 에코시스템은 죽마 위에 얹혀 있는 섬세한 엉망진창처럼 느껴집니다. 저는 JS 소스 맵, 폴리필, 빌드 오류로 인해 수많은 엔지니어링 시간이 낭비되는 것을 목격했습니다.</p>
+<p>React 밖에서도 상황은 똑같이 암울해 보입니다. JS, Python, Elixir 등의 프론트엔드 프레임워크도 비슷한 품질 문제로 가득 차 있습니다. 많은 소프트웨어가 있으므로 제가 재고해야 할 에코시스템이 있다면 <a href="https://taylor.town/cdn-cgi/l/email-protection#e8808d848487a89c899184879ac69c879f86">이메일을</a> 보내주세요.</p>
+<p><a href="https://package.elm-lang.org/">Elm의 패키지는</a> 일반적으로 잘 문서화되어 있고, 집중도가 높으며, 이름이 적절하게 지정되어 있고, 버그가 없습니다. 하지만 제 말만 믿지 마시고 무작위로 패키지를 골라 품질을 직접 확인해 보세요:</p>
+<table>
+<thead>
+<tr>
+<th id=""></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://package.elm-lang.org/packages/elm-explorations/test/latest/">엘름-탐험/테스트</a></td>
+</tr>
+<tr>
+<td><a href="https://package.elm-lang.org/packages/elm-explorations/webgl/latest/">엘름-탐험/웹글</a></td>
+</tr>
+<tr>
+<td><a href="https://package.elm-lang.org/packages/rtfeldman/elm-css/latest/">rtfeldman/elm-css</a></td>
+</tr>
+<tr>
+<td><a href="https://package.elm-lang.org/packages/rtfeldman/elm-hex/latest/">rtfeldman/hex</a></td>
+</tr>
+<tr>
+<td><a href="https://package.elm-lang.org/packages/lukewestby/elm-http-builder/latest/">루크웨스트비/엘름-http-빌더</a></td>
+</tr>
+<tr>
+<td><a href="https://package.elm-lang.org/packages/mdgriffith/elm-codegen/latest/">MDGRIFFITH/ELM-CODEGEN</a></td>
+</tr>
+<tr>
+<td><a href="https://package.elm-lang.org/packages/mdgriffith/elm-style-animation/latest/">mdgriffith/elm-style-animation</a></td>
+</tr>
+<tr>
+<td><a href="https://package.elm-lang.org/packages/mdgriffith/elm-ui/latest/">MDGRIFFITH/ELM-UI</a></td>
+</tr>
+<tr>
+<td><a href="https://package.elm-lang.org/packages/w0rm/elm-physics/latest/">W0RM/ELM-물리학</a></td>
+</tr>
+<tr>
+<td><a href="https://package.elm-lang.org/packages/BrianHicks/elm-csv/latest/">BrianHicks/elm-csv</a></td>
+</tr>
+<tr>
+<td><a href="https://package.elm-lang.org/packages/terezka/elm-charts/latest/">terezka/elm-charts</a></td>
+</tr>
+<tr>
+<td><a href="https://package.elm-lang.org/packages/tesk9/accessible-html/latest/">tesk9/accessible-html</a></td>
+</tr>
+<tr>
+<td><a href="https://package.elm-lang.org/packages/robinheghan/elm-phone-numbers/latest/">robinheghan/elm-전화번호</a></td>
+</tr>
+<tr>
+<td><a href="https://package.elm-lang.org/packages/ianmackenzie/elm-geometry/latest/">ianmackenzie/elm-geometry</a></td>
+</tr>
+<tr>
+<td><a href="https://package.elm-lang.org/packages/ianmackenzie/elm-units/latest/">ianmackenzie/elm-units</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="performance">6. 훌륭한 성능</h2>
+<p><a href="https://engineering.rakuten.today/post/elm-at-rakuten/">라쿠텐의 이 글은</a>제가 직접 경험한 Elm의 성능과 일치합니다:</p>
+<blockquote>
+  <ul>
+  <li>Elm 애플리케이션의 성능은 가장 빠른 편에 속합니다. 내부적으로 Elm은 React와 유사한 가상 DOM이라는 개념을 사용합니다. Elm 가상 DOM의 속도는 다른 메커니즘을 사용하여 DOM을 업데이트하는 Svelte와 비슷합니다.</li>
+  <li>Elm 컴파일러는 다른 프레임워크에 비해 더 작은 에셋을 생성합니다. 이러한 결과를 달성하기 위한 다양한 최적화 중에는 전체 에코시스템에서 작동하는 단일 함수에 대한 세분화된 데드 코드 제거 기능이 있습니다. 대규모 패키지를 임포트하고 포함된 함수 중 하나만 사용하는 경우 컴파일러는 생성된 코드에 해당 함수만 포함되도록 합니다.</li>
+  <li>Elm 컴파일러 자체도 빠릅니다. 저희의 대규모 코드베이스에는 약 66,500줄의 Elm 코드가 포함되어 있으며, 0.3초 안에 증분 컴파일하고 2.5초 안에 처음부터 컴파일합니다.</li>
+  </ul>
+</blockquote>
+<p>덧붙이고 싶은 말은 Elm의 가상 DOM이 동급의 최적화된 바닐라 JS 프로그램보다 확실히 느리다는 것입니다. 하지만 최신 브라우저의 경우 Elm은 개발자 인체공학과 런타임 속도가 가장 잘 균형을 이루는 것 같습니다.</p>
+
+<p><a href="https://github.com/elm-tooling/elm-language-server">Neovim에서 Elm을</a> 작성하는 것은 훌륭합니다. 유형 힌트, 테스트, 오류, 자동 서식 지정, 재컴파일 등 파일 크기에 관계없이 모든 것이 빠르게 느껴집니다.</p>
+<p>빠르고 간단한 Elm 컴파일러 덕분에 개발 중에 툴링을 매우 간단하게 유지할 수 있습니다. 전체 라이브 웹 개발 설정은 다음과 같습니다:</p>
+<pre translate="no"><code translate="no">http-server dist \
+&amp; watch -p "**/*.elm" -c "elm make src/Main.elm --debug --output=dist/elm.js"</code></pre>
+<p>디버깅은 간단합니다. 코드가 이상하게 동작하면 Elm의 시간 이동 디버거를 사용하여 각 상태 변경 시마다 모델을 검사합니다. 거기에서 순수 함수를 사용하면 오류가 분명해집니다.</p>
+<h2 id="simplicity">4. 최소한의 인지 오버헤드</h2>
+<p>대부분의 언어는 제 입맛에 맞지 않게 너무 강력합니다.</p>
+<p>오해하지 마세요. 저는 Rust와 다른 많은 언어를 좋아합니다! 하지만 가끔은 너무 과할 때도 있습니다.</p>
+<p>Rust나 JS, Haskell, Python, Lisp를 작성할 때면 압도당하는 기분이 듭니다. 이걸 일반화해야 할까? 클래스를 사용해야 할까, 구조체를 사용해야 할까? 불변성을 사용해야 할까, 가변성을 사용해야 할까? 매크로를 사용할까요? 함수형 또는 명령형 배열 조작?</p>
+<p>컴파일러와 동료, 고객을 만족시키려고 노력하지만 모두 실망합니다. 목공소를 주면 길을 잃지만 간단한 끌을 주면 무엇을 해야 할지 직관적으로 알 수 있습니다. 제한된 도구 세트에는 일정한 자유가 있습니다.</p>
+<p>Go나 Elm과 같은 언어는 사치스러움을 거부합니다. 지나친 복잡성을 거부합니다. 컴파일러 오류나 문체 차이와 싸우는 대신 실제 문제를 해결하도록 유도합니다.</p>
+<p>또한 일관된 코드는 이식 가능한 멘탈 모델을 만듭니다. Go와 Elm의 코드베이스는 가독성이 매우 뛰어난 경향이 있습니다.</p>
+<h2 id="predictability">3. 극도의 예측 가능성</h2>
+<p>저는 반짝이는 새로운 기능과 예측 가능성을 좋아합니다.</p>
+<p>하지만 안타깝게도 장단점이 있습니다. 컴파일러 팀의 경우 버그 찾기는 기능 개발 시간을 빼앗아 갑니다.</p>
+<p>위치가 바뀌지 않는다면 지뢰와 함께 살 수 있습니다. 패치를 릴리스하면 예측 가능성이 떨어집니다. 버그에 알려진 해결 방법이 있다면 개발자가 오래된 오류 대신 다음 릴리스에 모든 노력을 집중할 수 있기를 바랍니다.</p>
+<p>하지만 저는 야심찬 비전을 좋아하는 인내심이 강한 사람이기도 합니다. 몇 달 동안의 우연한 개선보다는 긴밀하게 통합된 기능 집합을 위해 몇 년을 기다리는 편이 낫습니다.</p>
+<p>Elm 0.19.1은 2019년 이후 최신 버전입니다. 2023년에 새로운 기능이 추가될 것이라는 소문이 들리는데, 매우 기대가 되지만 0.19.1은 여전히 놀라울 정도로 안정적입니다. 향후 릴리스가 예측 가능하고, 전체적으로 설계되었으며, 비교적 빈번하지 않다면 만족할 것입니다.</p>
+<h2 id="types">2. 두려움 없는 리팩토링</h2>
+<p>소프트웨어를 구축할 때 저의 첫 번째 추측은 일반적으로 틀립니다.</p>
+<p>대부분의 언어에서 무언가를 변경하는 것은 잔인한 과정입니다. 리팩터링이 너무 귀찮아서 실수를 감수하고 사는 경향이 있습니다.</p>
+<p>Elm에서는 거의 저항 없이 모든 것을 실험하고 변경할 수 있습니다. <code translate="no">case</code> 문에서 와일드카드 일치만 확인하면 컴파일러가 어떤 변경 사항도 신속하게 작동하는 프로그램으로 다시 안내해 줍니다.</p>
+<p>이론적으로는 모든 정적 유형 시스템이 이 작업을 수행할 수 있어야 하지만 그렇지 않습니다. 이유는 모르겠지만 Haskell/Rust/Go의 주요 변경 사항은 항상 의도하지 않은 결과를 초래합니다. Elm의 오류 메시지는 정말 그 자체의 클래스에 있으며 예쁜 서식과는 아무 상관이 없습니다.</p>
+<h2 id="design">1. 놀라운 API 디자인</h2>
+<p>Elm의 멘탈 모델은 저를 더 나은 프로그래머로 만들었습니다.</p>
+<p>아직 해보지 않았다면 시간을 내어 Elm의 자체 라이브러리인<a href="https://package.elm-lang.org/packages/elm/core/latest/">core</a>,<a href="https://package.elm-lang.org/packages/elm/html/latest/">html</a>,<a href="https://package.elm-lang.org/packages/elm/json/latest/">json</a>,<a href="https://package.elm-lang.org/packages/elm/browser/latest/">브라우저</a>,<a href="https://package.elm-lang.org/packages/elm/url/latest/">url</a>,<a href="https://package.elm-lang.org/packages/elm/http/latest/">http</a>,<a href="https://package.elm-lang.org/packages/elm/bytes/latest/">바이트</a>,<a href="https://package.elm-lang.org/packages/elm/file/latest/">파일</a>,<a href="https://package.elm-lang.org/packages/elm/parser/latest/">파서</a>,<a href="https://package.elm-lang.org/packages/elm/random/latest/">랜덤</a>,<a href="https://package.elm-lang.org/packages/elm/regex/latest/">정규식</a>,<a href="https://package.elm-lang.org/packages/elm/time/latest/">시간</a> 등을 살펴보세요.</p>
+<p>모든 주요 라이브러리에는 주옥같은 기능이 포함되어 있습니다. 이 라이브러리들은 쉬우면서도 엄격하고, 단순하면서도 강력합니다.</p>
+<p>예를 들어,<a href="https://package.elm-lang.org/packages/elm/parser/latest/">파서</a> 라이브러리를 생각해 보세요. 파서 파이프라인은 사용하기 쉽고, 역추적되지 않는 흐름의 관점에서 생각하는 법을 가르쳐 줍니다. 준비가 되면 <code translate="no">Parser.Advanced</code>으로 업그레이드하여 추가적인 컨텍스트 기능을 사용할 수 있지만, 필요하지 않을 때는 복잡함이 방해가 되지 않습니다.</p>
+<p>Elm을 자주 사용하지 않더라도 라이브러리를 공부하고 장난감을 만들어 보세요. 세심한 디자인에서 얻을 수 있는 지혜가 가득합니다.</p></div></div>
+	      </article>
+			</main>
+    </body>
+  </html>
+  
