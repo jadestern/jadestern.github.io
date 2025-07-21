@@ -1,0 +1,49 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>셸 도구 - 오마치 매뉴얼 - DHH</title>
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+      <script src="//unpkg.com/alpinejs" defer></script>
+      <style>
+        video {
+          width: 100%;
+        }
+        
+        /* Ensure body background is applied */
+        body {
+          background-color: var(--background-color);
+          color: var(--color);
+        }
+      </style>
+    </head>
+    <body x-data="{ dark: false }" x-bind:data-theme="dark ? 'dark' : 'light'">
+      <main class="container">
+      	<button x-on:click="dark = !dark" class="contrast outline">Switch Theme</button>
+	        <h1>셸 도구 - 오마치 매뉴얼 - DHH</h1>
+	        <div id="readability-page-1" class="page"><div data-controller="scroll-to-highlight" id="main">
+    <h2 id="fzf">fzf </h2>
+<p><a href="https://junegunn.github.io/fzf/">fzf를</a> 사용하면 <code translate="no">ff</code> 별칭을 통해 파일을 퍼지 방식으로 찾을 수 있습니다. 아무 디렉터리로 이동하여 <code translate="no">ff</code> 을 입력하면 오른쪽에서 범위를 좁히고 있는 파일의 미리 보기를 보면서 해당 트리의 모든 파일로 퍼지 검색을 할 수 있습니다.</p>
+
+<p><code translate="no">Ctrl + R</code> 에서 fzf를 사용하여 명령 기록을 통해 퍼지 찾기를 할 수 있습니다.</p>
+
+<p>이 도구는 Neovim에서 <code translate="no">Space Space</code> 을 입력할 때도 사용됩니다.</p>
+<h2 id="zoxide">Zoxide </h2>
+<p><a href="https://github.com/ajeetdsouza/zoxide">Zoxide는</a> cd를 대체하는 도구입니다. 이 도구는 사용자가 들어갔던 디렉터리를 기억하므로 다음에 더 쉽게 해당 디렉토리로 이동할 수 있습니다. <code translate="no">cd ~/.local/share/omarchy</code> 을 한 번 입력했다고 가정해 보겠습니다. 다음에는 <code translate="no">cd omarchy</code> (또는 <code translate="no">cd oma</code>)을 입력하면 Zoxide가 바로 해당 디렉토리로 이동합니다.</p>
+<h2 id="ripgrep">ripgrep </h2>
+<p><a href="https://github.com/BurntSushi/ripgrep">ripgrep는</a> <code translate="no">rg &lt;pattern&gt; &lt;path&gt;</code> 를 사용하여 파일의 내용을 검색합니다(예: <code translate="no">rg Controller app/</code> 을 사용하여 디렉토리 앱에서 <code translate="no">Controller</code> 의 모든 멘션을 찾습니다).</p>
+
+<p>이 도구는 Neovim에서 <code translate="no">Space S G</code> 을 입력할 때도 사용됩니다.</p>
+<h2 id="eza">eza </h2>
+<p><a href="https://eza.rocks/">eza는</a> ls를 대체합니다. 더 많은 정보, 색상 및 아이콘이 포함된 디렉토리 목록을 제공합니다. 기본적으로 eza는 ls로 별칭이 지정되어 있습니다. <code translate="no">lt</code> 을 사용하여 2단계 중첩 목록을 얻을 수도 있습니다. <code translate="no">lsa</code> 은 숨겨진 파일을 포함한 목록을 제공합니다. <code translate="no">lta</code> 은 숨겨진 파일이 포함된 중첩 목록을 제공합니다.</p>
+<h2 id="fd">fd </h2>
+<p><a href="https://github.com/sharkdp/fd">fd는</a> <code translate="no">find</code> 를 대체하여 사용하기 쉬운 방법입니다. <code translate="no">fd person.rb</code> 을 사용하면 현재 트리 내에서 <code translate="no">person.rb</code> 이라는 파일을 찾을 수 있습니다. <code translate="no">fd person.rb /</code> 은 전체 파일 시스템을 검색합니다. <code translate="no">fd person.rb / -H</code> 은 숨겨진 디렉터리를 포함한 전체 파일 시스템을 검색합니다.</p>
+
+  </div></div>
+	        <hr>
+	        <a href="https://manuals.omamix.org/2/the-omarchy-manual/57/shell-tools" target="_blank" role="button" class="outline">Shell Tools · The Omarchy Manual · DHH</a>
+			</main>
+    </body>
+  </html>
+  
