@@ -1,0 +1,326 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>2025년에 모든 개발자가 알아야 할 자바스크립트 단축키 40가지</title>
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+      <script src="//unpkg.com/alpinejs" defer></script>
+      <style>
+        video {
+          width: 100%;
+        }
+      </style>
+    </head>
+    <body x-data="{ dark: false }" x-bind:data-theme="dark ? 'dark' : 'light'">
+      <main class="container">
+      	<button x-on:click="dark = !dark" class="contrast outline">Switch Theme</button>
+	        <h1>2025년에 모든 개발자가 알아야 할 자바스크립트 단축키 40가지</h1>
+	        <div id="readability-page-1" class="page"><div>
+    
+
+    <main id="main-content">
+      <div>
+
+
+        <article id="article-show-container" data-article-id="2425369" data-article-slug="40-javascript-shortcuts-every-developer-should-know-in-2025-28cl" data-author-id="2598648" data-author-name="CodeWithDhanian" data-author-username="code_2" data-co-author-ids="" data-path="/code_2/40-javascript-shortcuts-every-developer-should-know-in-2025-28cl" data-pin-path="/stories/feed/pinned_article" data-pinned-article-id="" data-published="true" data-scheduled="false" lang="en">
+          
+          <header id="main-title">
+
+            
+          </header>
+
+          <div data-article-id="2425369" id="article-body">
+                <p><strong>작성자 Dhanian (<a href="https://dev.to/e_opore">@e_opore</a> on X)</strong></p>
+
+<p>자바스크립트는 빠르게 발전하고 있으며, 올바른 단축키를 익히면 더 빠르고 스마트하며 효율적인 개발자가 될 수 있습니다. 풀스택 앱을 구축하든 프론트엔드 UI 시스템에서 작업하든, 시간을 절약하는 이러한 요령은 코드를 더 깔끔하게 작성하고 생산성을 향상하는 데 도움이 될 것입니다.</p>
+
+<p>다음은 2025년에 꼭 알아야 할 <strong>40가지 JavaScript 단축키를</strong> 빠르게 익힐 수 있도록 네 가지 카테고리로 정리한 것입니다:</p>
+
+
+<hr>
+
+<h3>
+ <a name="110-syntax-shortcuts-and-essentials" href="#110-syntax-shortcuts-and-essentials">
+  </a>
+ <strong>1-10: 구문 바로 가기 및 필수 사항</strong></h3>
+
+
+
+<div>
+<pre translate="no"><code translate="no"><span>// 1. Ternary Operator</span>
+<span>const</span> <span>isAdult</span> <span>=</span> <span>age</span> <span>&gt;=</span> <span>18</span> <span>?</span> <span>"</span><span>Yes</span><span>"</span> <span>:</span> <span>"</span><span>No</span><span>"</span><span>;</span>
+
+<span>// 2. Default Parameters</span>
+<span>function</span> <span>greet</span><span>(</span><span>name</span> <span>=</span> <span>"</span><span>Guest</span><span>"</span><span>)</span> <span>{</span>
+  <span>return</span> <span>`Hello, </span><span>${</span><span>name</span><span>}</span><span>`</span><span>;</span>
+<span>}</span>
+
+<span>// 3. Arrow Functions</span>
+<span>const</span> <span>add</span> <span>=</span> <span>(</span><span>a</span><span>,</span> <span>b</span><span>)</span> <span>=&gt;</span> <span>a</span> <span>+</span> <span>b</span><span>;</span>
+
+<span>// 4. Destructuring Objects</span>
+<span>const</span> <span>{</span> <span>name</span><span>,</span> <span>age</span> <span>}</span> <span>=</span> <span>person</span><span>;</span>
+
+<span>// 5. Destructuring Arrays</span>
+<span>const</span> <span>[</span><span>first</span><span>,</span> <span>second</span><span>]</span> <span>=</span> <span>colors</span><span>;</span>
+
+<span>// 6. Template Literals</span>
+<span>const</span> <span>message</span> <span>=</span> <span>`Hi, </span><span>${</span><span>user</span><span>.</span><span>name</span><span>}</span><span>!`</span><span>;</span>
+
+<span>// 7. Spread Operator</span>
+<span>const</span> <span>newArray</span> <span>=</span> <span>[...</span><span>oldArray</span><span>,</span> <span>4</span><span>];</span>
+
+<span>// 8. Rest Parameters</span>
+<span>function</span> <span>sum</span><span>(...</span><span>numbers</span><span>)</span> <span>{</span>
+  <span>return</span> <span>numbers</span><span>.</span><span>reduce</span><span>((</span><span>a</span><span>,</span> <span>b</span><span>)</span> <span>=&gt;</span> <span>a</span> <span>+</span> <span>b</span><span>);</span>
+<span>}</span>
+
+<span>// 9. Optional Chaining</span>
+<span>const</span> <span>street</span> <span>=</span> <span>user</span><span>?.</span><span>address</span><span>?.</span><span>street</span><span>;</span>
+
+<span>// 10. Nullish Coalescing</span>
+<span>const</span> <span>username</span> <span>=</span> <span>inputName</span> <span>??</span> <span>"</span><span>Anonymous</span><span>"</span><span>;</span>
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>전체 화면 모드로 들어가기</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>전체 화면 모드 종료하기</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+
+<hr>
+
+<h3>
+ <a name="1120-logic-loops-and-arrays" href="#1120-logic-loops-and-arrays">
+  </a>
+ <strong>11-20: 논리, 루프, 배열</strong></h3>
+
+
+
+<div>
+<pre translate="no"><code translate="no"><span>// 11. Short-circuit Evaluation</span>
+<span>const</span> <span>status</span> <span>=</span> <span>isLoggedIn</span> <span>&amp;&amp;</span> <span>"</span><span>Welcome!</span><span>"</span><span>;</span>
+
+<span>// 12. Logical OR Assignment</span>
+<span>user</span><span>.</span><span>name</span> <span>||=</span> <span>"</span><span>Guest</span><span>"</span><span>;</span>
+
+<span>// 13. Logical AND Assignment</span>
+<span>settings</span><span>.</span><span>debug</span> <span>&amp;&amp;=</span> <span>false</span><span>;</span>
+
+<span>// 14. Object Property Shorthand</span>
+<span>const</span> <span>age</span> <span>=</span> <span>30</span><span>;</span>
+<span>const</span> <span>person</span> <span>=</span> <span>{</span> <span>name</span><span>,</span> <span>age</span> <span>};</span>
+
+<span>// 15. Computed Property Names</span>
+<span>const</span> <span>key</span> <span>=</span> <span>"</span><span>level</span><span>"</span><span>;</span>
+<span>const</span> <span>player</span> <span>=</span> <span>{</span> <span>[</span><span>key</span><span>]:</span> <span>42</span> <span>};</span>
+
+<span>// 16. For-of Loop</span>
+<span>for </span><span>(</span><span>const</span> <span>item</span> <span>of</span> <span>items</span><span>)</span> <span>{</span>
+  <span>console</span><span>.</span><span>log</span><span>(</span><span>item</span><span>);</span>
+<span>}</span>
+
+<span>// 17. forEach Loop</span>
+<span>items</span><span>.</span><span>forEach</span><span>(</span><span>item</span> <span>=&gt;</span> <span>console</span><span>.</span><span>log</span><span>(</span><span>item</span><span>));</span>
+
+<span>// 18. Map Function</span>
+<span>const</span> <span>squared</span> <span>=</span> <span>nums</span><span>.</span><span>map</span><span>(</span><span>n</span> <span>=&gt;</span> <span>n</span> <span>*</span> <span>n</span><span>);</span>
+
+<span>// 19. Filter Function</span>
+<span>const</span> <span>evens</span> <span>=</span> <span>nums</span><span>.</span><span>filter</span><span>(</span><span>n</span> <span>=&gt;</span> <span>n</span> <span>%</span> <span>2</span> <span>===</span> <span>0</span><span>);</span>
+
+<span>// 20. Reduce Function</span>
+<span>const</span> <span>total</span> <span>=</span> <span>nums</span><span>.</span><span>reduce</span><span>((</span><span>a</span><span>,</span> <span>b</span><span>)</span> <span>=&gt;</span> <span>a</span> <span>+</span> <span>b</span><span>,</span> <span>0</span><span>);</span>
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>전체 화면 모드 시작</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>전체 화면 모드 종료하기</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+
+<hr>
+
+<h3>
+ <a name="2130-object-amp-array-utilities" href="#2130-object-amp-array-utilities">
+  </a>
+ <strong>21-30: 개체 및 배열 유틸리티</strong></h3>
+
+
+
+<div>
+<pre translate="no"><code translate="no"><span>// 21. Includes Check</span>
+<span>const</span> <span>found</span> <span>=</span> <span>list</span><span>.</span><span>includes</span><span>(</span><span>"</span><span>apple</span><span>"</span><span>);</span>
+
+<span>// 22. Set for Unique Values</span>
+<span>const</span> <span>unique</span> <span>=</span> <span>[...</span><span>new</span> <span>Set</span><span>(</span><span>array</span><span>)];</span>
+
+<span>// 23. Object.entries</span>
+<span>Object</span><span>.</span><span>entries</span><span>(</span><span>obj</span><span>).</span><span>forEach</span><span>(([</span><span>key</span><span>,</span> <span>value</span><span>])</span> <span>=&gt;</span> <span>{</span>
+  <span>console</span><span>.</span><span>log</span><span>(</span><span>key</span><span>,</span> <span>value</span><span>);</span>
+<span>});</span>
+
+<span>// 24. Object.values</span>
+<span>const</span> <span>vals</span> <span>=</span> <span>Object</span><span>.</span><span>values</span><span>(</span><span>obj</span><span>);</span>
+
+<span>// 25. Object.keys</span>
+<span>const</span> <span>keys</span> <span>=</span> <span>Object</span><span>.</span><span>keys</span><span>(</span><span>obj</span><span>);</span>
+
+<span>// 26. Chaining Array Methods</span>
+<span>const</span> <span>result</span> <span>=</span> <span>data</span><span>.</span><span>filter</span><span>(</span><span>a</span> <span>=&gt;</span> <span>a</span><span>.</span><span>active</span><span>).</span><span>map</span><span>(</span><span>a</span> <span>=&gt;</span> <span>a</span><span>.</span><span>name</span><span>);</span>
+
+<span>// 27. Flatten Array</span>
+<span>const</span> <span>flat</span> <span>=</span> <span>arr</span><span>.</span><span>flat</span><span>();</span>
+
+<span>// 28. Trim String</span>
+<span>const</span> <span>cleaned</span> <span>=</span> <span>str</span><span>.</span><span>trim</span><span>();</span>
+
+<span>// 29. Pad String</span>
+<span>const</span> <span>padded</span> <span>=</span> <span>"</span><span>5</span><span>"</span><span>.</span><span>padStart</span><span>(</span><span>2</span><span>,</span> <span>"</span><span>0</span><span>"</span><span>);</span>
+
+<span>// 30. Intl.NumberFormat</span>
+<span>const</span> <span>price</span> <span>=</span> <span>new</span> <span>Intl</span><span>.</span><span>NumberFormat</span><span>().</span><span>format</span><span>(</span><span>1234567</span><span>);</span>
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>전체 화면 모드 시작</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>전체 화면 모드 종료</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+
+<hr>
+
+<h3>
+ <a name="3140-modern-tricks-amp-utilities" href="#3140-modern-tricks-amp-utilities">
+  </a>
+ <strong>31-40: 최신 트릭 및 유틸리티</strong></h3>
+
+
+
+<div>
+<pre translate="no"><code translate="no"><span>// 31. Dynamic Import</span>
+<span>const</span> <span>module</span> <span>=</span> <span>await</span> <span>import</span><span>(</span><span>'</span><span>./module.js</span><span>'</span><span>);</span>
+
+<span>// 32. Promise.all</span>
+<span>await</span> <span>Promise</span><span>.</span><span>all</span><span>([</span><span>fetchData</span><span>(),</span> <span>loadUI</span><span>()]);</span>
+
+<span>// 33. Async/Await</span>
+<span>const</span> <span>fetchData</span> <span>=</span> <span>async </span><span>()</span> <span>=&gt;</span> <span>{</span>
+  <span>const</span> <span>res</span> <span>=</span> <span>await</span> <span>fetch</span><span>(</span><span>url</span><span>);</span>
+  <span>return</span> <span>res</span><span>.</span><span>json</span><span>();</span>
+<span>};</span>
+
+<span>// 34. Optional Parameters in Functions</span>
+<span>function</span> <span>log</span><span>(</span><span>message</span><span>,</span> <span>level</span> <span>=</span> <span>"</span><span>info</span><span>"</span><span>)</span> <span>{</span>
+  <span>console</span><span>[</span><span>level</span><span>](</span><span>message</span><span>);</span>
+<span>}</span>
+
+<span>// 35. Number Conversion with Unary +</span>
+<span>const</span> <span>num</span> <span>=</span> <span>+</span><span>"</span><span>42</span><span>"</span><span>;</span>
+
+<span>// 36. Boolean Conversion with !!</span>
+<span>const</span> <span>isTrue</span> <span>=</span> <span>!!</span><span>value</span><span>;</span>
+
+<span>// 37. Short Array Swap</span>
+<span>[</span><span>a</span><span>,</span> <span>b</span><span>]</span> <span>=</span> <span>[</span><span>b</span><span>,</span> <span>a</span><span>];</span>
+
+<span>// 38. Quick String to Array</span>
+<span>const</span> <span>chars</span> <span>=</span> <span>[...</span><span>"</span><span>hello</span><span>"</span><span>];</span>
+
+<span>// 39. Quick Object Clone</span>
+<span>const</span> <span>copy</span> <span>=</span> <span>{</span> <span>...</span><span>original</span> <span>};</span>
+
+<span>// 40. Debounce Function (Utility)</span>
+<span>const</span> <span>debounce</span> <span>=</span> <span>(</span><span>fn</span><span>,</span> <span>delay</span><span>)</span> <span>=&gt;</span> <span>{</span>
+  <span>let</span> <span>timeout</span><span>;</span>
+  <span>return </span><span>(...</span><span>args</span><span>)</span> <span>=&gt;</span> <span>{</span>
+    <span>clearTimeout</span><span>(</span><span>timeout</span><span>);</span>
+    <span>timeout</span> <span>=</span> <span>setTimeout</span><span>(()</span> <span>=&gt;</span> <span>fn</span><span>(...</span><span>args</span><span>),</span> <span>delay</span><span>);</span>
+  <span>};</span>
+<span>};</span>
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>전체 화면 모드 시작</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>전체 화면 모드 종료</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+
+<hr>
+
+<h2>
+ <a name="supercharge-your-javascript-skills" href="#supercharge-your-javascript-skills">
+  </a>
+ <strong>자바스크립트 기술 향상</strong></h2>
+
+<p>이 단축키가 유용했다면 <strong>전체 JavaScript 가이드북도</strong> 마음에 드실 거예요. 초급부터 고급까지 단계별 심층 설명, 실제 프로젝트, 스마트 코딩 패턴으로 가득 차 있습니다.</p>
+
+<p>지금 바로 다운로드하여 수백 명의 개발자가 자바스크립트 기술을 향상시키는 데 동참하세요!</p>
+
+
+
+<div><p>2025년에 더 스마트하게 빌드해 봅시다.</p><p>
+- <strong>Dhanian (<a href="https://dev.to/e_opore">@e_opore</a> on X)</strong></p></div>
+
+
+            </div>
+            
+  
+
+
+
+        </article>
+
+        
+
+          
+      </div>
+    </main>
+
+    
+  </div></div>
+			</main>
+    </body>
+  </html>
+  
