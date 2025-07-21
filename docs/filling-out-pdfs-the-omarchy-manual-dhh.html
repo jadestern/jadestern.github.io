@@ -1,0 +1,39 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>PDF 작성 - 오마치 매뉴얼 - DHH</title>
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+      <script src="//unpkg.com/alpinejs" defer></script>
+      <style>
+        video {
+          width: 100%;
+        }
+        
+        /* Ensure body background is applied */
+        body {
+          background-color: var(--background-color);
+          color: var(--color);
+        }
+      </style>
+    </head>
+    <body x-data="{ dark: false }" x-bind:data-theme="dark ? 'dark' : 'light'">
+      <main class="container">
+      	<button x-on:click="dark = !dark" class="contrast outline">Switch Theme</button>
+	        <h1>PDF 작성 - 오마치 매뉴얼 - DHH</h1>
+	        <div id="readability-page-1" class="page"><div data-controller="scroll-to-highlight" id="main">
+    
+<p>오마치는 문서 뷰어라는 멋진 기본 PDF 뷰어와 함께 제공됩니다. 이 프로그램은 두 번 클릭하기만 하면 모든 PDF를 열어주는 프로그램입니다.</p>
+
+<p>하지만 문서 뷰어는 양식으로 설정된 PDF를 작성할 때만 사용할 수 있습니다. 그렇지 않은 PDF를 작성해야 하거나 PDF에 서명해야 하는 경우, 파일을 마우스 오른쪽 버튼으로 클릭하고 <em>연결</em> 프로그램 <em>...을</em> 선택한 다음 Xournal++를 선택해야 합니다.</p>
+
+<p>X저널++를 사용하면 T 도구를 사용해 PDF의 아무 곳에나 글을 쓸 수 있습니다. 문서에 서명을 해야 하는 경우 서명 이미지가 필요하며, 이미지 도구를 사용해 서명을 삽입하고 크기를 조정할 수 있습니다.</p>
+
+<p>PDF 작성을 마치면 <em>파일 &gt; PDF로 내</em> 보내기를 사용해 최종 버전을 저장합니다.</p>
+
+  </div></div>
+			</main>
+    </body>
+  </html>
+  
