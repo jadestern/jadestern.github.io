@@ -1,0 +1,65 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>Ollama 빠른 시작 | Plandex 문서</title>
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+      <script src="//unpkg.com/alpinejs" defer></script>
+      <style>
+        video {
+          width: 100%;
+        }
+        
+        /* Ensure body background is applied */
+        body {
+          background-color: var(--background-color);
+          color: var(--color);
+        }
+      </style>
+    </head>
+    <body x-data="{ dark: false }" x-bind:data-theme="dark ? 'dark' : 'light'">
+      <main class="container">
+      	<button x-on:click="dark = !dark" class="contrast outline">Switch Theme</button>
+	        <h1>Ollama 빠른 시작 | Plandex 문서</h1>
+	        <div id="readability-page-1" class="page"><div>
+<p>Plandex는 <a href="https://ollama.com/" target="_blank" rel="noopener noreferrer">Ollama</a> 모델과 함께 작동합니다. 이를 사용하려면 <a href="https://docs.plandex.ai/hosting/self-hosting/local-mode-quickstart">Plandex를 자체 호스팅해야 합니다.</a><strong>Ollama는 Plandex Cloud에서 지원되지 않습니다.</strong></p>
+<h2 id="disclaimer"><a aria-label="Direct link to Disclaimer" title="Direct link to Disclaimer" href="https://docs.plandex.ai/models/ollama#disclaimer">면책 조항</a></h2>
+<p>로컬 모델은 Ollama를 통해 지원되지만 로컬에서 실행할 수 있는 작은 모델은 <code translate="no">planner</code>, <code translate="no">architect</code>, <code translate="no">coder</code>, <code translate="no">builder</code> 과 같은 <a href="https://docs.plandex.ai/models/roles">무거운 작업을 수행하는 역할에</a> 사용할 수 있는 결과를 생성하기에 충분하지 않은 경우가 많습니다. 이러한 역할에 대한 프롬프트에는 작은 모델로는 달성하기 어려울 수 있는 강력한 인스트럭션이 필요합니다.</p>
+<p>가장 강력한 오픈 소스 <em>모델도</em> 충분히 괜찮은 결과를 얻을 수 있지만, 이러한 모델은 매우 강력한 시스템 없이 로컬에서 실행하기에는 규모가 상당히 큽니다. 이는 로컬 모델에 대한 실험을 막으려는 것이 아니라 달성할 수 있는 것에 대한 기대치를 설정하기 위한 것입니다.</p>
+<p>로컬 모델의 기능이 계속 개선됨에 따라 그 격차를 해소하기 위해 두 가지 '적응형' 모델 팩( <code translate="no">ollama-oss</code> 및 <code translate="no">ollama-daily</code>)을 사용할 수 있습니다. 이 모델 팩은 덜 까다로운 역할에는 로컬 올라마 모델을 사용하고, 무거운 작업에는 더 큰 원격 모델을 사용합니다( <code translate="no">oss</code> 변형의 경우 오픈 소스 모델, <code translate="no">daily</code> 변형의 경우 기본 <code translate="no">daily-driver</code> 모델 팩에 사용된 것과 동일한 모델).</p>
+<p>시간이 지남에 따라 로컬 모델이 개선됨에 따라 이러한 적응형 모델 팩은 더 많은 역할에 로컬 모델을 사용하도록 업데이트될 예정입니다.</p>
+<p>또한 모든 역할에 로컬 모델을 사용하는 실험용 <code translate="no">ollama</code> 모델 팩이 기본 제공되며, 테스트 및 벤치마킹에는 권장되지만 실제 업무 수행에는 아직 사용되지 않습니다.</p>
+<h2 id="system-requirements">시스템<a aria-label="Direct link to System requirements" title="Direct link to System requirements" href="https://docs.plandex.ai/models/ollama#system-requirements">요구 사항</a></h2>
+<p>Ollama 모델을 사용하려면 사용하려는 모델을 실행할 수 있는 충분한 시스템 리소스가 필요합니다. 기본 제공되는 실험용 <code translate="no">ollama</code> 모델 팩(가장 큰 모델이 qwen3:32b)을 사용하려면 최소 32GB 이상의 RAM이 권장되며, 여유 공간을 위해 48GB 이상이 권장됩니다. <code translate="no">ollama-daily</code> 및 <code translate="no">ollama-oss</code> 모델 팩(가장 큰 모델이 devstral:24b인 경우)의 경우 최소 16GB 이상의 RAM이 권장되며, 여유 공간을 위해 24GB 이상이 권장됩니다.</p>
+<p><a href="https://docs.plandex.ai/models/custom-models">사용자 정의 모델과 사용자 정의 모델 팩을</a> 사용하면 시스템에 적합한 모델을 유연하게 선택할 수 있습니다. 다만 Plandex 프롬프트를 성공적으로 실행하는 것은 아무리 큰 로컬 모델이라도 쉽지 않다는 점을 기억하세요.</p>
+<h2 id="install-and-run-ollama"><a aria-label="Direct link to Install and run Ollama" title="Direct link to Install and run Ollama" href="https://docs.plandex.ai/models/ollama#install-and-run-ollama">Ollama</a> 설치 및 실행</h2>
+<p>플랫폼에 맞는<a href="https://ollama.com/download" target="_blank" rel="noopener noreferrer">Ollama를 다운로드하여 설치합니다</a>.</p>
+<p>그런 다음 Ollama 서버가 실행 중인지 확인합니다:</p>
+<div><pre translate="no" tabindex="0"><code translate="no"><span><span>ollama serve</span><br></span></code></pre></div>
+<h2 id="pull-ollama-models">Ollama<a aria-label="Direct link to Pull Ollama models" title="Direct link to Pull Ollama models" href="https://docs.plandex.ai/models/ollama#pull-ollama-models">모델</a> 가져오기</h2>
+<p>사용하려는 모델을 가져옵니다.</p>
+<p>기본 제공 <code translate="no">ollama</code> 모델 팩의 경우 다음 모델을 가져옵니다:</p>
+<div><pre translate="no" tabindex="0"><code translate="no"><span><span>ollama pull qwen3:8b</span><br></span><span><span>ollama pull qwen3:14b</span><br></span><span><span>ollama pull qwen3:32b</span><br></span><span><span>ollama pull devstral:24b</span><br></span></code></pre></div>
+<p><code translate="no">ollama-daily</code> 및 <code translate="no">ollama-oss</code> 모델 팩의 경우 다음 모델을 가져오세요:</p>
+<div><pre translate="no" tabindex="0"><code translate="no"><span><span>ollama pull qwen3:8b</span><br></span><span><span>ollama pull devstral:24b</span><br></span></code></pre></div>
+<h2 id="use-ollama-in-plandex"><a aria-label="Direct link to Use Ollama in Plandex" title="Direct link to Use Ollama in Plandex" href="https://docs.plandex.ai/models/ollama#use-ollama-in-plandex">Plandex에서</a> Ollama 사용</h2>
+<h3 id="built-in-model-packs">기본 제공 모델 <a aria-label="Direct link to Built-in model packs" title="Direct link to Built-in model packs" href="https://docs.plandex.ai/models/ollama#built-in-model-packs">팩</a></h3>
+<p>Plandex에서 기본 제공 Ollama 모델 팩 중 하나를 사용하려면 모든 역할에 로컬 모델을 사용하지만 실제로는 어려울 수 있는 <code translate="no">ollama</code>, 덜 까다로운 역할에 로컬 모델을 사용하고 <code translate="no">daily-driver</code> 모델 팩의 기본 Plandex 모델과 무거운 작업을 위한 <code translate="no">ollama-daily</code>, 또는 덜 까다로운 역할에 로컬 모델을 사용하고 <code translate="no">ollama-oss</code>, 무거운 작업을 위한 <code translate="no">oss</code> 모델 팩의 오픈 소스 Plandex 모델을 사용할지 결정하세요.</p>
+<div><pre translate="no" tabindex="0"><code translate="no"><span><span>\set-model ollama # REPL</span><br></span><span><span>plandex set-model ollama # CLI</span><br></span></code></pre></div>
+<p>또는:</p>
+<div><pre translate="no" tabindex="0"><code translate="no"><span><span>\set-model ollama-daily # REPL</span><br></span><span><span>\set-model ollama-oss</span><br></span><span><span>plandex set-model ollama-daily # CLI</span><br></span><span><span>plandex set-model ollama-oss</span><br></span></code></pre></div>
+<h3 id="custom-models-and-model-packs">사용자 지정 모델 및 모델 <a aria-label="Direct link to Custom models and model packs" title="Direct link to Custom models and model packs" href="https://docs.plandex.ai/models/ollama#custom-models-and-model-packs">팩</a></h3>
+<p>Ollama와 함께 사용할 <a href="https://docs.plandex.ai/models/custom-models">사용자 지정 모델 및 모델 팩을</a> 설정할 수도 있습니다.</p>
+<p>사용자 정의 모델을 구성할 때는 <code translate="no">providers</code> 배열에 <code translate="no">ollama</code> 공급자를 추가하고 <code translate="no">modelName</code> 을 <a href="https://ollama.com/models" target="_blank" rel="noopener noreferrer">Ollama 모델 목록에</a> 표시된 대로 사용하려는 모델 이름으로 설정한 다음 접두사 <code translate="no">ollama_chat/</code> 을 추가해야 합니다. 예를 들어 <code translate="no">qwen3:32b</code> 모델을 사용하려면 <code translate="no">providers</code> 배열에 다음을 추가하면 됩니다:</p>
+<div><pre translate="no" tabindex="0"><code translate="no"><span><span>"providers": [</span><br></span><span><span>  {</span><br></span><span><span>    "provider": "ollama",</span><br></span><span><span>    "modelName": "ollama_chat/qwen3:32b"</span><br></span><span><span>  }</span><br></span><span><span>]</span><br></span></code></pre></div>
+<p>Ollama를 사용하도록 사용자 지정 모델 팩을 구성하는 경우 최상위 수준 <code translate="no">localProvider</code> 키를 <code translate="no">ollama</code> 으로 설정합니다. 예를 들어</p>
+<div><pre translate="no" tabindex="0"><code translate="no"><span><span>{</span><br></span><span><span>  ...</span><br></span><span><span>  "modelPacks": [</span><br></span><span><span>    {</span><br></span><span><span>      "localProvider": "ollama",</span><br></span><span><span>      ...</span><br></span><span><span>    }</span><br></span><span><span>  ]</span><br></span><span><span>}</span><br></span></code></pre></div>
+<h2 id="contributors"><a aria-label="Direct link to Contributors" title="Direct link to Contributors" href="https://docs.plandex.ai/models/ollama#contributors">기여자</a></h2>
+<p>플란덱스와 올라마로 실험하다가 기본 제공 모델 팩보다 더 잘 작동하는 모델 조합을 발견하면 <a href="https://discord.gg/plandex-ai" target="_blank" rel="noopener noreferrer">Discord에</a> 알려주시거나 <a href="https://github.com/plandex-ai/plandex/pulls" target="_blank" rel="noopener noreferrer">PR을 개설해</a> 주세요. 현지 모델의 세계는 빠르게 변화하고 있으며, 저희도 항상 최신 기술을 따라잡을 수는 없으므로 커뮤니티의 도움을 받아 부족한 부분을 채우면 좋을 것 같습니다. 여러분의 도움으로 Plandex가 100% 현지 모델들과 함께 효과적으로 일할 수 있는 날이 오기를 바랍니다.</p></div></div>
+	        <hr>
+	        <a href="https://docs.plandex.ai/models/ollama" target="_blank" role="button" class="outline">Ollama Quickstart | Plandex Docs</a>
+			</main>
+    </body>
+  </html>
+  
