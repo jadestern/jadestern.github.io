@@ -1,0 +1,31 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>BrutRB 문서</title>
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+      <script src="//unpkg.com/alpinejs" defer></script>
+      <style>
+        video {
+          width: 100%;
+        }
+        
+        /* Ensure body background is applied */
+        body {
+          background-color: var(--background-color);
+          color: var(--color);
+        }
+      </style>
+    </head>
+    <body x-data="{ dark: false }" x-bind:data-theme="dark ? 'dark' : 'light'">
+      <main class="container">
+      	<button x-on:click="dark = !dark" class="contrast outline">Switch Theme</button>
+	        <h1>BrutRB 문서</h1>
+	        <div id="readability-page-1" class="page"><div data-v-e6f2a212=""><h2 id="conceptual-overview" tabindex="-1">개념 <a href="#conceptual-overview" aria-label="Permalink to &quot;Conceptual Overview&quot;">개요</a></h2><p>Brut은 HTML을 생성하고 JavaScript와 CSS를 사용하며 데이터베이스와 상호 작용하는 웹 앱을 구축하는 방법입니다. Ruby 표준 라이브러리와 <a href="https://sequel.jeremyevans.net/" target="_blank" rel="noreferrer">Sequel</a> 및 <a href="https://phlex.fun/" target="_blank" rel="noreferrer">Phlex와</a> 같은 커뮤니티 라이브러리를 기반으로 구축되었습니다.</p><p>Brut의 접근 방식과 디자인은 세 가지 핵심 가치를 기반으로 합니다:</p><ul><li><strong>표준 활용</strong> - 웹 플랫폼은 훌륭하며 Brut는 사용자가 이를 사용하길 원합니다.</li><li><strong>가장 좋은 방법은 하나</strong> - 유연성은 혼란으로 이어집니다.</li><li><strong>쉬운 것보다는 단순한</strong> 것 - 빠르게 이해할 수 있는 장황한 코드가 뚫을 수 없는 컴팩트한 DSL을 매일 이깁니다.</li></ul><p>Brut의 추상화는 웹 사이트의 영역에서 발견되는 개념을 반영하는 경향이 있습니다. 예를 들어, 브라우저는 URL에서 웹 페이지를 제공합니다. Brut에서는 이를 <em>페이지라고</em> 하며 이를 구현하기 위해 <a href="https://brutrb.com/api/Brut/FrontEnd/Page.html" target="_self" rel="noopener" data-no-router=""><code translate="no">Brut::FrontEnd::Page</code></a> 의 서브클래스를 생성하여 구현합니다.</p><p>Brut는 기존 표준을 단순히 미적으로 보기 좋은 형태로 변환하는 추상화를 피하려고 노력합니다. 이미 CSS, HTML, 웹 플랫폼 및 SQL을 알고 있으므로 다른 사용 방법을 배워야 하는 것은 거의 없습니다.</p><h2 id="yes-you-can-build-a-blog-in-15-minutes" tabindex="-1">예, <a href="#yes-you-can-build-a-blog-in-15-minutes" aria-label="Permalink to &quot;Yes, You Can Build a Blog in 15 Minutes&quot;">15분</a> 안에 블로그를 만들 수 있습니다.</h2><p>바로 시작하고 싶다면<a href="https://github.com/thirdtank/blog-demo" target="_blank" rel="noreferrer">소스 코드를 확인하세요</a>.</p><h2 id="basic-elements" tabindex="-1">기본 <a href="#basic-elements" aria-label="Permalink to &quot;Basic Elements&quot;">요소</a></h2><p>Brut는 네 가지 기본 개념을 중심으로 코드와 동작을 구성합니다:</p><ul><li><strong>클라이언트</strong> 또는 <em>클라이언트 측은</em> 웹 브라우저(또는 HTTP 클라이언트)입니다. 이곳에서 CSS가 HTML에 적용되고 자바스크립트가 실행됩니다. HTTP 요청은 여기에서 시작됩니다.</li><li><strong>서버</strong> 또는 <em>서버 측은</em> 브라우저에 없는 코드가 실행되는 곳입니다. Brut에서는 HTML 생성, SQL 쿼리 및 그 사이의 모든 코드가 여기에 포함됩니다.</li><li><strong>프론트엔드는</strong> 사용자 인터페이스 또는 HTTP API를 생성하는 코드입니다. 이 코드의 대부분은 <em>서버 측에서</em> 실행되지만, 일종의 사용자 인터페이스를 제공하기 위해 존재합니다.</li><li><strong>백엔드는</strong> 데이터베이스 액세스, 비즈니스 로직 실행, 백그라운드 작업 관리 등 기타 모든 작업을 처리하는 코드입니다.</li></ul><p><img src="https://brutrb.com/assets/OverviewMetro.DUS-5fUZ.png" alt="Architectural Overview"></p><ul><li><strong>방문자는</strong> 웹사이트나 앱을 방문하는 사람을 말합니다.</li><li><strong>브라우저는</strong> 웹 브라우저입니다.</li><li><a href="https://brutrb.com/pages.html"><strong>페이지는</strong></a> 웹 페이지를 생성하며, 이는 브라우저의 UI가 URL로 이동할 때 발생하는 일입니다.</li><li><a href="https://brutrb.com/forms.html"><strong>양식은</strong></a> 브라우저에서 서버로 제출됩니다. Brut에서 양식은 <code translate="no">&lt;form&gt;</code> 의 내용을 설명할 뿐만 아니라 제출된 데이터에 대한 액세스를 제공합니다.</li><li><a href="https://brutrb.com/handlers.html"><strong>핸들러는</strong></a> 브라우저로부터 비-GET HTTP 요청, 특히 양식 제출을 수신합니다.</li><li><a href="https://brutrb.com/components.html"><strong>컴포넌트는</strong></a> HTML 조각을 생성하며 페이지의 HTML을 생성하거나 여러 페이지에서 재사용하는 데 사용됩니다.</li><li><a href="https://brutrb.com/javascript.html"><strong>자바스크립트와</strong></a> <a href="https://brutrb.com/assets.html"><strong>에셋</strong></a> ( <a href="https://brutrb.com/css.html">CSS</a> 포함)은 서버에 번들로 제공되어 클라이언트로 전송됩니다.</li><li><a href="https://brutrb.com/business-logic.html"><strong>도메인 로직은</strong></a> 비즈니스 및 도메인 로직이 있는 곳으로 원하는 대로 구현할 수 있습니다.</li><li><a href="https://brutrb.com/database-access.html"><strong>DB 모델은</strong></a> 데이터베이스에 대한 액세스를 제공하는 객체입니다.</li><li><strong>관계형 데이터베이스</strong> 는 데이터가 저장되는 데이터베이스를 말합니다.</li></ul><p>Brut은 인프라나 코드를 더 추가하는 것을 막지 않습니다. Redis 캐시, Sidekiq 작업 백엔드를 추가하거나 타사 API와 통합할 수 있습니다.</p><h2 id="brut-is-not-mvc" tabindex="-1">Brut는 <a href="#brut-is-not-mvc" aria-label="Permalink to &quot;Brut is Not MVC&quot;">MVC가</a> 아닙니다.</h2><p>Brut는 MVC 프레임워크가 <em>아니며</em>, <em>리소스라는</em> 개념을 추상화하여 사용하지도 않습니다. HTTP에 이 개념이 포함되어 있긴 하지만 웹 앱을 관리하는 데는 생각만큼 유용하지 않습니다.</p><p>팀들은 종종 다른 사람들이 페이지라고 부르는 것을 리소스와 HTTP 동사에 매핑하는 데 어려움을 겪는다는 사실을 발견했습니다. 또한 기능, 리소스, 작업 및 데이터베이스 테이블의 자음이 일치하지 않는다는 사실도 발견했습니다. <code translate="no">widgets</code> 리소스에서 <code translate="no">DELETE</code> 동사의 의미가 실제로 무엇을 의미해야 하는지에 대해서는 기본적으로 논하지 않겠습니다.</p><h2 id="brut-is-hippocratic-licensed" tabindex="-1">Brut는 히포크라테스 <a href="#brut-is-hippocratic-licensed" aria-label="Permalink to &quot;Brut is Hippocratic Licensed&quot;">라이선스</a></h2><p>Brut은 더 나은 세상을 만드는 데 사용된다는 점이 저에게 중요합니다. <a href="https://firstdonoharm.dev/version/3/0/cl-eco-media-my-tal-xuar.txt" target="_blank" rel="noreferrer">라이선스를</a> 참고해 주세요.</p></div></div>
+	        <hr>
+	        <a href="https://brutrb.com/overview.html" target="_blank" role="button" class="outline">BrutRB Documentation</a>
+			</main>
+    </body>
+  </html>
+  
