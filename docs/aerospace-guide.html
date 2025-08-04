@@ -1,0 +1,1085 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>에어로스페이스 가이드</title>
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+      <script src="//unpkg.com/alpinejs" defer></script>
+      <style>
+        video {
+          width: 100%;
+        }
+        
+        /* Ensure body background is applied */
+        body {
+          background-color: var(--background-color);
+          color: var(--color);
+        }
+      </style>
+    </head>
+    <body x-data="{ dark: false }" x-bind:data-theme="dark ? 'dark' : 'light'">
+      <main class="container">
+      	<button x-on:click="dark = !dark" class="contrast outline">Switch Theme</button>
+	        <h1>에어로스페이스 가이드</h1>
+	        <div id="readability-page-1" class="page"><div id="content">
+<div id="preamble">
+
+<p>이 가이드는 전체적으로 위에서 아래로 읽도록 구성되어 있습니다. 뻔한 부분은 건너뛰어도 됩니다.</p>
+</div>
+<div>
+<h2 id="installation"><a href="#installation"></a><a href="#installation">1. 설치</a></h2>
+<div>
+<div>
+<h3 id="homebrew-installation"><a href="#homebrew-installation"></a><a href="#homebrew-installation">1.1. 홈브루 설치(기본 설정)</a></h3>
+<p><a href="https://brew.sh/">Homebrew는</a> macOS용 패키지 관리자입니다.</p>
+<div>
+<pre translate="no"><code translate="no" data-lang="bash"><span></span>brew<span> </span>install<span> </span>--cask<span> </span>nikitabobko/tap/aerospace</code></pre>
+</div>
+<p><strong>(선택 사항)</strong> 홈브루 패키지가 제공하는 완성을 사용하도록 셸을 구성해야 할 수 있습니다: <a href="https://docs.brew.sh/Shell-Completion">https://docs.brew.sh/Shell-Completion</a>AeroSpace는 bash, fish 및 zsh 완성을 제공합니다.</p>
+
+<div>
+<pre translate="no"><code translate="no" data-lang="bash"><span></span>brew<span> </span>install<span> </span>--cask<span> </span>nikitabobko/tap/aerospace@0.12.0</code></pre>
+</div>
+</div>
+<div>
+<h3 id="manual-installation"><a href="#manual-installation"></a><a href="#manual-installation">1.2. 수동 설치</a></h3>
+<div>
+<ol>
+<li>
+<p><a href="https://github.com/nikitabobko/AeroSpace/releases">릴리스 페이지에서</a> 사용 가능한 최신 zip을 다운로드합니다.</p>
+</li>
+<li>
+<p>zip 압축 풀기</p>
+</li>
+<li>
+<p>압축을 푼 <code translate="no">AeroSpace-v$VERSION/AeroSpace.app</code> 을 다음 위치에 넣습니다. <code translate="no">/Applications</code></p>
+</li>
+<li>
+<p>압축을 푼 <code translate="no">AeroSpace-v$VERSION/bin/aerospace</code> 을 <code translate="no">$PATH</code>에 넣습니다(이 단계는 선택 사항입니다. CLI에서 AeroSpace와 상호 작용할 수 있는 경우에만 필요합니다.)</p>
+</li>
+</ol>
+</div>
+<p>이 메시지가 표시되는 경우</p>
+<div>
+<pre translate="no">"AeroSpace.app" can't be opened because Apple cannot check it for malicious software.</pre>
+</div>
+<p>문제 해결을 위한<strong>옵션 1</strong> </p>
+<div>
+<pre translate="no"><code translate="no"><span></span>xattr -d com.apple.quarantine /Applications/AeroSpace.app</code></pre>
+</div>
+<p>문제 해결을 위한<strong>옵션 2</strong> </p>
+<div>
+<ol>
+<li>
+<p>Finder에서 다음 위치로 이동합니다. <code translate="no">/Applications/AeroSpace.app</code></p>
+</li>
+<li>
+<p>마우스 오른쪽 클릭</p>
+</li>
+<li>
+<p>열기를 클릭합니다(예, 그렇게 바보 같죠).</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div>
+<h2 id="configuring-aerospace"><a href="#configuring-aerospace"></a><a href="#configuring-aerospace">2. AeroSpace 구성하기</a></h2>
+<div>
+<div>
+<h3 id="config-location"><a href="#config-location"></a><a href="#config-location">2.1. 사용자 지정 구성 위치</a></h3>
+<p>AeroSpace는 두 위치에서 사용자 지정 구성을 찾으려고 시도합니다:</p>
+<div>
+<ol>
+<li>
+<p><code translate="no">~/.aerospace.toml</code></p>
+</li>
+<li>
+<p><code translate="no">${XDG_CONFIG_HOME}/aerospace/aerospace.toml</code>
+(환경 변수 <code translate="no">XDG_CONFIG_HOME</code> 가 제공되지 않으면 <code translate="no">~/.config</code> 로 대체됨).</p>
+</li>
+</ol>
+</div>
+<p>구성이 두 개 이상의 위치에서 발견되면 모호성이 보고됩니다.</p>
+</div>
+
+<div>
+<h3 id="default-config"><a href="#default-config"></a><a href="#default-config">2.3. 기본 설정</a></h3>
+<p>기본 구성은 설명서의 일부이며 설명과 함께 모든 사소한 구성 키가 포함되어 있습니다. 사소한 구성 옵션은 이 가이드에서 자세히 설명합니다. 사용자 지정 구성이 없는 경우 AeroSpace는 기본 구성을 로드합니다.</p>
+<p>사용자 지정 구성에서 키가 생략된 경우 특정 키에 대해 달리 명시되지 않는 한 기본 구성의 값으로 대체됩니다. 즉, 즉:</p>
+<div>
+<ul>
+<li>
+<p><code translate="no">mode.*.binding</code>. 빈 TOML 테이블로 폴백됩니다. 사용자 설정은 키보드 바인딩에 대한 진실의 원천입니다. 구성에 모든 키보드 바인딩과 <a href="#binding-modes">바인딩 모드를</a> 명시적으로 언급해야 합니다.</p>
+</li>
+<li>
+<p><code translate="no">on-focused-monitor-changed</code>. 빈 TOML 배열로 폴백됩니다.</p>
+</li>
+<li>
+<p><code translate="no">exec</code> TOML 테이블로 폴백합니다. 참조: <a href="#exec-env-vars">실행-* 환경 변수</a> (너무 지루하고 장황해서 <code translate="no">default-config.toml</code> 에서도 언급하고 싶지 않습니다.)</p>
+</li>
+</ul>
+</div>
+<p>경험 법칙: 모든 "스칼라 같은" 값은 항상 기본 구성으로 폴백됩니다. 모든 "벡터와 같은" 값은 빈 TOML 배열 또는 테이블로 폴백됩니다.</p>
+<p>이렇게 하면 기본값을 좋아하는 사소한 구성 키로부터 구성을 깔끔하게 유지할 수 있습니다. 앱 설치에서 기본 구성을 복사하여 사용자 지정 구성을 부트스트랩할 수 있습니다.</p>
+<div>
+<pre translate="no"><code translate="no" data-lang="shell"><span></span>cp<span> </span>/Applications/AeroSpace.app/Contents/Resources/default-config.toml<span> </span>~/.aerospace.toml</code></pre>
+</div>
+
+<div>
+<pre translate="no"><code translate="no" data-lang="toml"><span></span><span># Place a copy of this config to ~/.aerospace.toml</span>
+<span># After that, you can edit ~/.aerospace.toml to your liking</span>
+
+<span># You can use it to add commands that run after AeroSpace startup.</span>
+<span># Available commands : <a href="https://nikitabobko.github.io/AeroSpace/commands">https://nikitabobko.github.io/AeroSpace/commands</a></span>
+<span>after-startup-command</span><span> </span><span>=</span><span> </span><span>[]</span>
+
+<span># Start AeroSpace at login</span>
+<span>start-at-login</span><span> </span><span>=</span><span> </span><span>false</span>
+
+<span># Normalizations. See: <a href="https://nikitabobko.github.io/AeroSpace/guide#normalization">https://nikitabobko.github.io/AeroSpace/guide#normalization</a></span>
+<span>enable-normalization-flatten-containers</span><span> </span><span>=</span><span> </span><span>true</span>
+<span>enable-normalization-opposite-orientation-for-nested-containers</span><span> </span><span>=</span><span> </span><span>true</span>
+
+<span># See: <a href="https://nikitabobko.github.io/AeroSpace/guide#layouts">https://nikitabobko.github.io/AeroSpace/guide#layouts</a></span>
+<span># The 'accordion-padding' specifies the size of accordion padding</span>
+<span># You can set 0 to disable the padding feature</span>
+<span>accordion-padding</span><span> </span><span>=</span><span> </span><span>30</span>
+
+<span># Possible values: tiles|accordion</span>
+<span>default-root-container-layout</span><span> </span><span>=</span><span> </span><span>'tiles'</span>
+
+<span># Possible values: horizontal|vertical|auto</span>
+<span># 'auto' means: wide monitor (anything wider than high) gets horizontal orientation,</span>
+<span>#               tall monitor (anything higher than wide) gets vertical orientation</span>
+<span>default-root-container-orientation</span><span> </span><span>=</span><span> </span><span>'auto'</span>
+
+<span># Mouse follows focus when focused monitor changes</span>
+<span># Drop it from your config, if you don't like this behavior</span>
+<span># See <a href="https://nikitabobko.github.io/AeroSpace/guide#on-focus-changed-callbacks">https://nikitabobko.github.io/AeroSpace/guide#on-focus-changed-callbacks</a></span>
+<span># See <a href="https://nikitabobko.github.io/AeroSpace/commands#move-mouse">https://nikitabobko.github.io/AeroSpace/commands#move-mouse</a></span>
+<span># Fallback value (if you omit the key): on-focused-monitor-changed = []</span>
+<span>on-focused-monitor-changed</span><span> </span><span>=</span><span> </span><span>[</span><span>'move-mouse monitor-lazy-center'</span><span>]</span>
+
+<span># You can effectively turn off macOS "Hide application" (cmd-h) feature by toggling this flag</span>
+<span># Useful if you don't use this macOS feature, but accidentally hit cmd-h or cmd-alt-h key</span>
+<span># Also see: <a href="https://nikitabobko.github.io/AeroSpace/goodies#disable-hide-app">https://nikitabobko.github.io/AeroSpace/goodies#disable-hide-app</a></span>
+<span>automatically-unhide-macos-hidden-apps</span><span> </span><span>=</span><span> </span><span>false</span>
+
+<span># Possible values: (qwerty|dvorak|colemak)</span>
+<span># See <a href="https://nikitabobko.github.io/AeroSpace/guide#key-mapping">https://nikitabobko.github.io/AeroSpace/guide#key-mapping</a></span>
+<span>[key-mapping]</span>
+<span>    </span><span>preset</span><span> </span><span>=</span><span> </span><span>'qwerty'</span>
+
+<span># Gaps between windows (inner-*) and between monitor edges (outer-*).</span>
+<span># Possible values:</span>
+<span># - Constant:     gaps.outer.top = 8</span>
+<span># - Per monitor:  gaps.outer.top = [{ monitor.main = 16 }, { monitor."some-pattern" = 32 }, 24]</span>
+<span>#                 In this example, 24 is a default value when there is no match.</span>
+<span>#                 Monitor pattern is the same as for 'workspace-to-monitor-force-assignment'.</span>
+<span>#                 See:</span>
+<span>#                 <a href="https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors">https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors</a></span>
+<span>[gaps]</span>
+<span>    </span><span>inner</span><span>.</span><span>horizontal</span><span> </span><span>=</span><span> </span><span>0</span>
+<span>    </span><span>inner</span><span>.</span><span>vertical</span><span> </span><span>=</span><span>   </span><span>0</span>
+<span>    </span><span>outer</span><span>.</span><span>left</span><span> </span><span>=</span><span>       </span><span>0</span>
+<span>    </span><span>outer</span><span>.</span><span>bottom</span><span> </span><span>=</span><span>     </span><span>0</span>
+<span>    </span><span>outer</span><span>.</span><span>top</span><span> </span><span>=</span><span>        </span><span>0</span>
+<span>    </span><span>outer</span><span>.</span><span>right</span><span> </span><span>=</span><span>      </span><span>0</span>
+
+<span># 'main' binding mode declaration</span>
+<span># See: <a href="https://nikitabobko.github.io/AeroSpace/guide#binding-modes">https://nikitabobko.github.io/AeroSpace/guide#binding-modes</a></span>
+<span># 'main' binding mode must be always presented</span>
+<span># Fallback value (if you omit the key): mode.main.binding = {}</span>
+<span>[mode.main.binding]</span>
+
+<span>    </span><span># All possible keys:</span>
+<span>    </span><span># - Letters.        a, b, c, ..., z</span>
+<span>    </span><span># - Numbers.        0, 1, 2, ..., 9</span>
+<span>    </span><span># - Keypad numbers. keypad0, keypad1, keypad2, ..., keypad9</span>
+<span>    </span><span># - F-keys.         f1, f2, ..., f20</span>
+<span>    </span><span># - Special keys.   minus, equal, period, comma, slash, backslash, quote, semicolon,</span>
+<span>    </span><span>#                   backtick, leftSquareBracket, rightSquareBracket, space, enter, esc,</span>
+<span>    </span><span>#                   backspace, tab, pageUp, pageDown, home, end, forwardDelete,</span>
+<span>    </span><span>#                   sectionSign (ISO keyboards only, european keyboards only)</span>
+<span>    </span><span># - Keypad special. keypadClear, keypadDecimalMark, keypadDivide, keypadEnter, keypadEqual,</span>
+<span>    </span><span>#                   keypadMinus, keypadMultiply, keypadPlus</span>
+<span>    </span><span># - Arrows.         left, down, up, right</span>
+
+<span>    </span><span># All possible modifiers: cmd, alt, ctrl, shift</span>
+
+<span>    </span><span># All possible commands: <a href="https://nikitabobko.github.io/AeroSpace/commands">https://nikitabobko.github.io/AeroSpace/commands</a></span>
+
+<span>    </span><span># See: <a href="https://nikitabobko.github.io/AeroSpace/commands#exec-and-forget">https://nikitabobko.github.io/AeroSpace/commands#exec-and-forget</a></span>
+<span>    </span><span># You can uncomment the following lines to open up terminal with alt + enter shortcut</span>
+<span>    </span><span># (like in i3)</span>
+<span>    </span><span># alt-enter = '''exec-and-forget osascript -e '</span>
+<span>    </span><span># tell application "Terminal"</span>
+<span>    </span><span>#     do script</span>
+<span>    </span><span>#     activate</span>
+<span>    </span><span># end tell'</span>
+<span>    </span><span># '''</span>
+
+<span>    </span><span># See: <a href="https://nikitabobko.github.io/AeroSpace/commands#layout">https://nikitabobko.github.io/AeroSpace/commands#layout</a></span>
+<span>    </span><span>alt-slash</span><span> </span><span>=</span><span> </span><span>'layout tiles horizontal vertical'</span>
+<span>    </span><span>alt-comma</span><span> </span><span>=</span><span> </span><span>'layout accordion horizontal vertical'</span>
+
+<span>    </span><span># See: <a href="https://nikitabobko.github.io/AeroSpace/commands#focus">https://nikitabobko.github.io/AeroSpace/commands#focus</a></span>
+<span>    </span><span>alt-h</span><span> </span><span>=</span><span> </span><span>'focus left'</span>
+<span>    </span><span>alt-j</span><span> </span><span>=</span><span> </span><span>'focus down'</span>
+<span>    </span><span>alt-k</span><span> </span><span>=</span><span> </span><span>'focus up'</span>
+<span>    </span><span>alt-l</span><span> </span><span>=</span><span> </span><span>'focus right'</span>
+
+<span>    </span><span># See: <a href="https://nikitabobko.github.io/AeroSpace/commands#move">https://nikitabobko.github.io/AeroSpace/commands#move</a></span>
+<span>    </span><span>alt-shift-h</span><span> </span><span>=</span><span> </span><span>'move left'</span>
+<span>    </span><span>alt-shift-j</span><span> </span><span>=</span><span> </span><span>'move down'</span>
+<span>    </span><span>alt-shift-k</span><span> </span><span>=</span><span> </span><span>'move up'</span>
+<span>    </span><span>alt-shift-l</span><span> </span><span>=</span><span> </span><span>'move right'</span>
+
+<span>    </span><span># See: <a href="https://nikitabobko.github.io/AeroSpace/commands#resize">https://nikitabobko.github.io/AeroSpace/commands#resize</a></span>
+<span>    </span><span>alt-minus</span><span> </span><span>=</span><span> </span><span>'resize smart -50'</span>
+<span>    </span><span>alt-equal</span><span> </span><span>=</span><span> </span><span>'resize smart +50'</span>
+
+<span>    </span><span># See: <a href="https://nikitabobko.github.io/AeroSpace/commands#workspace">https://nikitabobko.github.io/AeroSpace/commands#workspace</a></span>
+<span>    </span><span>alt-1</span><span> </span><span>=</span><span> </span><span>'workspace 1'</span>
+<span>    </span><span>alt-2</span><span> </span><span>=</span><span> </span><span>'workspace 2'</span>
+<span>    </span><span>alt-3</span><span> </span><span>=</span><span> </span><span>'workspace 3'</span>
+<span>    </span><span>alt-4</span><span> </span><span>=</span><span> </span><span>'workspace 4'</span>
+<span>    </span><span>alt-5</span><span> </span><span>=</span><span> </span><span>'workspace 5'</span>
+<span>    </span><span>alt-6</span><span> </span><span>=</span><span> </span><span>'workspace 6'</span>
+<span>    </span><span>alt-7</span><span> </span><span>=</span><span> </span><span>'workspace 7'</span>
+<span>    </span><span>alt-8</span><span> </span><span>=</span><span> </span><span>'workspace 8'</span>
+<span>    </span><span>alt-9</span><span> </span><span>=</span><span> </span><span>'workspace 9'</span>
+<span>    </span><span>alt-a</span><span> </span><span>=</span><span> </span><span>'workspace A'</span><span> </span><span># In your config, you can drop workspace bindings that you don't need</span>
+<span>    </span><span>alt-b</span><span> </span><span>=</span><span> </span><span>'workspace B'</span>
+<span>    </span><span>alt-c</span><span> </span><span>=</span><span> </span><span>'workspace C'</span>
+<span>    </span><span>alt-d</span><span> </span><span>=</span><span> </span><span>'workspace D'</span>
+<span>    </span><span>alt-e</span><span> </span><span>=</span><span> </span><span>'workspace E'</span>
+<span>    </span><span>alt-f</span><span> </span><span>=</span><span> </span><span>'workspace F'</span>
+<span>    </span><span>alt-g</span><span> </span><span>=</span><span> </span><span>'workspace G'</span>
+<span>    </span><span>alt-i</span><span> </span><span>=</span><span> </span><span>'workspace I'</span>
+<span>    </span><span>alt-m</span><span> </span><span>=</span><span> </span><span>'workspace M'</span>
+<span>    </span><span>alt-n</span><span> </span><span>=</span><span> </span><span>'workspace N'</span>
+<span>    </span><span>alt-o</span><span> </span><span>=</span><span> </span><span>'workspace O'</span>
+<span>    </span><span>alt-p</span><span> </span><span>=</span><span> </span><span>'workspace P'</span>
+<span>    </span><span>alt-q</span><span> </span><span>=</span><span> </span><span>'workspace Q'</span>
+<span>    </span><span>alt-r</span><span> </span><span>=</span><span> </span><span>'workspace R'</span>
+<span>    </span><span>alt-s</span><span> </span><span>=</span><span> </span><span>'workspace S'</span>
+<span>    </span><span>alt-t</span><span> </span><span>=</span><span> </span><span>'workspace T'</span>
+<span>    </span><span>alt-u</span><span> </span><span>=</span><span> </span><span>'workspace U'</span>
+<span>    </span><span>alt-v</span><span> </span><span>=</span><span> </span><span>'workspace V'</span>
+<span>    </span><span>alt-w</span><span> </span><span>=</span><span> </span><span>'workspace W'</span>
+<span>    </span><span>alt-x</span><span> </span><span>=</span><span> </span><span>'workspace X'</span>
+<span>    </span><span>alt-y</span><span> </span><span>=</span><span> </span><span>'workspace Y'</span>
+<span>    </span><span>alt-z</span><span> </span><span>=</span><span> </span><span>'workspace Z'</span>
+
+<span>    </span><span># See: <a href="https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace">https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace</a></span>
+<span>    </span><span>alt-shift-1</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace 1'</span>
+<span>    </span><span>alt-shift-2</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace 2'</span>
+<span>    </span><span>alt-shift-3</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace 3'</span>
+<span>    </span><span>alt-shift-4</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace 4'</span>
+<span>    </span><span>alt-shift-5</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace 5'</span>
+<span>    </span><span>alt-shift-6</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace 6'</span>
+<span>    </span><span>alt-shift-7</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace 7'</span>
+<span>    </span><span>alt-shift-8</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace 8'</span>
+<span>    </span><span>alt-shift-9</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace 9'</span>
+<span>    </span><span>alt-shift-a</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace A'</span>
+<span>    </span><span>alt-shift-b</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace B'</span>
+<span>    </span><span>alt-shift-c</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace C'</span>
+<span>    </span><span>alt-shift-d</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace D'</span>
+<span>    </span><span>alt-shift-e</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace E'</span>
+<span>    </span><span>alt-shift-f</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace F'</span>
+<span>    </span><span>alt-shift-g</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace G'</span>
+<span>    </span><span>alt-shift-i</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace I'</span>
+<span>    </span><span>alt-shift-m</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace M'</span>
+<span>    </span><span>alt-shift-n</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace N'</span>
+<span>    </span><span>alt-shift-o</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace O'</span>
+<span>    </span><span>alt-shift-p</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace P'</span>
+<span>    </span><span>alt-shift-q</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace Q'</span>
+<span>    </span><span>alt-shift-r</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace R'</span>
+<span>    </span><span>alt-shift-s</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace S'</span>
+<span>    </span><span>alt-shift-t</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace T'</span>
+<span>    </span><span>alt-shift-u</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace U'</span>
+<span>    </span><span>alt-shift-v</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace V'</span>
+<span>    </span><span>alt-shift-w</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace W'</span>
+<span>    </span><span>alt-shift-x</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace X'</span>
+<span>    </span><span>alt-shift-y</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace Y'</span>
+<span>    </span><span>alt-shift-z</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace Z'</span>
+
+<span>    </span><span># See: <a href="https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth">https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth</a></span>
+<span>    </span><span>alt-tab</span><span> </span><span>=</span><span> </span><span>'workspace-back-and-forth'</span>
+<span>    </span><span># See: <a href="https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor">https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor</a></span>
+<span>    </span><span>alt-shift-tab</span><span> </span><span>=</span><span> </span><span>'move-workspace-to-monitor --wrap-around next'</span>
+
+<span>    </span><span># See: <a href="https://nikitabobko.github.io/AeroSpace/commands#mode">https://nikitabobko.github.io/AeroSpace/commands#mode</a></span>
+<span>    </span><span>alt-shift-semicolon</span><span> </span><span>=</span><span> </span><span>'mode service'</span>
+
+<span># 'service' binding mode declaration.</span>
+<span># See: <a href="https://nikitabobko.github.io/AeroSpace/guide#binding-modes">https://nikitabobko.github.io/AeroSpace/guide#binding-modes</a></span>
+<span>[mode.service.binding]</span>
+<span>    </span><span>esc</span><span> </span><span>=</span><span> </span><span>[</span><span>'reload-config'</span><span>,</span><span> </span><span>'mode main'</span><span>]</span>
+<span>    </span><span>r</span><span> </span><span>=</span><span> </span><span>[</span><span>'flatten-workspace-tree'</span><span>,</span><span> </span><span>'mode main'</span><span>]</span><span> </span><span># reset layout</span>
+<span>    </span><span>f</span><span> </span><span>=</span><span> </span><span>[</span><span>'layout floating tiling'</span><span>,</span><span> </span><span>'mode main'</span><span>]</span><span> </span><span># Toggle between floating and tiling layout</span>
+<span>    </span><span>backspace</span><span> </span><span>=</span><span> </span><span>[</span><span>'close-all-windows-but-current'</span><span>,</span><span> </span><span>'mode main'</span><span>]</span>
+
+<span>    </span><span># sticky is not yet supported <a href="https://github.com/nikitabobko/AeroSpace/issues/2">https://github.com/nikitabobko/AeroSpace/issues/2</a></span>
+<span>    </span><span>#s = ['layout sticky tiling', 'mode main']</span>
+
+<span>    </span><span>alt-shift-h</span><span> </span><span>=</span><span> </span><span>[</span><span>'join-with left'</span><span>,</span><span> </span><span>'mode main'</span><span>]</span>
+<span>    </span><span>alt-shift-j</span><span> </span><span>=</span><span> </span><span>[</span><span>'join-with down'</span><span>,</span><span> </span><span>'mode main'</span><span>]</span>
+<span>    </span><span>alt-shift-k</span><span> </span><span>=</span><span> </span><span>[</span><span>'join-with up'</span><span>,</span><span> </span><span>'mode main'</span><span>]</span>
+<span>    </span><span>alt-shift-l</span><span> </span><span>=</span><span> </span><span>[</span><span>'join-with right'</span><span>,</span><span> </span><span>'mode main'</span><span>]</span>
+
+<span>    </span><span>down</span><span> </span><span>=</span><span> </span><span>'volume down'</span>
+<span>    </span><span>up</span><span> </span><span>=</span><span> </span><span>'volume up'</span>
+<span>    </span><span>shift-down</span><span> </span><span>=</span><span> </span><span>[</span><span>'volume set 0'</span><span>,</span><span> </span><span>'mode main'</span><span>]</span></code></pre>
+</div>
+</div>
+<div>
+<h3 id="binding-modes"><a href="#binding-modes"></a><a href="#binding-modes">2.4. 바인딩 모드</a></h3>
+<p>서로 다른 바인딩 모드를 생성하여 여러 바인딩 세트를 만들 수 있습니다. 다른 바인딩 모드로 전환하면 현재 모드의 모든 바인딩이 비활성화되고 새 모드에 지정된 바인딩만 활성화됩니다. AeroSpace가 시작하는 초기 바인딩 모드는 "기본"입니다.</p>
+<p>이 기능은<a href="https://i3wm.org/docs/userguide.html#binding_modes">i3의</a> 기능과 완전히 동일합니다.</p>
+<p>바인딩 모드 작업은 두 부분으로 구성됩니다. 1. 바인딩 모드로 전환할 바인딩을 정의하고 2. 바인딩 모드 자체를 선언하는 것입니다.</p>
+<div>
+<pre translate="no"><code translate="no" data-lang="toml"><span></span><span>[mode.main.binding]</span><span>            </span><span># Declare 'main' binding mode</span>
+<span>    </span><span>alt-r</span><span> </span><span>=</span><span> </span><span>'mode resize'</span><span>      </span><span># 1. Define a binding to switch to 'resize' mode</span>
+
+<span>[mode.resize.binding]</span><span>          </span><span># 2. Declare 'resize' binding mode</span>
+<span>    </span><span>minus</span><span> </span><span>=</span><span> </span><span>'resize smart -50'</span>
+<span>    </span><span>equal</span><span> </span><span>=</span><span> </span><span>'resize smart +50'</span></code></pre>
+</div>
+</div>
+<div>
+<h3 id="commands"><a href="#commands"></a><a href="#commands">2.5. 명령</a></h3>
+<p>명령은 AeroSpace를 조작하고 상태를 쿼리하는 데 사용하는 것입니다.</p>
+<p>명령을 사용하는 방법에는 두 가지가 있습니다:</p>
+<div>
+<ol>
+<li>
+<p>키를 바인딩하여 AeroSpace 명령을 실행합니다. 예시:</p>
+<div>
+<pre translate="no"><code translate="no" data-lang="toml"><span></span><span>[mode.main.binding]</span>
+<span>    </span><span># Bind alt-1 key to switch to workspace 1</span>
+<span>    </span><span>alt-1</span><span> </span><span>=</span><span> </span><span>'workspace 1'</span>
+<span>    </span><span># Or bind a sequence of commands</span>
+<span>    </span><span>alt-shift-1</span><span> </span><span>=</span><span> </span><span>[</span><span>'move-node-to-workspace 1'</span><span>,</span><span> </span><span>'workspace 1'</span><span>]</span></code></pre>
+</div>
+</li>
+<li>
+<p>CLI에서 명령 실행하기. Terminal.app을 열고 입력합니다:</p>
+<div>
+<pre translate="no"><code translate="no" data-lang="bash"><span></span>aerospace<span> </span>workspace<span> </span><span>1</span></code></pre>
+</div>
+</li>
+</ol>
+</div>
+<p>사용 가능한 명령 목록은 <a href="https://nikitabobko.github.io/AeroSpace/commands">명령을</a> 참조하십시오.</p>
+</div>
+<div>
+<h3 id="key-mapping"><a href="#key-mapping"></a><a href="#key-mapping">2.6. 키보드 레이아웃 및 키 매핑</a></h3>
+<p>기본적으로 구성의 키 바인딩은 <code translate="no">qwerty</code> 레이아웃으로 인식됩니다.</p>
+<p>다른 레이아웃, 다른 알파벳을 사용하거나 기존 키의 멋진 별칭을 사용하려는 경우 <code translate="no">key-mapping.key-notation-to-key-code</code> 을 사용할 수 있습니다.</p>
+<div>
+<pre translate="no"><code translate="no" data-lang="toml"><span></span><span># Define my fancy unicorn key notation</span>
+<span>[key-mapping.key-notation-to-key-code]</span>
+<span>    </span><span>unicorn</span><span> </span><span>=</span><span> </span><span>'u'</span>
+
+<span>[mode.main.binding]</span>
+<span>    </span><span>alt-unicorn</span><span> </span><span>=</span><span> </span><span>'workspace wonderland'</span><span> </span><span># (⁀ᗢ⁀)</span></code></pre>
+</div>
+<div>
+<ul>
+<li>
+<p><code translate="no">dvorak</code> 및 <code translate="no">colemak</code> 사용자를 위해 AeroSpace는 사전 구성된 사전 설정을 제공합니다.</p>
+<div>
+<pre translate="no"><code translate="no" data-lang="toml"><span></span><span>[key-mapping]</span>
+<span>    </span><span>preset</span><span> </span><span>=</span><span> </span><span>'dvorak'</span><span>  </span><span># or 'colemak'</span></code></pre>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div>
+<h3 id="exec-env-vars"><a href="#exec-env-vars"></a><a href="#exec-env-vars">2.7. 실행-* 환경 변수</a></h3>
+<p><code translate="no">exec-*</code> 명령 및 콜백의 환경 변수를 구성할 수 있습니다(예: <a href="https://nikitabobko.github.io/AeroSpace/commands#exec-and-forget">exec-and-forget</a>, <a href="#exec-on-workspace-change-callback">'exec-on-workspace-change' 콜백</a>).</p>
+<div>
+<ul>
+<li>
+<p><code translate="no">exec.inherit-env-vars = true</code> 는 <code translate="no">AeroSpace.app</code> 의 환경 변수를 상속할지 여부를 구성합니다. (기본값은 <code translate="no">true</code> 입니다.)</p>
+</li>
+<li>
+<p>다음 구문을 사용하여 환경 변수를 재정의할 수 있습니다:</p>
+<div>
+<pre translate="no"><code translate="no" data-lang="toml"><span></span><span>[exec.env-vars]</span>
+<span>    </span><span>PATH</span><span> </span><span>=</span><span> </span><span>'${HOME}/bin:${PATH}'</span></code></pre>
+</div>
+<p>환경 변수 대체는 다음과 같은 형태로 지원됩니다. <code translate="no">${ENV_VAR}</code></p>
+</li>
+<li>
+<p><a href="https://nikitabobko.github.io/AeroSpace/commands#list-exec-env-vars"><code translate="no">list-exec-env-vars</code> 명령을</a> 사용하여 환경 변수의 최종 결과를 검사할 수 있습니다.</p>
+</li>
+<li>
+<p>macOS의 GUI 앱에는 기본적으로 <code translate="no">PATH</code> <a href="https://docs.brew.sh/FAQ#my-mac-apps-dont-find-homebrew-utilities">(docs.brew.sh)</a>에 홈브루의 접두사가 없습니다. 따라서 구성에서 <code translate="no">exec</code> 섹션을 재정의하지 않으면 AeroSpace는 다음 <code translate="no">exec</code> 구성으로 폴백합니다:</p>
+<div>
+<pre translate="no"><code translate="no" data-lang="toml"><span></span><span>[exec]</span>
+<span>    </span><span>inherit-env-vars</span><span> </span><span>=</span><span> </span><span>true</span>
+<span>[exec.env-vars]</span>
+<span>    </span><span>PATH</span><span> </span><span>=</span><span> </span><span>'/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}'</span></code></pre>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div>
+<h2 id="tree"><a href="#tree"></a><a href="#tree">3. 트리</a></h2>
+<div>
+<p>AeroSpace는 모든 창과 컨테이너를 트리에 저장합니다. AeroSpace 트리 타일링 모델은 <a href="https://i3wm.org/docs/userguide.html#tree">i3에서 영감을</a> 얻었습니다.</p>
+<p><strong>정의에서 영감을 받았습니다.</strong> 리프가 아닌 각 노드를 "컨테이너"라고 합니다.</p>
+<div>
+<table>
+<tbody><tr>
+<td>
+<p>경고</p>
+</td>
+<td>
+i3의 "컨테이너"는 AeroSpace의 "노드"와 동일한 용어입니다.</td>
+</tr>
+</tbody></table>
+</div>
+<div>
+<ul>
+<li>
+<p>각 작업 공간에는 자체 단일 루트 노드가 포함됩니다.</p>
+</li>
+<li>
+<p>각 컨테이너에는 임의의 수의 자식 노드가 포함될 수 있습니다.</p>
+</li>
+<li>
+<p>Windows는 가능한 유일한 리프 노드입니다. Windows에는 자식 노드가 없습니다.</p>
+</li>
+<li>
+<p>모든 컨테이너에는 두 가지 프로퍼티가 있습니다:</p>
+<div>
+<ol>
+<li>
+<p><a href="#layouts">레이아웃</a> (사용 가능한 값: <code translate="no">tiles</code>, <code translate="no">accordion</code>)</p>
+</li>
+<li>
+<p>방향(사용 가능한 값: <code translate="no">horizontal</code>, <code translate="no">vertical</code>)</p>
+</li>
+</ol>
+</div>
+</li>
+</ul>
+</div>
+<p>여기서 "창의 레이아웃"이란 창의 부모 컨테이너의 레이아웃을 의미합니다.</p>
+<p>예시를 보면 트리 타일링 모델을 더 쉽게 이해할 수 있습니다.</p>
+<div>
+<p><img src="https://nikitabobko.github.io/AeroSpace/assets/h_tiles.png" alt="h tiles">
+</p>
+<p>그림 1. 간단한 트리 구조. 두 개의 창을 나란히 배치</p>
+</div>
+<div>
+<p><img src="https://nikitabobko.github.io/AeroSpace/assets/tree.png" alt="tree">
+</p>
+<p>그림 2. 복잡한 트리 구조</p>
+</div>
+<p>컨테이너를 원하는 만큼 깊게 중첩할 수 있습니다.</p>
+<p>트리에서 네 가지 기본 방향(왼쪽, 아래, 위, 오른쪽)으로 탐색할 수 있습니다. <a href="https://nikitabobko.github.io/AeroSpace/commands#focus">포커스 명령을</a> 사용하여 탐색할 수 있습니다.</p>
+<p>트리 구조는 세 가지 명령으로 변경할 수 있습니다:</p>
+<div>
+<ol>
+<li>
+<p><a href="https://nikitabobko.github.io/AeroSpace/commands#move">move</a></p>
+</li>
+<li>
+<p><a href="https://nikitabobko.github.io/AeroSpace/commands#join-with">join-with</a></p>
+</li>
+<li>
+<p><a href="https://nikitabobko.github.io/AeroSpace/commands#split">split</a> (i3와의 호환성을 위한 것입니다. <code translate="no">split</code> 보다 <code translate="no">join-with</code> 를 선호하세요.)</p>
+</li>
+</ol>
+</div>
+<div>
+<h3 id="layouts"><a href="#layouts"></a><a href="#layouts">3.1. 레이아웃</a></h3>
+<p>AeroSpace는 총 4가지 레이아웃을 제공합니다:</p>
+<div>
+<ul>
+<li>
+<p><code translate="no">h_tiles</code> 가로 타일(i3에서는 "가로 분할"이라고 함)</p>
+</li>
+<li>
+<p><code translate="no">v_tiles</code> 수직 타일(i3에서는 "수직 분할"이라고 함)</p>
+</li>
+<li>
+<p><code translate="no">h_accordion</code> 수평 아코디언(i3의 "탭 레이아웃"과 유사)</p>
+</li>
+<li>
+<p><code translate="no">v_accordion</code> 수직 아코디언(i3의 "스택형 레이아웃"과 유사)</p>
+</li>
+</ul>
+</div>
+<p><a href="#tree">이전 섹션에서</a> 이미 <code translate="no">tiles</code> 레이아웃에 익숙해졌을 것입니다.</p>
+<p>아코디언은 창이 서로 위에 배치되는 레이아웃입니다.</p>
+<div>
+<ul>
+<li>
+<p><strong>가로 아코디언은</strong> 왼쪽과 오른쪽에 패딩을 표시하여 해당 방향에 다른 창이 있음을 시각적으로 나타냅니다.</p>
+</li>
+<li>
+<p><strong>수직 아코디언은</strong> 위쪽과 아래쪽 패딩을 표시하여 해당 방향에 다른 창이 있음을 시각적으로 나타냅니다.</p>
+</li>
+</ul>
+</div>
+<div>
+<p><img src="https://nikitabobko.github.io/AeroSpace/assets/h_accordion.png" alt="h accordion" width="800">
+</p>
+<p>그림 3. 가로 아코디언</p>
+</div>
+<div>
+<p><img src="https://nikitabobko.github.io/AeroSpace/assets/v_accordion.png" alt="v accordion" width="800">
+</p>
+<p>그림 4. 수직 아코디언</p>
+</div>
+<p><code translate="no">tiles</code> 레이아웃에서와 마찬가지로 <a href="https://nikitabobko.github.io/AeroSpace/commands#focus">포커스</a> 명령을 사용하여 아코디언 레이아웃을 탐색할 수 있습니다.</p>
+<p><code translate="no">focus (left|right)</code> 명령을 사용하여 <code translate="no">h_accordion</code> 에서 창을 탐색할 수 있습니다. <code translate="no">v_accordion</code> 에서는 <code translate="no">focus (up|down)</code> 명령을 사용하여 창을 탐색할 수 있습니다.</p>
+<p>아코디언 패딩은 <code translate="no">accordion-padding</code> 옵션을 통해 구성할 수 있습니다.</p>
+</div>
+<div>
+<h3 id="normalization"><a href="#normalization"></a><a href="#normalization">3.2. 정규화</a></h3>
+<p>기본적으로 AeroSpace는 두 가지 유형의 트리 정규화를 수행합니다:</p>
+<div>
+<ol>
+<li>
+<p>자식이 하나만 있는 컨테이너는 "평탄화"됩니다. 루트 컨테이너는 예외이며, 단일 창 자식을 가질 수 있습니다. 다음과 같이 구성합니다. <code translate="no">enable-normalization-flatten-containers</code></p>
+</li>
+<li>
+<p>서로 중첩되는 컨테이너는 방향이 반대여야 합니다. 구성 기준 <code translate="no">enable-normalization-opposite-orientation-for-nested-containers</code></p>
+</li>
+</ol>
+</div>
+<p><strong>예제 1</strong></p>
+<p>첫 번째 정규화에 따르면 이러한 레이아웃은 불가능합니다:</p>
+<div>
+<pre translate="no">h_tiles (root node)
+└── v_tiles
+    └── window 1</pre>
+</div>
+<p>즉시 다음과 같이 변형됩니다.</p>
+<div>
+<pre translate="no">v_tiles (new root node)
+└── window 1</pre>
+</div>
+<p><strong>예제 2</strong></p>
+<p>두 번째 정규화에 따르면 이러한 레이아웃은 불가능합니다:</p>
+<div>
+<pre translate="no">h_tiles
+├── window 1
+└── h_tiles
+    ├── window 2
+    └── window 3</pre>
+</div>
+<p>즉시 다음과 같이 변환됩니다.</p>
+<div>
+<pre translate="no">h_tiles
+├── window 1
+└── v_tiles
+    ├── window 2
+    └── window 3</pre>
+</div>
+<p>정규화를 사용하면 화면에 창이 배치되는 방식을 보고 트리 구조를 더 쉽게 이해할 수 있습니다. 이 줄을 설정에 배치하여 정규화를 비활성화할 수 있습니다:</p>
+<div>
+<pre translate="no"><code translate="no" data-lang="toml"><span></span><span>enable-normalization-flatten-containers</span><span> </span><span>=</span><span> </span><span>false</span>
+<span>enable-normalization-opposite-orientation-for-nested-containers</span><span> </span><span>=</span><span> </span><span>false</span></code></pre>
+</div>
+<p>정규화에 대해 잘 알고 있는 하드코어 i3 사용자가 아니라면 정규화를 활성화하는 것이 좋습니다.</p>
+</div>
+<div>
+<h3 id="floating-windows"><a href="#floating-windows"></a><a href="#floating-windows">3.3. 플로팅 윈도우</a></h3>
+<p>일반적으로 플로팅 윈도우는 <a href="#tree">타일링 트리의</a> 일부로 간주되지 않습니다. 하지만 <a href="https://nikitabobko.github.io/AeroSpace/commands#focus">포커스</a> 명령에서는 그렇지 않습니다.</p>
+<p><a href="https://nikitabobko.github.io/AeroSpace/commands#focus">포커스</a> 명령의 관점에서 플로팅 윈도우는 <a href="#tree">타일링 트리의</a> 일부입니다. 플로팅 윈도우 부모 컨테이너는 플로팅 윈도우의 중앙을 포함하는 가장 작은 타일링 컨테이너로 결정됩니다.</p>
+<p>이 기법을 사용하면 부동 창에 초점을 맞추기 위한 추가 바인딩이 필요하지 않습니다.</p>
+</div>
+</div>
+</div>
+<div>
+<h2 id="emulation-of-virtual-workspaces"><a href="#emulation-of-virtual-workspaces"></a><a href="#emulation-of-virtual-workspaces">4. 가상 작업 공간 에뮬레이션</a></h2>
+<div>
+<p>기본 macOS 스페이스에는 많은 문제가 있습니다.</p>
+<div>
+<ul>
+<li>
+<p>스페이스 전환 애니메이션이 느립니다.</p>
+<div>
+<ul>
+<li>
+<p>스페이스 전환 애니메이션을 비활성화할 수 없습니다( <code translate="no">Reduce motion</code> 설정을 켜면 약간 더 빠르게 만들 수 있지만 최적이 아닙니다).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>스페이스 수가 제한되어 있습니다(모니터 한 대에 최대 16개의 스페이스).</p>
+</li>
+<li>
+<p>스페이스를 생성/삭제/순서 변경할 수 없으며 핫키를 사용하여 스페이스 간에 창을 이동할 수 없습니다(핫키를 사용하여 스페이스 간에 전환만 가능).</p>
+</li>
+<li>
+<p>Apple은 스페이스와 통신할 수 있는 공용 API를 제공하지 않습니다(스페이스 생성/삭제/순서 변경/스페이스 간 전환 및 스페이스 간 창 이동).</p>
+</li>
+</ul>
+</div>
+<p>스페이스는 다루기가 매우 어렵기 때문에 AeroSpace는 스페이스를 재구현하여 "작업 공간"이라고 부릅니다. 작업 공간이 활성화되어 있지 않으면 모든 창이 화면의 보이는 영역 바깥쪽, 오른쪽 하단 또는 왼쪽 모서리에 배치됩니다. 작업 공간으로 다시 전환하면(예: <a href="https://nikitabobko.github.io/AeroSpace/commands#workspace">작업 공간</a> 명령 또는 <code translate="no">cmd + tab</code>) 창이 화면의 보이는 영역으로 다시 배치됩니다.</p>
+<p>AeroSpace를 종료하거나 AeroSpace가 충돌을 감지하면 모든 창이 화면의 보이는 영역으로 다시 배치됩니다.</p>
+<p>AeroSpace는 트레이 아이콘(오른쪽 상단 모서리)에 현재 활성화된 작업 공간의 이름을 표시하여 사용자에게 현재 어떤 작업 공간이 활성화되어 있는지 시각적으로 피드백을 제공합니다.</p>
+<p>AeroSpace 작업 공간 사용 시 의도된 작업 흐름은 하나의 macOS 공간(또는 <code translate="no">Displays have separate Spaces</code> 이 활성화된 경우 보유한 모니터 수만큼)만 사용하고 더 이상 macOS 공간과 상호 작용하지 않는 것입니다.</p>
+<div>
+<table>
+<tbody><tr>
+<td>
+<p>참고</p>
+</td>
+<td>
+<p>좋든 나쁘든, macOS는 창을 보이는 영역 밖에 완전히 배치하는 것을 허용하지 않습니다. 화면의 오른쪽 또는 왼쪽 하단 모서리에 1픽셀 세로줄의 "숨겨진" 창이 계속 표시됩니다. 즉, AeroSpace가 심하게 충돌하는 경우에도 이 몇 픽셀을 화면 중앙으로 드래그하여 창을 수동으로 "숨기기 해제"할 수 있습니다.</p>
+<p>숨겨진 창의 표시를 최소화하려면 Dock을 하단에 배치하고 자동 숨김 기능을 켜는 것이 좋습니다.</p>
+</td>
+</tr>
+</tbody></table>
+</div>
+<div>
+<h3 id="proper-monitor-arrangement"><a href="#proper-monitor-arrangement"></a><a href="#proper-monitor-arrangement">4.1. 올바른 모니터 배치</a></h3>
+<p>AeroSpace는 창을 숨길 수 있는 여유 공간이 필요하므로 <strong>모든 모니터의 오른쪽 또는 왼쪽 하단에 여유 공간이</strong> 있도록 모니터를 배치하시기 바랍니다. (<code translate="no">System Settings → Displays → Arrange…​</code>)</p>
+<p>모니터를 올바르게 배치하지 않으면 숨겨진 창의 일부가 다른 모니터에 표시됩니다.</p>
+<div>
+<p><img src="https://nikitabobko.github.io/AeroSpace/assets/monitor-arrangement-1-bad.svg" alt="monitor arrangement 1 bad">
+</p>
+<p>그림 5. 잘못된 모니터 배열. 모니터 2의 하단 모서리에 여유 공간이 없습니다.</p>
+</div>
+<div>
+<p><img src="https://nikitabobko.github.io/AeroSpace/assets/monitor-arrangement-1-good.svg" alt="monitor arrangement 1 good">
+</p>
+<p>그림 6. 올바른 모니터 배치. 모든 모니터의 하단 모서리에 여유 공간이 있습니다.</p>
+</div>
+<div>
+<p><img src="https://nikitabobko.github.io/AeroSpace/assets/monitor-arrangement-2-bad.svg" alt="monitor arrangement 2 bad">
+</p>
+<p>그림 7. 잘못된 모니터 배치. 모니터 1의 하단 모서리에 여유 공간이 없습니다.</p>
+</div>
+<div>
+<p><img src="https://nikitabobko.github.io/AeroSpace/assets/monitor-arrangement-2-good.svg" alt="monitor arrangement 2 good">
+</p>
+<p>그림 8. 양호한 모니터 배치. 모든 모니터의 하단 모서리에 여유 공간이 있습니다.</p>
+</div>
+</div>
+<div>
+<h3 id="a-note-on-mission-control"><a href="#a-note-on-mission-control"></a><a href="#a-note-on-mission-control">4.2. 미션 컨트롤에 대한 참고 사항</a></h3>
+<p>어떤 이유에서인지 미션 컨트롤에서 화면 오른쪽 하단에 많은 창을 배치하는 것을 좋아하지 않습니다. 창을 더 크게 표시할 공간이 충분한데도 미션 컨트롤에서 창을 너무 작게 표시합니다.</p>
+<p>해결 방법이 있습니다. <code translate="no">Group windows by application</code> 설정을 활성화할 수 있습니다:</p>
+<div>
+<pre translate="no"><code translate="no" data-lang="bash"><span></span>defaults<span> </span>write<span> </span>com.apple.dock<span> </span>expose-group-apps<span> </span>-bool<span> </span><span>true</span><span> </span><span>&amp;&amp;</span><span> </span>killall<span> </span>Dock</code></pre>
+</div>
+<p>(또는 시스템 설정: <code translate="no">System Settings → Desktop &amp; Dock → Group windows by application</code>)에서 설정할 수 있습니다. 어떤 이상한 이유에서든 도움이 됩니다.</p>
+</div>
+<div>
+<h3 id="a-note-on-displays-have-separate-spaces"><a href="#a-note-on-displays-have-separate-spaces"></a><a href="#a-note-on-displays-have-separate-spaces">4.3. '디스플레이에 별도의 스페이스가 있음'에 대한 참고 사항</a></h3>
+<p>이 설정을 비활성화하면 macOS가 더 안정적으로 작동한다는 관찰 결과가 있습니다 <code translate="no">Displays have separate Spaces</code>. (기본적으로 활성화되어 있습니다.) 이 설정을 활성화하면 포커스 및 성능과 관련된 모든 종류의 이상한 문제를 보고하는 사람들이 있습니다:</p>
+<div>
+<ul>
+<li>
+<p>멀티 모니터 설정에서 잘못된 창이 포커스를 받을 수 있습니다: <a href="https://github.com/nikitabobko/AeroSpace/issues/101">#101</a> (Apple API의 버그)</p>
+</li>
+<li>
+<p><strong>단일 모니터</strong> 설정에서 테두리가 없는 잘못된 Alacritty 창이 포커스를 받을 수 있습니다: <a href="https://github.com/nikitabobko/AeroSpace/issues/247">#247</a> (Apple API의 버그)</p>
+</li>
+<li>
+<p>성능 문제: <a href="https://github.com/nikitabobko/AeroSpace/issues/333">#333</a></p>
+</li>
+<li>
+<p>macOS가 무작위로 초점을 다시 전환합니다: <a href="https://github.com/nikitabobko/AeroSpace/issues/289">#289</a></p>
+</li>
+</ul>
+</div>
+<p><code translate="no">Displays have separate Spaces</code> 을 활성화하면 모니터 간에 창을 이동하면 창이 다른 스페이스 간에 이동하게 되는데, 이는 AeroSpace가 사용하는 공용 API가 스페이스의 존재를 인식하지 못하기 때문입니다. 스페이스는 macOS에서 저주받은 존재일 뿐입니다. 스페이스가 적을수록 macOS가 더 잘 작동합니다.</p>
+<table>
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th>'디스플레이에 별도의 스페이스가 있음'이 활성화된 경우</th>
+<th>'디스플레이에 별도의 스페이스가 있음'이 비활성화됨</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><p>창을 여러 모니터에 걸쳐 사용할 수 있나요?</p></td>
+<td><p>❌ 아니요. macOS 제한 사항</p></td>
+<td><p>👍 예</p></td>
+</tr>
+<tr>
+<td><p>전반적인 안정성 및 성능</p></td>
+<td><p>❌ 이상한 초점 및 성능 문제가 발생할 수 있습니다(위 목록 참조).</p></td>
+<td><p>👍 공용 Apple API가 더 안정적입니다(이는 AeroSpace 안정성에 영향을 미침).</p></td>
+</tr>
+<tr>
+<td><p>첫 번째 모니터가 전체 화면일 때</p></td>
+<td><p>두 번째 모니터가 독립적으로 작동</p></td>
+<td><p>❌ 두 번째 모니터가 사용할 수 없는 검은색 화면인 경우</p></td>
+</tr>
+<tr>
+<td><p>macOS 상태 표시줄 ...</p></td>
+<td><p>...이 두 모니터에 모두 표시됨</p></td>
+<td><p>...이 메인 모니터에만 표시됨</p></td>
+</tr>
+</tbody>
+</table>
+<p>멀티 모니터 설정에서 macOS 기본 전체 화면에 신경 쓰지 않는 경우 (별도의 Space 인스턴스를 생성하기 때문에 어쨌든 그 자체가 투박함) <code translate="no">Displays have separate Spaces</code> 을 비활성화하는 것이 좋습니다.</p>
+<p>이 설정은 실행하여 비활성화할 수 있습니다:</p>
+<div>
+<pre translate="no"><code translate="no" data-lang="bash"><span></span>defaults<span> </span>write<span> </span>com.apple.spaces<span> </span>spans-displays<span> </span>-bool<span> </span><span>true</span><span> </span><span>&amp;&amp;</span><span> </span>killall<span> </span>SystemUIServer</code></pre>
+</div>
+<p>(또는 시스템 설정: <code translate="no">System Settings → Desktop &amp; Dock → Displays have separate Spaces</code>)에서 비활성화할 수 있습니다. 설정을 적용하려면 로그아웃해야 합니다.</p>
+</div>
+</div>
+</div>
+<div>
+<h2 id="callbacks"><a href="#callbacks"></a><a href="#callbacks">5. 콜백</a></h2>
+<div>
+<div>
+<h3 id="on-window-detected-callback"><a href="#on-window-detected-callback"></a><a href="#on-window-detected-callback">5.1. '창 감지 시' 콜백</a></h3>
+<p><code translate="no">on-window-detected</code> 콜백을 사용하여 새 창이 감지될 때마다 명령을 실행할 수 있습니다.</p>
+<p>다음은 가능한 모든 구성을 사용하는 쇼케이스 예시입니다:</p>
+<div>
+<pre translate="no"><code translate="no" data-lang="toml"><span></span><span>[[on-window-detected]]</span>
+<span>    </span><span>if</span><span>.</span><span>app-id</span><span> </span><span>=</span><span> </span><span>'com.apple.systempreferences'</span>
+<span>    </span><span>if</span><span>.</span><span>app-name-regex-substring</span><span> </span><span>=</span><span> </span><span>'settings'</span>
+<span>    </span><span>if</span><span>.</span><span>window-title-regex-substring</span><span> </span><span>=</span><span> </span><span>'substring'</span>
+<span>    </span><span>if</span><span>.</span><span>workspace</span><span> </span><span>=</span><span> </span><span>'workspace-name'</span>
+<span>    </span><span>if</span><span>.</span><span>during-aerospace-startup</span><span> </span><span>=</span><span> </span><span>true</span>
+<span>    </span><span>check-further-callbacks</span><span> </span><span>=</span><span> </span><span>true</span>
+<span>    </span><span>run</span><span> </span><span>=</span><span> </span><span>[</span><span>'layout floating'</span><span>,</span><span> </span><span>'move-node-to-workspace S'</span><span>]</span><span>  </span><span># The callback itself</span></code></pre>
+</div>
+<p><code translate="no">run</code> 감지된 창이 지정된 모든 조건과 일치하는 경우에만 명령이 실행됩니다. 조건을 지정하지 않으면 새 창이 감지될 때마다 <code translate="no">run</code> 이 실행됩니다.</p>
+<p>구성에서 여러 콜백을 선언할 수 있습니다. 콜백은 선언된 순서대로 처리됩니다. 기본적으로 조건과 일치하는 첫 번째 콜백이 실행되고 추가 콜백은 고려되지 않습니다. ( <code translate="no">check-further-callbacks</code> 옵션으로 동작을 재정의할 수 있습니다.)</p>
+<p>현재로서는 <code translate="no">run</code> 콜백에서 <a href="https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace">move-node-to-workspace</a> 및 <a href="https://nikitabobko.github.io/AeroSpace/commands#layout">레이아웃</a> 명령만 지원됩니다. 다른 명령이 지원되도록 하려면 사용 사례를 <a href="https://github.com/nikitabobko/AeroSpace/issues/20">이슈에</a> 게시해 주세요.</p>
+<p>사용 가능한 창 조건은 다음과 같습니다:</p>
+<table>
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th>조건 TOML 키</th>
+<th>조건 설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><p><code translate="no">if.app-id</code></p></td>
+<td><p>애플리케이션 ID가 감지된 창과 정확히 일치</p></td>
+</tr>
+<tr>
+<td><p><code translate="no">if.app-name-regex-substring</code></p></td>
+<td><p>애플리케이션 이름 감지된 창의 대소문자를 구분하지 않는 정규식 하위 문자열</p></td>
+</tr>
+<tr>
+<td><p><code translate="no">if.window-title-regex-substring</code></p></td>
+<td><p>감지된 창의 창 제목 대소문자를 구분하지 않는 정규식 부분 문자열</p></td>
+</tr>
+<tr>
+<td><p><code translate="no">if.during-aerospace-startup</code></p></td>
+<td><div>
+<ul>
+<li>
+<p><code translate="no">true</code> 이면 AeroSpace 시작 중에만 콜백을 실행합니다.</p>
+</li>
+<li>
+<p><code translate="no">false</code> 이면 AeroSpace 시작 중이 <strong>아닌</strong> 경우에만 콜백을 실행합니다.</p>
+</li>
+<li>
+<p>지정하지 않으면 조건이 확인되지 않습니다.</p>
+</li>
+</ul>
+</div></td>
+</tr>
+<tr>
+<td><p><code translate="no">if.workspace</code></p></td>
+<td><p>창의 작업 공간 이름 정확히 일치</p></td>
+</tr>
+</tbody>
+</table>
+<div>
+<ul>
+<li>
+<p><code translate="no">if.during-aerospace-startup = true</code> 은 시작 시에만 초기 앱 배열을 수행하려는 경우에 유용합니다.</p>
+</li>
+<li>
+<p><code translate="no">if.during-aerospace-startup = false</code> 는 AeroSpace를 다시 시작하고 싶지만 콜백이 다시 시작할 때마다 실행하고 싶지 않은 부작용이 있는 경우 유용합니다(예: 콜백이 새 창에서 열림).</p>
+</li>
+</ul>
+</div>
+<p><code translate="no">app-id</code> 을 확인하는 방법에는 여러 가지가 있습니다:</p>
+<div>
+<ul>
+<li>
+<p><a href="https://nikitabobko.github.io/AeroSpace/goodies#popular-apps-ids">인기 있는 애플리케이션 ID의</a> 미리 구성된 <a href="https://nikitabobko.github.io/AeroSpace/goodies#popular-apps-ids">목록을</a> 살펴보세요.</p>
+</li>
+<li>
+<p>다음을 사용할 수 있습니다. <a href="https://nikitabobko.github.io/AeroSpace/commands#list-apps"><code translate="no">aerospace list-apps</code></a> CLI 명령을 사용하여 실행 중인 애플리케이션의 ID 가져오기</p>
+</li>
+<li>
+<p><code translate="no">mdls -name kMDItemCFBundleIdentifier -r /Applications/App.app</code></p>
+</li>
+</ul>
+</div>
+<div>
+<table>
+<tbody><tr>
+<td>
+<p>중요</p>
+</td>
+<td>
+일부 창은 창이 나타난 후 제목을 초기화합니다.<code translate="no">window-title-regex-substring</code> 은 이러한 창에서 예상대로 작동하지 않을 수 있습니다.</td>
+</tr>
+</tbody></table>
+</div>
+<p>자동화 예시:</p>
+<div>
+<ul>
+<li>
+<p>특정 작업 공간에 앱 할당</p>
+<div>
+<pre translate="no"><code translate="no" data-lang="toml"><span></span><span>[[on-window-detected]]</span>
+<span>    </span><span>if</span><span>.</span><span>app-id</span><span> </span><span>=</span><span> </span><span>'org.alacritty'</span>
+<span>    </span><span>run</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace T'</span><span> </span><span># mnemonics T - Terminal</span>
+
+<span>[[on-window-detected]]</span>
+<span>    </span><span>if</span><span>.</span><span>app-id</span><span> </span><span>=</span><span> </span><span>'com.google.Chrome'</span>
+<span>    </span><span>run</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace W'</span><span> </span><span># mnemonics W - Web browser</span>
+
+<span>[[on-window-detected]]</span>
+<span>    </span><span>if</span><span>.</span><span>app-id</span><span> </span><span>=</span><span> </span><span>'com.jetbrains.intellij'</span>
+<span>    </span><span>run</span><span> </span><span>=</span><span> </span><span>'move-node-to-workspace I'</span><span> </span><span># mnemonics I - IDE</span></code></pre>
+</div>
+</li>
+<li>
+<p>모든 창을 기본적으로 부동 상태로 만들기</p>
+<div>
+<pre translate="no"><code translate="no" data-lang="toml"><span></span><span>[[on-window-detected]]</span>
+<span>    </span><span>check-further-callbacks</span><span> </span><span>=</span><span> </span><span>true</span>
+<span>    </span><span>run</span><span> </span><span>=</span><span> </span><span>'layout floating'</span></code></pre>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div>
+<h3 id="on-focus-changed-callbacks"><a href="#on-focus-changed-callbacks"></a><a href="#on-focus-changed-callbacks">5.2. '포커스 변경 시' 콜백</a></h3>
+<p>다음 콜백을 사용하여 포커스 변경을 추적할 수 있습니다: <code translate="no">on-focus-changed</code> 및 <code translate="no">on-focused-monitor-changed</code>.</p>
+<div>
+<ul>
+<li>
+<p><code translate="no">on-focus-changed</code> 는 초점이 맞춰진 창이나 작업 영역이 변경될 때마다 호출됩니다.</p>
+</li>
+<li>
+<p><code translate="no">on-focused-monitor-changed</code> 는 초점이 맞춰진 모니터가 변경될 때마다 호출됩니다.</p>
+</li>
+</ul>
+</div>
+<p>콜백의 일반적인 사용 사례는 "마우스가 포커스를 따르는" 동작을 구현하는 것입니다. 원하는 콜백을 <a href="https://nikitabobko.github.io/AeroSpace/commands#move-mouse">마우스 이동 명령과</a> 결합하기만 하면 됩니다:</p>
+<div>
+<pre translate="no"><code translate="no" data-lang="toml"><span></span><span>on-focused-monitor-changed</span><span> </span><span>=</span><span> </span><span>[</span><span>'move-mouse monitor-lazy-center'</span><span>]</span><span> </span><span># Mouse lazily follows focused monitor (default in i3)</span>
+<span># or</span>
+<span>on-focus-changed</span><span> </span><span>=</span><span> </span><span>[</span><span>'move-mouse window-lazy-center'</span><span>]</span><span> </span><span># Mouse lazily follows any focus (window or workspace)</span></code></pre>
+</div>
+<p>콜백이 호출되는 순서는 구현 세부 사항이며 버전마다 변경될 수 있으므로 콜백이 호출되는 순서에 의존해서는 안 됩니다.</p>
+<p>콜백은 "재귀 저항성"이 있으므로 콜백 내에서 포커스를 변경해도 콜백이 다시 트리거되지 않습니다. 이러한 콜백 내에서 포커스를 변경하는 것은 좋지 않은 생각이며 향후 버전에서는 처리 방식이 변경될 가능성이 높습니다.</p>
+</div>
+<div>
+<h3 id="exec-on-workspace-change-callback"><a href="#exec-on-workspace-change-callback"></a><a href="#exec-on-workspace-change-callback">5.3. 'exec-on-workspace-change' 콜백</a></h3>
+<p><code translate="no">exec-on-workspace-change</code> 콜백을 사용하면 포커스된 작업 영역이 변경될 때 임의의 프로세스를 실행할 수 있습니다. 바를 통합하는 데 유용할 수 있습니다.</p>
+<div>
+<pre translate="no"><code translate="no" data-lang="toml"><span></span><span># Notify Sketchybar about workspace change</span>
+<span>exec-on-workspace-change</span><span> </span><span>=</span><span> </span><span>[</span><span>'/bin/bash'</span><span>,</span><span> </span><span>'-c'</span><span>,</span>
+<span>    </span><span>'sketchybar --trigger aerospace_workspace_change FOCUSED=$AEROSPACE_FOCUSED_WORKSPACE'</span>
+<span>]</span></code></pre>
+</div>
+<p>프로세스는 <a href="#exec-env-vars"><code translate="no">exec.env-vars</code></a>프로세스에는 다음 환경 변수에 대한 액세스 권한이 있습니다:</p>
+<div>
+<ul>
+<li>
+<p><code translate="no">AEROSPACE_FOCUSED_WORKSPACE</code> - 사용자가 전환한 워크스페이스</p>
+</li>
+<li>
+<p><code translate="no">AEROSPACE_PREV_WORKSPACE</code> - 에서 전환한 작업 공간 사용자</p>
+</li>
+</ul>
+</div>
+<p>Sketchybar와 통합하는 방법에 대한 자세한 예는<a href="https://nikitabobko.github.io/AeroSpace/goodies#show-aerospace-workspaces-in-sketchybar">./goodies를</a> 참조하세요<a href="https://nikitabobko.github.io/AeroSpace/goodies#show-aerospace-workspaces-in-sketchybar">.</a></p>
+</div>
+</div>
+</div>
+<div>
+<h2 id="multiple-monitors"><a href="#multiple-monitors"></a><a href="#multiple-monitors">6. 여러 모니터</a></h2>
+<div>
+<div>
+<ul>
+<li>
+<p>작업 공간 풀은 모니터 간에 공유됩니다.</p>
+</li>
+<li>
+<p>각 모니터는 자체 작업 공간을 표시합니다. 표시된 작업 공간을 "보이는" 작업 공간이라고 합니다.</p>
+</li>
+<li>
+<p>서로 다른 모니터는 같은 작업 공간을 동시에 표시할 수 없습니다.</p>
+</li>
+<li>
+<p>각 워크스페이스(보이지 않거나 비어 있더라도)에는 모니터가 할당되어 있습니다.</p>
+</li>
+<li>
+<p>기본적으로 모든 워크스페이스는 '메인' 모니터(' <code translate="no">System → Displays → Use as</code>'의 '메인')에 할당됩니다.</p>
+</li>
+</ul>
+</div>
+<p>작업 공간으로 전환하면</p>
+<div>
+<ol>
+<li>
+<p>AeroSpace가 작업 공간의 할당된 모니터를 가져와 모니터에 작업 공간을 표시합니다.</p>
+</li>
+<li>
+<p>AeroSpace가 작업 공간에 초점을 맞춥니다.</p>
+</li>
+</ol>
+</div>
+
+<p>작업 공간 풀을 공유하는 아이디어는 대부분의 사용자가 보조 모니터에 제한된 작업 공간 세트를 가지고 있다는 <strong id="observation">관찰에</strong> 기반합니다. 보조 모니터는 특정 작업(브라우저, 셸) 전용이거나 로그 및 대시보드와 같은 다양한 활동을 모니터링하는 데 자주 사용됩니다. 따라서 각 보조 모니터당 하나의 작업 공간을 사용하고 "나머지"는 메인 모니터에서 사용하는 것이 합리적일 때가 많습니다.</p>
+<div>
+<table>
+<tbody><tr>
+<td>
+<p>참고</p>
+</td>
+<td>
+<p>빈 작업 공간으로 전환하는 것이 AeroSpace와 i3의 유일한 차이점입니다. 빈 작업 공간으로 전환하면 AeroSpace는 할당된 모니터에 작업 공간을 배치하고, i3는 현재 활성 상태인 모니터에 작업 공간을 배치합니다.</p>
+<div>
+<ul>
+<li>
+<p>위에 나열된 <a href="#observation"><em>관찰을</em></a> 통해 AeroSpace 모델이 더 잘 작동한다는 것을 알았습니다.</p>
+</li>
+<li>
+<p>AeroSpace 모델이 더 일관성이 있습니다(빈 작업 공간과 비어 있지 않은 작업 공간에 대해 동일하게 작동).</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</tbody></table>
+</div>
+<div>
+<h3 id="assign-workspaces-to-monitors"><a href="#assign-workspaces-to-monitors"></a><a href="#assign-workspaces-to-monitors">6.1. 모니터에 작업 공간 할당하기</a></h3>
+<p><code translate="no">workspace-to-monitor-force-assignment</code> 구문을 사용하여 특정 모니터에 항상 표시되도록 작업 공간을 할당할 수 있습니다.</p>
+<div>
+<pre translate="no"><code translate="no" data-lang="toml"><span></span><span>[workspace-to-monitor-force-assignment]</span>
+<span>    </span><span>1</span><span> </span><span>=</span><span> </span><span>1</span><span>                            </span><span># Monitor sequence number from left to right. 1-based indexing</span>
+<span>    </span><span>2</span><span> </span><span>=</span><span> </span><span>'main'</span><span>                       </span><span># Main monitor</span>
+<span>    </span><span>3</span><span> </span><span>=</span><span> </span><span>'secondary'</span><span>                  </span><span># Non-main monitor in case when there are only two monitors</span>
+<span>    </span><span>4</span><span> </span><span>=</span><span> </span><span>'built-in'</span><span>                   </span><span># Case insensitive regex substring</span>
+<span>    </span><span>5</span><span> </span><span>=</span><span> </span><span>'^built-in retina display$'</span><span>  </span><span># Case insensitive regex match</span>
+<span>    </span><span>6</span><span> </span><span>=</span><span> </span><span>[</span><span>'secondary'</span><span>,</span><span> </span><span>'dell'</span><span>]</span><span>        </span><span># You can specify multiple patterns.</span>
+<span>                                     </span><span>#   The first matching pattern will be used</span></code></pre>
+</div>
+<div>
+<ul>
+<li>
+<p>할당의 왼쪽은 작업 공간 이름입니다.</p>
+</li>
+<li>
+<p>할당의 오른쪽은 모니터 패턴입니다.</p>
+</li>
+</ul>
+</div>
+<p>지원되는 모니터 패턴</p>
+<div>
+<ul>
+<li>
+<p><code translate="no">main</code> - "메인" 모니터( <code translate="no">System Settings → Displays → Use as</code> 에서 "메인")</p>
+</li>
+<li>
+<p><code translate="no">secondary</code> - 모니터가 두 개만 있는 경우 주 모니터가 아닌 모니터</p>
+</li>
+<li>
+<p><code translate="no">&lt;number&gt;</code> (예: <code translate="no">1</code>, <code translate="no">2</code>) - 왼쪽에서 오른쪽으로 모니터의 시퀀스 번호입니다. 1 기반 인덱싱</p>
+</li>
+<li>
+<p><code translate="no">&lt;regex-pattern&gt;</code> (예: <code translate="no">dell.*</code>, <code translate="no">built-in.*</code>) - 대소문자를 구분하지 않는 정규식 하위 문자열 패턴</p>
+</li>
+</ul>
+</div>
+<p>여러 패턴을 배열로 지정할 수 있습니다. 첫 번째 일치하는 패턴이 사용됩니다.</p>
+
+</div>
+</div>
+</div>
+<div>
+<h2 id="dialog-heuristics"><a href="#dialog-heuristics"></a><a href="#dialog-heuristics">7. 대화 상자 휴리스틱</a></h2>
+<div>
+<div>
+<ul>
+<li>
+<p>Apple은 앱이 어떤 창이 대화상자인지 다른 사용자에게 알릴 수 있도록 접근성 API를 제공합니다.</p>
+</li>
+<li>
+<p>많은 앱이 이 API를 구현하지 않거나 부적절하게 구현합니다.</p>
+<p>일부 Apple 대화 상자조차도 API를 제대로 구현하지 않습니다. (예: Finder "복사" 진행률 창은 다른 사람에게 대화 상자라는 것을 알리지 않습니다.)</p>
+</li>
+</ul>
+</div>
+<p>AeroSpace는 API를 사용하여 창이 대화상자인지 여부를 부드럽게 묻지만, 몇 가지 휴리스틱을 적용하기도 합니다.</p>
+<p>예를 들어 전체 화면 버튼이 없는 창(NB! 전체 화면 버튼과 최대화 버튼은 다른 버튼입니다)은 일반적으로 대화 상자로 간주되며, 터미널 앱(WezTerm, Alacritty, iTerm2 등)은 제외됩니다.</p>
+<p>대화 상자로 인식되는 창은 기본적으로 떠 있습니다.</p>
+<p>일부 창이 제대로 처리되지 않는 경우 휴리스틱을 개선하는 PR을 만들어도 좋습니다. 자주 사용하는 애플리케이션에 대한 특수 처리를 하드코딩하는 것은 괜찮습니다. AeroSpace 소스에서 <code translate="no">isDialogHeuristic</code> 함수를 참조하세요.</p>
+<p><code translate="no">on-window-detected</code> 을 사용하여 특정 애플리케이션의 모든 창을 강제 타일링하거나 강제 플로팅할 수도 있습니다:</p>
+<div>
+<ol>
+<li>
+<p>모든 창(또는 특정 앱의 창) 강제 타일링하기</p>
+<div>
+<pre translate="no"><code translate="no" data-lang="toml"><span></span><span>[[on-window-detected]]</span>
+<span>    </span><span>if</span><span>.</span><span>app-id</span><span> </span><span>=</span><span> </span><span>'...'</span>
+<span>    </span><span>run</span><span> </span><span>=</span><span> </span><span>'layout tiling'</span></code></pre>
+</div>
+</li>
+<li>
+<p>모든 창(또는 특정 앱의 창) 강제 플로팅</p>
+<div>
+<pre translate="no"><code translate="no" data-lang="toml"><span></span><span>[[on-window-detected]]</span>
+<span>    </span><span>if</span><span>.</span><span>app-id</span><span> </span><span>=</span><span> </span><span>'...'</span>
+<span>    </span><span>run</span><span> </span><span>=</span><span> </span><span>'layout floating'</span></code></pre>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div>
+<h2 id="common-pitfall-keyboard-keys-handling"><a href="#common-pitfall-keyboard-keys-handling"></a><a href="#common-pitfall-keyboard-keys-handling">8. 일반적인 함정: 키보드 키 처리</a></h2>
+<div>
+<p>구성에서 AeroSpace가 일부 키를 처리할 수 없는 경우, 전역 키를 수신할 수 있는 다른 소프트웨어(예: skhd, Karabiner-Elements, Raycast)와 키가 충돌하지 않는지 확인하세요.</p>
+</div>
+</div>
+</div></div>
+	        <hr>
+	        <a href="https://nikitabobko.github.io/AeroSpace/guide#a-note-on-displays-have-separate-spaces" target="_blank" role="button" class="outline">AeroSpace Guide</a>
+			</main>
+    </body>
+  </html>
+  
