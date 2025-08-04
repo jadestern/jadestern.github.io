@@ -1,0 +1,70 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>새로운 레이캐스트 노트를 만나보세요 - 레이캐스트 블로그</title>
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+      <script src="//unpkg.com/alpinejs" defer></script>
+      <style>
+        video {
+          width: 100%;
+        }
+        
+        /* Ensure body background is applied */
+        body {
+          background-color: var(--background-color);
+          color: var(--color);
+        }
+      </style>
+    </head>
+    <body x-data="{ dark: false }" x-bind:data-theme="dark ? 'dark' : 'light'">
+      <main class="container">
+      	<button x-on:click="dark = !dark" class="contrast outline">Switch Theme</button>
+	        <h1>새로운 레이캐스트 노트를 만나보세요 - 레이캐스트 블로그</h1>
+	        <div id="readability-page-1" class="page"><div><p>저희는 2020년에 내부 크리스마스 해커톤의 일환으로 플로팅 노트를 만들었습니다. Petr는 모든 창 위에 떠서 레이캐스트를 사용해 핫키로 빠르게 전환할 수 있는 매우 간단한 노트 명령어를 원했습니다. 그래서 그는 그것을 만들었고 며칠 후 Nichlas의 도움으로 출시했습니다. 1,000명의 사용자가 정말 좋아했습니다. 그리고 <em>곧바로</em> 여러 개의 메모와 마크다운 서식 지원을 요청하기 시작했습니다.</p>
+<p>첫 출시 3년 후, 저는 "실수로" 플로팅 노트의 내부 프로토타입을 <a href="https://youtu.be/gJAhrPGUt9E?si=IBXTQIxJ5vOYVvl2&amp;t=194">유출했습니다</a>. 여러 개의 노트와 마크다운 서식을 지원했지만 그것이 단지 탐색 단계였다는 사실을 저는 거의 알지 못했습니다. 그 후로 일주일에 <del>하루도</del> 빠짐없이 누군가로부터 " <em>웬 2.0</em>?"이라는 질문을 받았습니다.</p>
+<p>그래서 마침내 <strong>레이캐스트 노트를</strong> 발표하게 되어 이보다 더 기쁠 수 없습니다!</p>
+<p><iframe title="Friction." loading="lazy" src="https://www.youtube.com/embed/8FTSAqNleuw?autoplay=0&amp;rel=0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></p>
+
+<p>플로팅 노트에서 사랑받았던 빠르고 가볍고 매끄러운 노트 필기 경험은 그대로 유지하면서, 워크플로우를 더욱 유연하게 제어할 수 있는 새로운 기능이 추가되었습니다.</p>
+<p>새로운 기능을 소개하는 동영상도 만들었으니 <a href="https://youtu.be/6knS3y39f7k">여기에서</a> 시청하실 수 있습니다.</p>
+<h3 id="name-and-commands" data-heading="true"><a id="name-and-commands" href="#name-and-commands">이름과 명령어</a></h3>
+<p>플로팅 노트는 이제 레이캐스트 노트입니다. 기억하기 쉽도록 내부 별칭을 추가해 "플로팅 노트"를 검색하면 레이캐스트 노트가 표시되도록 했습니다.</p>
+<p>사용 가능한 명령어도 재검토했습니다. 이전에는 <code translate="no">Toggle Floating Notes Window</code> 와 <code translate="no">Toggle Floating Notes Focus</code> 두 가지가 있었습니다. 이제 <code translate="no">Raycast Notes</code> 명령 하나로 통합했습니다.</p>
+<p>이 명령에 단축키를 지정해 두면 한 번의 키 입력으로 빠르게 노트에 접근할 수 있습니다. 제 핫키는 <code translate="no">⌥ N</code> 입니다.</p>
+
+<p><img alt="Raycast commands" loading="lazy" width="1270" height="760" decoding="async" data-nimg="1" sizes="(max-width: 706px) 100vw, 706px" srcset="https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Froot.png&amp;w=640&amp;q=100 640w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Froot.png&amp;w=750&amp;q=100 750w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Froot.png&amp;w=828&amp;q=100 828w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Froot.png&amp;w=1080&amp;q=100 1080w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Froot.png&amp;w=1200&amp;q=100 1200w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Froot.png&amp;w=1920&amp;q=100 1920w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Froot.png&amp;w=2048&amp;q=100 2048w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Froot.png&amp;w=3840&amp;q=100 3840w" src="https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Froot.png&amp;w=3840&amp;q=100"></p>
+<h3 id="markdown-formatting" data-heading="true"><a id="markdown-formatting" href="#markdown-formatting">마크다운 서식 지정</a></h3>
+<p>이제 마크다운 서식을 활용해 보다 체계적인 노트를 만들 수 있습니다.</p>
+<p>레이캐스트 노트는 다양한 제목 크기, 굵게, 이탤릭체, 취소선 등의 텍스트 장식, 인라인 코드와 코드 블록, 들여쓰기 및 재정렬이 가능한 목록, 체크리스트, 링크 등을 지원합니다.</p>
+<p>저는 개인적으로 회의 노트와 할 일을 좀 더 상세하게 추가할 수 있어서 이 기능이 아주 마음에 듭니다.</p>
+<p><img alt="Markdown support" loading="lazy" width="1270" height="760" decoding="async" data-nimg="1" sizes="(max-width: 706px) 100vw, 706px" srcset="https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fmarkdown.png&amp;w=640&amp;q=100 640w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fmarkdown.png&amp;w=750&amp;q=100 750w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fmarkdown.png&amp;w=828&amp;q=100 828w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fmarkdown.png&amp;w=1080&amp;q=100 1080w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fmarkdown.png&amp;w=1200&amp;q=100 1200w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fmarkdown.png&amp;w=1920&amp;q=100 1920w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fmarkdown.png&amp;w=2048&amp;q=100 2048w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fmarkdown.png&amp;w=3840&amp;q=100 3840w" src="https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fmarkdown.png&amp;w=3840&amp;q=100"></p>
+<h3 id="multiple-notes" data-heading="true"><a id="multiple-notes" href="#multiple-notes">여러 개의 노트</a></h3>
+<p>드디어 Pro 구독자라면 무제한, 무료 요금제에서는 최대 5개까지 노트를 만들 수 있습니다. Raycast 노트에서 <code translate="no">⌘ N</code> 을 눌러 새 노트를 만들고 <code translate="no">⌘ P</code> 을 눌러 모든 노트를 검색할 수 있습니다.</p>
+<p>이러한 작업은 Raycast에서도 가능합니다. <code translate="no">Create Note</code> 또는 <code translate="no">Search Notes</code> 명령을 주목하세요. 그리고 평소처럼 자주 사용하실 계획이라면 단축키를 지정해 두시면 됩니다.</p>
+<p><img alt="Search notes" loading="lazy" width="1270" height="760" decoding="async" data-nimg="1" sizes="(max-width: 706px) 100vw, 706px" srcset="https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fsearch.png&amp;w=640&amp;q=100 640w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fsearch.png&amp;w=750&amp;q=100 750w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fsearch.png&amp;w=828&amp;q=100 828w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fsearch.png&amp;w=1080&amp;q=100 1080w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fsearch.png&amp;w=1200&amp;q=100 1200w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fsearch.png&amp;w=1920&amp;q=100 1920w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fsearch.png&amp;w=2048&amp;q=100 2048w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fsearch.png&amp;w=3840&amp;q=100 3840w" src="https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fsearch.png&amp;w=3840&amp;q=100"></p>
+<h3 id="keyboard-accessible" data-heading="true"><a id="keyboard-accessible" href="#keyboard-accessible">키보드 접근성</a></h3>
+<p>레이캐스트의 모든 기능과 마찬가지로, 새로운 <code translate="no">⌘ K</code> 작업 패널에서 각 기능에 대한 키보드 단축키를 찾을 수 있습니다.</p>
+<p><img alt="Action panel" loading="lazy" width="1270" height="760" decoding="async" data-nimg="1" sizes="(max-width: 706px) 100vw, 706px" srcset="https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Factionpanel.png&amp;w=640&amp;q=100 640w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Factionpanel.png&amp;w=750&amp;q=100 750w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Factionpanel.png&amp;w=828&amp;q=100 828w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Factionpanel.png&amp;w=1080&amp;q=100 1080w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Factionpanel.png&amp;w=1200&amp;q=100 1200w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Factionpanel.png&amp;w=1920&amp;q=100 1920w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Factionpanel.png&amp;w=2048&amp;q=100 2048w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Factionpanel.png&amp;w=3840&amp;q=100 3840w" src="https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Factionpanel.png&amp;w=3840&amp;q=100"></p>
+<h3 id="advanced-features" data-heading="true"><a id="advanced-features" href="#advanced-features">고급 기능</a></h3>
+<p>이제 모든 노트를 세 가지 형식으로 내보낼 수 있습니다: 일반 텍스트, 마크다운, HTML. 이메일이나 블로그 게시물 작성을 시작할 때 유용합니다.</p>
+<p>제가 가장 좋아하는 새로운 기능 중 하나는 특정 노트에 대한 빠른 링크를 만들 수 있다는 점입니다. 그러면 흐름 상태를 깨지 않고 어디서든 한 번의 키 입력으로 해당 노트를 열 수 있습니다.</p>
+<p>이 옵션은 <code translate="no">⌘ K</code> 작업 패널에서 찾을 수 있습니다.</p>
+<p><img alt="Action panel" loading="lazy" width="1270" height="760" decoding="async" data-nimg="1" sizes="(max-width: 706px) 100vw, 706px" srcset="https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fquicklink.png&amp;w=640&amp;q=100 640w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fquicklink.png&amp;w=750&amp;q=100 750w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fquicklink.png&amp;w=828&amp;q=100 828w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fquicklink.png&amp;w=1080&amp;q=100 1080w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fquicklink.png&amp;w=1200&amp;q=100 1200w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fquicklink.png&amp;w=1920&amp;q=100 1920w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fquicklink.png&amp;w=2048&amp;q=100 2048w, https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fquicklink.png&amp;w=3840&amp;q=100 3840w" src="https://www.raycast.com/_next/image?url=%2Fuploads%2Fblog-raycast-notes%2Fquicklink.png&amp;w=3840&amp;q=100"></p>
+<h2 id="available-now" data-heading="true"><a id="available-now" href="#available-now">지금 사용 가능</a></h2>
+<p>레이캐스트 노트는 지금 사용 가능합니다. <code translate="no">Check for Updates</code> 명령을 실행하여 사용을 시작하세요. 아직 Raycast를 사용하고 있지 않다면 다운로드하여 Mac에 설치할 수 있습니다.</p>
+<p><a aria-disabled="false"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 16"><path fill="currentColor" d="M12.665 15.358c-.905.844-1.893.711-2.843.311-1.006-.409-1.93-.427-2.991 0-1.33.551-2.03.391-2.825-.31C-.498 10.886.166 4.078 5.28 3.83c1.246.062 2.114.657 2.843.71 1.09-.213 2.133-.826 3.296-.746 1.393.107 2.446.64 3.138 1.6-2.88 1.662-2.197 5.315.443 6.337-.526 1.333-1.21 2.657-2.345 3.635zM8.03 3.778C7.892 1.794 9.563.16 11.483 0c.268 2.293-2.16 4-3.452 3.777"></path></svg>다운로드</a></p>
+<br>
+<h3 id="raycast-for-windows" data-heading="true"><a id="raycast-for-windows" href="#raycast-for-windows">Windows용 레이캐스트</a></h3>
+<p>레이캐스트를 Windows에 출시합니다. <a href="https://www.raycast.com/windows">Windows 대기자 명</a> 단에 등록하여 준비되면 가장 먼저 알려주세요.</p>
+
+<h3 id="raycast-for-ios" data-heading="true"><a id="raycast-for-ios" href="#raycast-for-ios">iOS용 레이캐스트</a></h3>
+<p>현재 iOS용 Raycast를 개발 중입니다. 사용해보고 싶으시다면 대기자 명단에 등록하세요.</p>
+</div></div>
+	        <hr>
+	        <a href="https://www.raycast.com/blog/raycast-notes" target="_blank" role="button" class="outline">Meet the new Raycast Notes - Raycast Blog</a>
+			</main>
+    </body>
+  </html>
+  
