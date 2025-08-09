@@ -1,0 +1,54 @@
+
+  <html lang="ko">
+    <head>
+      <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>자바스크립트가 문제가 아닙니다. 브라우저를 교체하는 것이 문제였습니다. | RedwoodSDK</title>
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+      <script src="//unpkg.com/alpinejs" defer></script>
+      <style>
+        video {
+          width: 100%;
+        }
+        
+        /* Ensure body background is applied */
+        body {
+          background-color: var(--background-color);
+          color: var(--color);
+        }
+      </style>
+    </head>
+    <body x-data="{ dark: false }" x-bind:data-theme="dark ? 'dark' : 'light'">
+      <main class="container">
+      	<button x-on:click="dark = !dark" class="contrast outline">Switch Theme</button>
+	        <h1>자바스크립트가 문제가 아닙니다. 브라우저를 교체하는 것이 문제였습니다. | RedwoodSDK</h1>
+	        <div id="readability-page-1" class="page"><div><p>저희는 라우팅을 탈취하고, 상태를 수동으로 동기화하고, 네이티브 앱의 기대치에 맞게 자바스크립트로 양식과 전환을 재구성하는 등 브라우저를 재구축하는 데 10년을 보냈습니다. 이제 브라우저가 따라잡았습니다. 이제 해킹을 중단하고 웹에서 다시 제대로 빌드해야 할 때입니다.</p>
+<p>기술 스택에 '단일 페이지 앱'이 선택되는 것은 성능 때문이 아니라 사용성 때문입니다: 전에는 iOS 개발자였는데, 매년 Apple에서 휴먼 인터페이스 가이드라인을 발표했습니다. Apple이 인터랙션 디자인에 대해 어떻게 생각하는지 알려주는 지침서였기 때문에 처음부터 끝까지 다 읽었습니다. 그 디자인 철학은 API에 그대로 적용되었습니다. 핵심 원칙 중 하나는 보기 전환이었습니다. 사용자가 한 행을 탭하면 다음 화면으로 미끄러지듯 넘어가는 방식이었죠. 이는 사용자가 방향성을 유지하는 데 도움이 되었습니다. 사용자는 자신이 어디에서 왔고 어떻게 돌아갈 수 있는지 이해했습니다.</p>
+<p>웹은 그런 기능을 제공하지 않았습니다. 전체 페이지를 새로 고침하면 새 화면이 막 나타났기 때문입니다. 사용자는 정신적으로 경험을 스스로 연결해야 했습니다. 그래서 개발자로서 저희는 브라우저를 해킹하기 시작했습니다. 그리고 SPA를 발명했습니다. 자바스크립트를 좋아해서가 아니라 사용자의 기대에 부응하기 위해서였습니다. Apple에 맞추려고 노력했습니다.</p>
+<p>하지만 이제 브라우저(와 네트워크)가 따라잡았습니다. 보기 전환이 있습니다. 스트리밍이 있습니다. 엣지 컴퓨팅도 있습니다. 웹의 작동 방식을 다시 작성하지 않고도 사용자에게 훌륭한 경험을 제공하는 데 필요한 모든 것을 갖추고 있습니다.</p>
+<p>모든 것을 다 채워야 했던 시절이 있었습니다. 모든 기능에 해결 방법, 패치, 라이브러리가 필요했습니다. 하지만 오늘날의 브라우저는 대부분 정렬되어 있습니다. 플랫폼이 강력합니다. 기준선이 더 높아졌습니다.</p>
+<p>RedwoodSDK를 통해 서버 측 라우팅과 렌더링에 집중하기로 결정했습니다. 즉, 라우팅을 가로채고, 상태를 수동으로 동기화하고, 양식과 전환을 자바스크립트로 재구축하여 브라우저 내부에서 브라우저를 에뮬레이션하지 않습니다. 대신 브라우저를 프레임워크의 기초로 사용합니다. 이를 통해 라이브러리 작성자가 네이티브 앱 동작을 모방하기 위해 수년 동안 해결해야 했던 수많은 복잡성을 간소화할 수 있습니다. 웹 플랫폼에 의존함으로써 클라이언트에 제공되는 자바스크립트의 양을 줄여 앱이 더 빠르고 가벼우며 추론하기 쉬워집니다.</p>
+<blockquote>
+<p>역사: 우리가 어떻게 여기까지 왔는지 간략히 살펴볼 필요가 있습니다. 단일 페이지 애플리케이션(SPA)의 개념은 2000년대 초에 등장했습니다. Microsoft는 1999년에 웹 페이지가 새로 고침 없이 비동기적으로 데이터를 가져올 수 있는 XMLHttpRequest 객체를 도입했습니다. 2004년과 2005년에 출시된 Gmail과 Google 지도는 이 기술의 잠재력을 제대로 보여준 최초의 앱이었습니다. 2005년에 'AJAX'라는 용어가 만들어졌고 개발자들은 브라우저에서 완전한 대화형 애플리케이션을 구축하기 시작했습니다. 백본, 엠버, 앵귤러JS, 그리고 결국에는 리액트와 같은 프레임워크가 등장하면서 SPA의 복잡성을 보다 쉽게 관리할 수 있게 되었습니다. 하지만 이러한 앱은 성능에 관한 것이 아니었습니다. 사용성에 관한 것이었습니다. 웹이 네이티브 앱과 경쟁하려 했기 때문에 등장한 것이죠.</p>
+</blockquote>
+<p>그리고 서버 우선 아키텍처를 선택했다고 해서 사용자 경험이 나빠진다는 의미는 아닙니다. 정반대입니다. 저희는 앱에 필요한 사항을 기반으로 브라우저를 점진적으로 개선합니다. 예를 들어, 더 부드러운 전환을 원하는 경로에 대해 클라이언트 측 탐색을 지원합니다.</p>
+<pre translate="no"><code translate="no">// src/client.tsx
+
+import { initClient, initClientNavigation } from "rwsdk/client";
+
+initClientNavigation();
+initClient()
+</code></pre><p>백그라운드에서는 앵커 태그의 클릭을 가로채고, 다음 페이지를 React 서버 컴포넌트(RSC) 플라이트 스트림으로 가져오고, React 하이드레이션을 사용하여 DOM을 원활하게 업데이트합니다. 결과는 클라이언트 측 앱처럼 느껴지지만 여전히 웹의 요청-응답 모델을 사용하고 있습니다. 쿠키, 리디렉션, 적절한 오류 코드가 제공됩니다. HTTP에서 항상 사용하던 모든 것이 그대로 유지됩니다.</p>
+<p>중요한 점은 아무것도 포기하지 않는다는 것입니다. URL, 양식, 수십 년 동안 사용되어 온 도구를 사용하여 웹이 원래 의도한 방식으로 앱을 구축하는 것입니다. SPA가 적합한 곳도 있습니다: 지연 시간 제로, 오프라인 지원, 클라이언트와의 상호 작용이 많은 경우. 이러한 사용 사례는 여전히 직접 지원할 수 있지만 대부분의 경우에는 지원받을 수 있습니다.</p>
+<p>핵심은 바로 이것입니다. 이제 브라우저와의 싸움을 멈출 수 있습니다. 브라우저를 다시 구현하는 일을 멈출 수 있습니다. 그리고 브라우저를 기반으로 자신 있게, 점진적으로, 그리고 자신 있게 구축할 수 있습니다. 자바스크립트는 문제가 아닙니다. 브라우저를 교체하는 것이 문제입니다.</p>
+<p><a href="https://docs.rwsdk.com/guides/frontend/client-side-nav/">클라이언트 측 탐색 문서 읽기</a></p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/IjplRRpIogE?si=C8aq30ukm0VHEV-e" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+
+<p><em>(초기 피드백을 보내주신 Barrett, Simon, MJ에게 감사드립니다.)</em></p>
+</div></div>
+	        <hr>
+	        <a href="https://rwsdk.com/blog/spa-is-dead" target="_blank" role="button" class="outline">JavaScript isn’t the problem. Replacing the browser was. | RedwoodSDK</a>
+			</main>
+    </body>
+  </html>
+  
